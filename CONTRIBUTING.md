@@ -1,5 +1,7 @@
 # Hướng dẫn làm việc nhóm
 
+Công cụ, quy định nhóm và checklist ngoài code: xem [docs/TEAM.md](docs/TEAM.md).
+
 Repo có hai thành viên (A và B), mỗi người có thể dùng trợ lý AI. File này giúp hai người không lệch hướng và không xung đột khi merge.
 
 ## 1. Nguồn sự thật
@@ -32,6 +34,7 @@ pytest -q
 ## 3. Quy trình một task
 
 - Tạo nhánh từ `main` mới nhất: `task/<số task>-<tên-ngắn>`, ví dụ `task/6-tfidf-baseline`.
+- Mỗi task có một GitHub Issue; nhánh và PR ghi số issue, mô tả PR có `Closes #<số>`.
 - Một PR = một task trong plan. Tick checkbox của task trong plan ngay trong PR đó.
 - Trước khi mở PR: `git pull --rebase origin main`.
 - Không push thẳng vào `main`. Không force-push nhánh của người khác.
