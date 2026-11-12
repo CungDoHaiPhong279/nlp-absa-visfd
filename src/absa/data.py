@@ -1,4 +1,5 @@
 """Hằng số, tách nhãn, ma trận nhãn và đọc split của UIT-ViSFD."""
+
 import re
 from pathlib import Path
 from typing import Literal
@@ -6,8 +7,18 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 
-ASPECTS = ("SCREEN", "CAMERA", "FEATURES", "BATTERY", "PERFORMANCE",
-           "STORAGE", "DESIGN", "PRICE", "GENERAL", "SER&ACC")
+ASPECTS = (
+    "SCREEN",
+    "CAMERA",
+    "FEATURES",
+    "BATTERY",
+    "PERFORMANCE",
+    "STORAGE",
+    "DESIGN",
+    "PRICE",
+    "GENERAL",
+    "SER&ACC",
+)
 POLARITIES = ("Positive", "Neutral", "Negative")
 POLARITY_CODE = {"Positive": 1, "Neutral": 2, "Negative": 3}
 _CODE_POLARITY = {v: k for k, v in POLARITY_CODE.items()}
@@ -51,10 +62,14 @@ def labels_to_matrix(labels: list[dict[str, str]]) -> np.ndarray:
 
 
 def matrix_to_labels(Y: np.ndarray) -> list[dict[str, str]]:
-    return [{a: _CODE_POLARITY[int(c)] for a, c in zip(ASPECTS, row) if c} for row in Y]
+    return [
+        {a: _CODE_POLARITY[int(c)] for a, c in zip(ASPECTS, row, strict=False) if c} for row in Y
+    ]
 
 
-def load_split(name: Literal["train", "dev", "test"], data_dir: Path = Path("data/raw")) -> pd.DataFrame:
+def load_split(
+    name: Literal["train", "dev", "test"], data_dir: Path = Path("data/raw")
+) -> pd.DataFrame:
     df = pd.read_csv(Path(data_dir) / f"{name.capitalize()}.csv", encoding="utf-8")
     missing = [c for c in _COLUMNS if c not in df.columns]
     if missing:

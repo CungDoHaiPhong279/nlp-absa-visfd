@@ -39,7 +39,7 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - Chỉ chọn tham số trên **Dev**. Chỉ đánh giá **Test** bằng `--eval-test` với cấu hình trong `configs/final/` (D12).
 - Vectorizer, từ vựng, embedding và trọng số lớp chỉ fit trên Train.
 - Seed mặc định 42; thí nghiệm nhiều seed dùng `[42, 43, 44]`.
-- `data/`, `models/`, `results/runs/`, `results/predictions/` không commit. Tải lại bằng `python scripts/download_data.py`.
+- `data/`, `models/`, `results/predictions/` không commit (`results/runs/*.json` có commit, xem D13). Tải lại dữ liệu bằng `python scripts/download_data.py`.
 - Model id: `vinai/phobert-base-v2` (đầu vào phải tách từ bằng VnCoreNLP), `uitnlp/visobert` (đầu vào không tách từ). `max_length` ≤ 256.
 - Chỉ số chính: `aspect_macro_f1` và `sentiment_macro_f1`. Accuracy không bao giờ là chỉ số chính.
 - Bảng xuất ra dùng thang %, 2 chữ số thập phân. Hàm tính toán bên trong không làm tròn.
@@ -104,7 +104,7 @@ nlp-absa-visfd/
 ├── tests/  conftest.py  test_*.py
 ├── data/ (gitignore)  raw/  processed/
 ├── models/ (gitignore)
-├── results/  tables/  figures/  error_analysis/  runs/ (gitignore)  predictions/ (gitignore)
+├── results/  tables/  figures/  error_analysis/  runs/ (commit, D13)  predictions/ (gitignore)
 └── report/  NLP_BTL_MaNhom.pdf  slides.pdf
 ```
 
@@ -147,37 +147,73 @@ Ngoài ra: `py_vncorenlp` đổi thư mục làm việc khi nạp model (cần k
 import re
 from pathlib import Path
 import numpy as np, pytest
-from absa.data import (ASPECTS, parse_label, has_others, format_label,
-                       labels_to_matrix, matrix_to_labels, load_split)
+from absa.data import (
+    ASPECTS,
+    parse_label,
+    has_others,
+    format_label,
+    labels_to_matrix,
+    matrix_to_labels,
+    load_split,
+)
+
 
 def test_aspect_order():
-    assert ASPECTS == ("SCREEN", "CAMERA", "FEATURES", "BATTERY", "PERFORMANCE",
-                       "STORAGE", "DESIGN", "PRICE", "GENERAL", "SER&ACC")
+    assert ASPECTS == (
+        "SCREEN",
+        "CAMERA",
+        "FEATURES",
+        "BATTERY",
+        "PERFORMANCE",
+        "STORAGE",
+        "DESIGN",
+        "PRICE",
+        "GENERAL",
+        "SER&ACC",
+    )
+
 
 def test_parse_basic():
-    assert parse_label("{CAMERA#Positive};{BATTERY#Negative};{OTHERS};") == {"CAMERA": "Positive", "BATTERY": "Negative"}
+    assert parse_label("{CAMERA#Positive};{BATTERY#Negative};{OTHERS};") == {
+        "CAMERA": "Positive",
+        "BATTERY": "Negative",
+    }
+
 
 def test_parse_others_only():
     assert parse_label("{OTHERS};") == {}
     assert has_others("{OTHERS};") is True
     assert has_others("{CAMERA#Positive};") is False
 
-def test_parse_whitespace_and_no_trailing_semicolon():
-    assert parse_label(" {SER&ACC#Neutral} ; {PRICE#Positive}") == {"SER&ACC": "Neutral", "PRICE": "Positive"}
 
-@pytest.mark.parametrize("bad, token", [
-    ("{CAMRA#Positive};", "CAMRA#Positive"),
-    ("{CAMERA#Good};", "CAMERA#Good"),
-    ("{CAMERA};", "CAMERA"),
-    ("{CAMERA#Positive};{CAMERA#Negative};", "CAMERA"),
-])
+def test_parse_whitespace_and_no_trailing_semicolon():
+    assert parse_label(" {SER&ACC#Neutral} ; {PRICE#Positive}") == {
+        "SER&ACC": "Neutral",
+        "PRICE": "Positive",
+    }
+
+
+@pytest.mark.parametrize(
+    "bad, token",
+    [
+        ("{CAMRA#Positive};", "CAMRA#Positive"),
+        ("{CAMERA#Good};", "CAMERA#Good"),
+        ("{CAMERA};", "CAMERA"),
+        ("{CAMERA#Positive};{CAMERA#Negative};", "CAMERA"),
+    ],
+)
 def test_parse_invalid_raises(bad, token):
     with pytest.raises(ValueError, match=re.escape(token)):
         parse_label(bad)
 
+
 def test_format_label_order_and_empty():
-    assert format_label({"BATTERY": "Negative", "CAMERA": "Positive"}) == "{CAMERA#Positive};{BATTERY#Negative};"
+    assert (
+        format_label({"BATTERY": "Negative", "CAMERA": "Positive"})
+        == "{CAMERA#Positive};{BATTERY#Negative};"
+    )
     assert format_label({}) == ""
+
 
 def test_matrix_roundtrip():
     labels = [{"CAMERA": "Positive", "STORAGE": "Negative"}, {}]
@@ -188,20 +224,27 @@ def test_matrix_roundtrip():
     assert matrix_to_labels(Y) == labels
     assert labels_to_matrix([]).shape == (0, 10)
 
+
 def test_load_split_fake(fake_data_dir):
     df = load_split("train", fake_data_dir)
     assert len(df) == 12
-    assert {"index", "comment", "n_star", "date_time", "label", "aspects", "has_others"} <= set(df.columns)
+    assert {"index", "comment", "n_star", "date_time", "label", "aspects", "has_others"} <= set(
+        df.columns
+    )
     assert df["n_star"].dtype.kind == "i"
     assert int(df["aspects"].map(len).eq(0).sum()) == 3
 
+
 REAL = Path("data/raw/Train.csv")
+
 
 @pytest.mark.skipif(not REAL.exists(), reason="chưa tải dữ liệu")
 def test_load_split_real_sizes():
     sizes = {s: len(load_split(s)) for s in ("train", "dev", "test")}
     assert sizes == {"train": 7786, "dev": 1112, "test": 2224}
-    only_others = {s: int(load_split(s)["aspects"].map(len).eq(0).sum()) for s in ("train", "dev", "test")}
+    only_others = {
+        s: int(load_split(s)["aspects"].map(len).eq(0).sum()) for s in ("train", "dev", "test")
+    }
     assert only_others == {"train": 115, "dev": 18, "test": 37}
     assert int(load_split("train")["aspects"].map(lambda d: "STORAGE" in d).sum()) == 91
 ```
@@ -212,7 +255,7 @@ Thông báo lỗi: `"Nhãn không hợp lệ: {token}"` cho khía cạnh hoặc 
 
 - [ ] **Step 4: Tạo khung dự án.**
   - `pyproject.toml`: layout `src/`, package `absa`, `requires-python = ">=3.10"`, `[tool.pytest.ini_options] pythonpath = ["src"]`, `testpaths = ["tests"]`.
-  - `.gitignore`: `data/`, `models/`, `results/runs/`, `results/predictions/`, `*.pt`, `.ipynb_checkpoints/`, `.venv/`, `__pycache__/`.
+  - `.gitignore`: `data/`, `models/`, `results/predictions/`, `*.pt`, `.ipynb_checkpoints/`, `.venv/`, `__pycache__/`.
   - `requirements.txt` (cận dưới, không ghim): `pandas>=2.0, numpy>=1.24, scikit-learn>=1.3, underthesea>=6.8, py_vncorenlp>=0.1.4, torch>=2.1, transformers>=4.40, sentencepiece>=0.1.99, gradio>=4.0, matplotlib>=3.7, PyYAML>=6.0, tabulate>=0.9, jupyter, nbconvert, pytest>=7`. Ghi chú đầu file: trên Windows nên cài torch bản CPU bằng `pip install torch --index-url https://download.pytorch.org/whl/cpu` trước.
   - `docs/decisions.md`: tiêu đề, chép nguyên phần "Quyết định so với spec" ở trên, rồi thêm mục trống `## Nhật ký quyết định khi chạy`.
 
@@ -257,13 +300,17 @@ git commit -m "feat: project skeleton, data download and label parsing"
 import json
 import numpy as np
 from absa.evaluate import evaluate, confusion_by_aspect
+
 C, B = 1, 3  # cột CAMERA, BATTERY
+
 
 def make(rows):
     Y = np.zeros((len(rows), 10), dtype=np.int8)
     for i, r in enumerate(rows):
-        for col, v in r.items(): Y[i, col] = v
+        for col, v in r.items():
+            Y[i, col] = v
     return Y
+
 
 def test_perfect():
     Y = make([{C: 1}, {B: 3}, {}])
@@ -271,11 +318,13 @@ def test_perfect():
     assert m["aspect_macro_f1"] == 1.0 and m["sentiment_macro_f1"] == 1.0
     assert m["exact_match"] == 1.0 and m["polarity_macro_f1_detected"] == 1.0
 
+
 def test_right_aspect_wrong_polarity():
     m = evaluate(make([{C: 1}]), make([{C: 3}]))
     assert m["aspect_macro_f1"] == 1.0
     assert m["sentiment_macro_f1"] == 0.0
     assert m["exact_match"] == 0.0
+
 
 def test_all_none_rows_and_empty_prediction_no_crash():
     m = evaluate(make([{}, {}]), make([{}, {C: 1}]))
@@ -283,17 +332,21 @@ def test_all_none_rows_and_empty_prediction_no_crash():
     assert m["aspect_macro_f1"] == 0.0 and m["sentiment_macro_f1"] == 0.0
     assert m["polarity_macro_f1_detected"] == 0.0
 
+
 def test_macro_ignores_absent_aspect():
     m = evaluate(make([{C: 1}, {B: 1}]), make([{C: 1}, {}]))
     assert m["aspect_macro_f1"] == 0.5
     assert m["per_aspect"]["STORAGE"]["support"] == 0
 
+
 def test_polarity_detected():
     m = evaluate(make([{C: 1}, {B: 3}]), make([{C: 1}, {B: 1}]))
-    assert abs(m["polarity_macro_f1_detected"] - 1/3) < 1e-9  # Positive F1=2/3, Negative F1=0
+    assert abs(m["polarity_macro_f1_detected"] - 1 / 3) < 1e-9  # Positive F1=2/3, Negative F1=0
+
 
 def test_json_serializable():
     json.dumps(evaluate(make([{C: 1}]), make([{C: 1}])))
+
 
 def test_confusion_by_aspect():
     cm = confusion_by_aspect(make([{C: 1}, {C: 3}, {}]), make([{C: 1}, {C: 1}, {C: 2}]), "CAMERA")
@@ -345,15 +398,18 @@ import os, shutil, unicodedata
 import pandas as pd, pytest
 from absa import preprocess as P
 
+
 def test_nfc_and_tone_consistent():
     out = P.normalize(unicodedata.normalize("NFD", "Pin hóa đá"))
     assert out == unicodedata.normalize("NFC", out)
     assert P.normalize("hoá đá") == P.normalize("hóa đá")
 
+
 def test_strip_emoji():
     assert P.normalize("pin trâu 😍👍", strip_emoji=True) == "pin trâu"
     assert P.normalize("😍😍", strip_emoji=True) == ""
-    assert P.normalize("pin trâu 😍") .endswith("😍")  # mặc định giữ emoji
+    assert P.normalize("pin trâu 😍").endswith("😍")  # mặc định giữ emoji
+
 
 def test_strip_punct_lower_whitespace():
     assert P.normalize("pin trâu!!! máy ok...", strip_punct=True) == "pin trâu máy ok"
@@ -361,9 +417,11 @@ def test_strip_punct_lower_whitespace():
     assert P.normalize("  pin \n trâu ") == "pin trâu"
     assert P.normalize("") == ""
 
+
 def test_segment_underthesea():
     out = P.segment(["điện thoại pin trâu", ""])
     assert "điện_thoại" in out[0] and out[1] == ""
+
 
 @pytest.mark.skipif(shutil.which("java") is None, reason="không có Java")
 def test_vncorenlp_keeps_cwd():
@@ -371,19 +429,24 @@ def test_vncorenlp_keeps_cwd():
     out = P.segment(["điện thoại pin trâu"], backend="vncorenlp")
     assert "điện_thoại" in out[0] and os.getcwd() == cwd
 
+
 def test_use_star_prefix_after_segment():
     df = pd.DataFrame({"comment": ["điện thoại tốt"], "n_star": [5]})
     out = P.preprocess_df(df, {"segment": "underthesea", "use_star": True})
     assert out[0].startswith("[5 sao] ") and "điện_thoại" in out[0]
 
+
 def test_unknown_key_raises():
     with pytest.raises(ValueError, match="lowercse"):
         P.preprocess_df(pd.DataFrame({"comment": ["a"], "n_star": [1]}), {"lowercse": True})
 
+
 def test_cache_hit(tmp_path, monkeypatch):
     df = pd.DataFrame({"comment": ["pin trâu", "máy đẹp"], "n_star": [5, 4]})
     first = P.preprocess_df(df, {"segment": "underthesea"}, tmp_path, "train")
-    monkeypatch.setattr(P, "segment", lambda *a, **k: (_ for _ in ()).throw(AssertionError("không dùng cache")))
+    monkeypatch.setattr(
+        P, "segment", lambda *a, **k: (_ for _ in ()).throw(AssertionError("không dùng cache"))
+    )
     assert P.preprocess_df(df, {"segment": "underthesea"}, tmp_path, "train") == first
     assert len(list(tmp_path.glob("train__*.json"))) == 1
 ```
@@ -691,7 +754,7 @@ model: {type: transformer, model_name: vinai/phobert-base-v2, mode: joint, max_l
   4. `pip install -e . -r requirements.txt`, rồi `pip freeze > requirements.lock.colab.txt`.
   5. `!java -version`; nếu thiếu thì `apt-get install -y openjdk-17-jre-headless`.
   6. `python scripts/download_data.py`.
-  7. Khôi phục `data/processed` và `results/runs` từ Drive nếu đã có.
+  7. Khôi phục `data/processed` từ Drive nếu đã có (`results/runs` đã nằm trong git, D13).
   8. `pytest -q`.
   9. Kiểm tra nạp được tokenizer: `AutoTokenizer.from_pretrained("vinai/phobert-base-v2")` và `"uitnlp/visobert"`.
   10. Chạy đo thời gian.

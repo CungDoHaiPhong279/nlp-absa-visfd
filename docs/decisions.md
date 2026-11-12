@@ -16,5 +16,7 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - **D10 – Dò tham số trên Dev (E0):** `C` ∈ {0.25, 0.5, 1, 2, 4} cho TF-IDF LR/SVM; ngưỡng phát hiện khía cạnh ∈ {0.30, 0.35, …, 0.70} cho transformer ở chế độ split.
 - **D11 – Cấu trúc repo:** gói `src/absa/` và 3 notebook (`01_eda`, `02_colab_train`, `03_error_analysis`) thay cho 4 notebook và `src/*.py` rời ở spec mục 8. Lý do: code dùng chung, test được.
 - **D12 – `--eval-test` chỉ nhận cấu hình nằm trong `configs/final/`** và không dùng chung với `--limit`; code chặn cứng, không chỉ dựa vào quy ước.
+- **D13 – Commit `results/runs/*.json`:** mỗi lần chạy một file tên riêng (`{name}__seed{seed}.json`) nên không xung đột; cả nhóm cần chung các file này để `make_tables.py` sinh cùng bảng và để mọi số trong báo cáo truy được. `results/predictions/` vẫn không commit (lớn), chia sẻ qua Google Drive.
+- **D14 – Quy trình nhóm:** mọi thay đổi vào `main` qua Pull Request, CI xanh, người còn lại duyệt; quy tắc chi tiết ở `CONTRIBUTING.md`; quy tắc cho trợ lý AI ở `AGENTS.md`.
 
 ## Nhật ký quyết định khi chạy

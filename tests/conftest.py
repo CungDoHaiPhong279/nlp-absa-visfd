@@ -16,7 +16,14 @@ def fake_data_dir(tmp_path):
         rows = []
         for i in range(n):
             text, label = _PATTERNS[i % 4]
-            rows.append({"index": i, "comment": f"{name.lower()} {text} {i}",
-                         "n_star": _STARS[i % 4], "date_time": "01/01/2021 10:00", "label": label})
+            rows.append(
+                {
+                    "index": i,
+                    "comment": f"{name.lower()} {text} {i}",
+                    "n_star": _STARS[i % 4],
+                    "date_time": "01/01/2021 10:00",
+                    "label": label,
+                }
+            )
         pd.DataFrame(rows).to_csv(tmp_path / f"{name}.csv", index=False, encoding="utf-8")
     return tmp_path

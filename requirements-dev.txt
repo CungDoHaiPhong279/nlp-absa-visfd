@@ -1,0 +1,4 @@
+pre-commit>=3.5
+# Phải trùng phiên bản với rev của ruff-pre-commit trong .pre-commit-config.yaml; nâng cả hai cùng lúc.
+ruff==0.17.5
+nbstripout>=0.7

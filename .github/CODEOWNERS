@@ -1,0 +1,4 @@
+# File này chỉ định người review mặc định cho mỗi đường dẫn (GitHub tự gán vào PR).
+# Khi biết tên GitHub của thành viên B, bỏ dấu # ở các dòng mẫu bên dưới và điền tên vào.
+* @CungDoHaiPhong279
+# /src/absa/evaluate.py @<github-B>

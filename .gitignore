@@ -1,7 +1,6 @@
 .superpowers/
 data/
 models/
-results/runs/
 results/predictions/
 *.pt
 .ipynb_checkpoints/
