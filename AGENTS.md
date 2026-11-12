@@ -7,3 +7,4 @@
 - Không sửa `results/tables/*` bằng tay. Không commit `data/`, `models/`, `results/predictions/`.
 - Python: dùng `.venv` (Python 3.11), không dùng Python của MSYS2.
 - Gặp mâu thuẫn giữa plan và code: dừng lại và hỏi người dùng, không tự chọn.
+- Đọc `docs/TEAM.md`. Khi làm một task, đọc issue tương ứng trên GitHub; không đóng issue thay người dùng.
