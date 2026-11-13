@@ -480,7 +480,7 @@ def test_cache_hit(tmp_path, monkeypatch):
   - `emoji_stats(texts: list[str], top: int = 10) -> dict`: `share_with_emoji` (float) và `top_emojis` (`list[tuple[str, int]]`).
   - `TEENCODE: tuple[str, ...] = ("k", "ko", "kh", "hk", "khg", "dc", "đc", "ok", "oke", "sp", "mn", "bt", "vs", "j", "r", "mik", "mk", "đt", "dt", "cam", "fb", "nv", "trc", "ms")`, và `teencode_counts(texts, terms=TEENCODE) -> pd.Series`: số bình luận chứa mỗi từ (tách theo khoảng trắng, chữ thường), sắp giảm dần.
 
-- [ ] **Step 1: Viết test (fail)** với DataFrame giả 3 dòng: nhãn `{CAMERA#Positive};{PRICE#Negative};`, `{OTHERS};`, `{CAMERA#Neutral};`; `n_star` lần lượt 5, 1, 3; cột `aspects` tạo bằng `parse_label`.
+- [x] **Step 1: Viết test (fail)** với DataFrame giả 3 dòng: nhãn `{CAMERA#Positive};{PRICE#Negative};`, `{OTHERS};`, `{CAMERA#Neutral};`; `n_star` lần lượt 5, 1, 3; cột `aspects` tạo bằng `parse_label`.
   - `aspect_polarity_table`: `.loc["CAMERA","Total"] == 2`, `.loc["PRICE","Negative"] == 1`, `.loc["STORAGE","Total"] == 0`, có đủ 10 hàng.
   - `aspects_per_comment(df).to_dict() == {0: 1, 1: 1, 2: 1}`.
   - `star_vs_polarity(df).loc[5, "Positive"] == 1` và `.loc[5, "Negative"] == 1`.
@@ -488,14 +488,14 @@ def test_cache_hit(tmp_path, monkeypatch):
   - `duplicate_report({"train": df_of(["a", "b", "A"]), "dev": df_of(["b"]), "test": df_of(["c"])}) == {"train_dup": 1, "train_dev_overlap": 1, "train_test_overlap": 0, "dev_test_overlap": 0}`.
   - `emoji_stats(["pin 😍", "ok", "😍👍"])`: `share_with_emoji` xấp xỉ `2/3`, `top_emojis[0] == ("😍", 2)`.
   - `teencode_counts(["ko có gì", "Ko ok"])["ko"] == 2`.
-- [ ] **Step 2: Chạy test**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `eda.py`.**
-- [ ] **Step 4: Viết `notebooks/01_eda.ipynb`.** Mỗi mục có một ô markdown nhận xét ngắn. Thứ tự: nạp dữ liệu → bảng → hình → nhận xét. Xuất ra:
+- [x] **Step 2: Chạy test**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `eda.py`.**
+- [x] **Step 4: Viết `notebooks/01_eda.ipynb`.** Mỗi mục có một ô markdown nhận xét ngắn. Thứ tự: nạp dữ liệu → bảng → hình → nhận xét. Xuất ra:
   - `results/tables/eda_aspect_polarity_{train,dev,test}.csv`, `eda_aspects_per_comment.csv`, `eda_star_vs_polarity.csv`, `eda_length.csv`, `eda_duplicates.json`, `eda_emoji.json`, `eda_teencode.csv`.
   - `results/figures/eda_aspect_freq.png` (cột), `eda_aspect_polarity_stacked.png` (cột chồng), `eda_star_polarity_heatmap.png`, `eda_length_hist.png`.
   - Ô tùy chọn (chỉ chạy khi có `transformers` và mạng): đếm số token con (subword) của PhoBERT sau tách từ VnCoreNLP, và của ViSoBERT trên văn bản thô, trên Train. Ghi `results/tables/eda_subword_len.csv` (các cột mean, p95, p99, max).
-- [ ] **Step 5: Chạy `pytest tests/test_eda.py -v`** (PASS), rồi `jupyter nbconvert --execute --to notebook --inplace notebooks/01_eda.ipynb` (không lỗi). Mở `eda_duplicates.json`: nếu `train_test_overlap > 0` thì ghi số đó vào `docs/decisions.md` (không xóa mẫu, vì phải giữ split gốc).
-- [ ] **Step 6: Ghi `max_length` vào `docs/decisions.md`** theo D9, dùng `eda_subword_len.csv` (ô tùy chọn có thể chạy trên Colab). Kỳ vọng thô: p95 khoảng 78 âm tiết, nên `max_length` có lẽ là 128 hoặc 160; hãy dùng số đo thật.
+- [x] **Step 5: Chạy `pytest tests/test_eda.py -v`** (PASS), rồi `jupyter nbconvert --execute --to notebook --inplace notebooks/01_eda.ipynb` (không lỗi). Mở `eda_duplicates.json`: nếu `train_test_overlap > 0` thì ghi số đó vào `docs/decisions.md` (không xóa mẫu, vì phải giữ split gốc).
+- [x] **Step 6: Ghi `max_length` vào `docs/decisions.md`** theo D9, dùng `eda_subword_len.csv` (ô tùy chọn có thể chạy trên Colab). Kỳ vọng thô: p95 khoảng 78 âm tiết, nên `max_length` có lẽ là 128 hoặc 160; hãy dùng số đo thật.
 - [ ] **Step 7: Commit** `feat: EDA module, notebook and figures` (gồm cả `results/tables/eda_*` và `results/figures/eda_*`).
 
 ---
