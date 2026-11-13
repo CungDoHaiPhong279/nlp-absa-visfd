@@ -391,7 +391,7 @@ def test_confusion_by_aspect():
   - `segment(texts: list[str], backend: Literal["underthesea", "vncorenlp"] = "underthesea") -> list[str]`: từ ghép nối bằng `_`; chuỗi rỗng giữ nguyên là `""`.
   - `preprocess_df(df: pd.DataFrame, pre_cfg: dict, cache_dir: Path | None = None, cache_tag: str | None = None) -> list[str]`. Gộp `pre_cfg` với `PRE_DEFAULTS` (khóa lạ thì báo `ValueError`). Thứ tự: normalize → segment → tiền tố `"[{n_star} sao] "` nếu `use_star`. Chỉ cache khi có cả `cache_dir` lẫn `cache_tag`. File cache: `{cache_dir}/{cache_tag}__{sha1(json.dumps(cfg, sort_keys=True))[:10]}.json`, nội dung `{"n": int, "config": dict, "texts": list[str]}`. Nếu `n` khác `len(df)` thì tính lại.
 
-- [ ] **Step 1: Viết test (fail)**
+- [x] **Step 1: Viết test (fail)**
 
 ```python
 import os, shutil, unicodedata
@@ -451,12 +451,12 @@ def test_cache_hit(tmp_path, monkeypatch):
     assert len(list(tmp_path.glob("train__*.json"))) == 1
 ```
 
-- [ ] **Step 2: Chạy `pytest tests/test_preprocess.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt.**
+- [x] **Step 2: Chạy `pytest tests/test_preprocess.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt.**
   - Regex emoji gồm các dải U+1F000–U+1FAFF, U+2600–U+27BF, U+2B00–U+2BFF, U+FE0F, U+200D, U+20E3. Emoticon dạng chữ như `:)` không xử lý; ghi điều này thành giới hạn trong `docs/decisions.md`.
   - Backend `underthesea`: `underthesea.word_tokenize(text, format="text")`.
   - Backend `vncorenlp`: nạp `py_vncorenlp.VnCoreNLP(annotators=["wseg"], save_dir=str(Path("models/vncorenlp").resolve()))` một lần (biến module), tải model bằng `py_vncorenlp.download_model` nếu chưa có. Lưu `os.getcwd()` trước khi nạp và `os.chdir` về sau, kể cả khi lỗi (`try/finally`). Mỗi văn bản: `" ".join(rdr.word_segment(text))`.
-- [ ] **Step 4: Chạy test**, kỳ vọng PASS (`test_vncorenlp_keeps_cwd` có thể bị skip nếu máy không có Java; B chạy lại trên Colab để xác nhận PASS).
+- [x] **Step 4: Chạy test**, kỳ vọng PASS (`test_vncorenlp_keeps_cwd` có thể bị skip nếu máy không có Java; B chạy lại trên Colab để xác nhận PASS).
 - [ ] **Step 5: Commit** `feat: Vietnamese normalization, segmentation and preprocessing cache`
 
 ---
@@ -647,7 +647,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
   - `per_aspect_table` có 10 hàng.
 - [ ] **Step 2: Chạy `pytest tests/test_report.py -v`**, kỳ vọng FAIL.
 - [ ] **Step 3: Cài đặt.**
-- [ ] **Step 4: Chạy test** (PASS), rồi `python scripts/make_tables.py`. Kỳ vọng có `results/tables/comparison_dev.md`, `ablation_E1_dev.md`, `ablation_E2_dev.md`, `ablation_E3_dev.md`, `ablation_E6_tfidf_dev.md`, `sweep_E0_tfidf_lr_dev.md`, mỗi bảng có hàng `tfidf_lr`.
+- [x] **Step 4: Chạy test** (PASS), rồi `python scripts/make_tables.py`. Kỳ vọng có `results/tables/comparison_dev.md`, `ablation_E1_dev.md`, `ablation_E2_dev.md`, `ablation_E3_dev.md`, `ablation_E6_tfidf_dev.md`, `sweep_E0_tfidf_lr_dev.md`, mỗi bảng có hàng `tfidf_lr`.
 - [ ] **Step 5: Commit** `feat: comparison, ablation and per-aspect tables` (gồm cả `results/tables/*.md|csv`).
 
 ---
@@ -687,7 +687,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
   - `test_best_threshold`: `Y_true` có 2 hàng với CAMERA=1; `aspect_probs` bằng 0.4 ở ô có CAMERA, 0.1 ở các ô khác; `polarity_codes` toàn 1. Kỳ vọng `best_threshold(...) == 0.35`.
 - [ ] **Step 2: Chạy `pytest tests/test_transformer_core.py -v`**, kỳ vọng FAIL.
 - [ ] **Step 3: Cài đặt** `tiny.py` và phần lõi của `transformer.py`.
-- [ ] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
+- [x] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
 - [ ] **Step 5: Commit** `feat: transformer ABSA heads, losses, decoding and class weights`
 
 ---
@@ -809,7 +809,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
         freeze_embedding: false, patience: 3}
 ```
 
-- [ ] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
+- [x] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
 - [ ] **Step 5: Commit** `feat: BiLSTM+fastText approximate reproduction baseline`
 
 ---
@@ -896,7 +896,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - `test_from_dir_roundtrip(tmp_path)`: train `TransformerAbsa("__tiny__", epochs=1)`, gán `preprocess_cfg`, `save`, rồi `Predictor.from_dir` → `predict("pin trâu")` trả dict có khóa ⊆ `ASPECTS`, và khớp với `model.predict(["pin trâu"])` sau khi đổi về dict.
 - [ ] **Step 2: Chạy `pytest tests/test_inference.py -v`**, kỳ vọng FAIL.
 - [ ] **Step 3: Cài đặt `inference.py` và `demo/app.py`.**
-- [ ] **Step 4: Chạy test** (PASS). Chạy thật:
+- [x] **Step 4: Chạy test** (PASS). Chạy thật:
   - Trên Colab: `python demo/app.py --model models/final_phobert__seed42 --share`.
   - Trên máy local: chỉ chạy nếu có Java (vì PhoBERT cần VnCoreNLP) và đã tải checkpoint từ Drive.
 

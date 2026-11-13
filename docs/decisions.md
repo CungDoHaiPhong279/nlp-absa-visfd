@@ -20,3 +20,4 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - **D14 – Quy trình nhóm:** mọi thay đổi vào `main` qua Pull Request, CI xanh, người còn lại duyệt; quy tắc chi tiết ở `CONTRIBUTING.md`; quy tắc cho trợ lý AI ở `AGENTS.md`.
 
 ## Nhật ký quyết định khi chạy
+- **Task 3 – giới hạn emoji/emoticon:** `strip_emoji` chỉ bỏ các dải Unicode emoji (U+1F000–1FAFF, U+2600–27BF, U+2B00–2BFF, U+FE0F, U+200D, U+20E3). Emoticon dạng chữ như `:)` không được xử lý (không bị bỏ bởi `strip_emoji`; `strip_punct` chỉ thay dấu câu của chúng bằng khoảng trắng).
