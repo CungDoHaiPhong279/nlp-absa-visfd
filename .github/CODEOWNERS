@@ -1,4 +1,42 @@
-# File này chỉ định người review mặc định cho mỗi đường dẫn (GitHub tự gán vào PR).
-# Khi biết tên GitHub của thành viên B, bỏ dấu # ở các dòng mẫu bên dưới và điền tên vào.
-* @CungDoHaiPhong279
-# /src/absa/evaluate.py @<github-B>
+# Người được GitHub tự động yêu cầu review khi PR sửa đường dẫn tương ứng.
+# Ở repo này, "owner" = NGƯỜI REVIEW, tức người còn lại, theo bảng ở CONTRIBUTING.md mục 5.
+# A = @CungDoHaiPhong279, B = @Longdaica11. Dòng sau ghi đè dòng trước.
+
+# Mặc định (file chung): cả hai
+*                                   @CungDoHaiPhong279 @Longdaica11
+
+# File A phụ trách -> B review
+/src/absa/data.py                   @Longdaica11
+/src/absa/preprocess.py             @Longdaica11
+/src/absa/eda.py                    @Longdaica11
+/src/absa/baseline.py               @Longdaica11
+/src/absa/report.py                 @Longdaica11
+/src/absa/bilstm.py                 @Longdaica11
+/src/absa/inference.py              @Longdaica11
+/demo/                              @Longdaica11
+/notebooks/01_eda.ipynb             @Longdaica11
+/scripts/download_data.py           @Longdaica11
+/scripts/make_tables.py             @Longdaica11
+/scripts/prepare_fasttext.py        @Longdaica11
+/configs/tfidf_*.yaml               @Longdaica11
+/configs/bilstm_fasttext.yaml       @Longdaica11
+/configs/ablation/E1_*              @Longdaica11
+/configs/ablation/E2_*              @Longdaica11
+/configs/ablation/E3_tfidf_*        @Longdaica11
+/configs/ablation/E6_tfidf_*        @Longdaica11
+
+# File B phụ trách -> A review
+/src/absa/evaluate.py               @CungDoHaiPhong279
+/src/absa/config.py                 @CungDoHaiPhong279
+/src/absa/registry.py               @CungDoHaiPhong279
+/src/absa/experiment.py             @CungDoHaiPhong279
+/src/absa/tiny.py                   @CungDoHaiPhong279
+/src/absa/transformer.py            @CungDoHaiPhong279
+/src/absa/training.py               @CungDoHaiPhong279
+/scripts/run.py                     @CungDoHaiPhong279
+/scripts/run_all.py                 @CungDoHaiPhong279
+/configs/phobert_*.yaml             @CungDoHaiPhong279
+/configs/visobert_*.yaml            @CungDoHaiPhong279
+/configs/ablation/*_phobert_*       @CungDoHaiPhong279
+/notebooks/02_colab_train.ipynb     @CungDoHaiPhong279
+/README.md                          @CungDoHaiPhong279
