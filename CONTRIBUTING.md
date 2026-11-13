@@ -34,7 +34,7 @@ pytest -q
 ## 3. Quy trình một task
 
 - Tạo nhánh từ `main` mới nhất: `task/<số task>-<tên-ngắn>`, ví dụ `task/6-tfidf-baseline`.
-- Mỗi task có một GitHub Issue; nhánh và PR ghi số issue, mô tả PR có `Closes #<số>`.
+- Mỗi task có một GitHub Issue (tiêu đề `Task N: …`). Tên nhánh dùng **số task** trong plan; mô tả PR dùng **số issue**: `Closes #<số issue>`. Hai số này khác nhau, ví dụ Task 2 là issue #4.
 - Một PR = một task trong plan. Tick checkbox của task trong plan ngay trong PR đó.
 - Trước khi mở PR: `git pull --rebase origin main`.
 - Không push thẳng vào `main`. Không force-push nhánh của người khác.

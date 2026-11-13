@@ -139,9 +139,9 @@ Ngoài ra: `py_vncorenlp` đổi thư mục làm việc khi nạp model (cần k
   - `load_split(name: Literal["train", "dev", "test"], data_dir: Path = Path("data/raw")) -> pd.DataFrame`: giữ các cột gốc, thêm `aspects: dict` và `has_others: bool`; `n_star` kiểu int.
   - Fixture `fake_data_dir(tmp_path) -> Path` trong `tests/conftest.py`: ghi `Train.csv` (12 dòng), `Dev.csv` (4), `Test.csv` (4) đúng định dạng gốc. Mẫu nhãn lặp vòng: `"pin trâu máy đẹp" → {BATTERY#Positive};{DESIGN#Positive};`, `"pin yếu giá cao" → {BATTERY#Negative};{PRICE#Negative};`, `"giao hàng nhanh" → {SER&ACC#Positive};`, `"hihi" → {OTHERS};`. Comment có tiền tố tên split và hậu tố số dòng (`"test pin yếu giá cao 2"`) để không trùng nhau. `n_star` lặp vòng 5, 1, 4, 3.
 
-- [ ] **Step 1: Chuẩn bị môi trường (B).** Cài Python 3.11/3.12 từ python.org và Java 17 (Temurin) cho VnCoreNLP. Rồi chạy `python -m venv .venv` và `.venv\Scripts\activate`. Chạy `python -c "import sys; print(sys.executable)"`; kỳ vọng đường dẫn nằm trong `.venv`, không phải `msys64`. Chạy `git init`.
+- [x] **Step 1: Chuẩn bị môi trường (B).** Cài Python 3.11/3.12 từ python.org và Java 17 (Temurin) cho VnCoreNLP. Rồi chạy `python -m venv .venv` và `.venv\Scripts\activate`. Chạy `python -c "import sys; print(sys.executable)"`; kỳ vọng đường dẫn nằm trong `.venv`, không phải `msys64`. Chạy `git init`.
 
-- [ ] **Step 2: Viết test (fail)** trong `tests/test_data.py`:
+- [x] **Step 2: Viết test (fail)** trong `tests/test_data.py`:
 
 ```python
 import re
@@ -251,21 +251,21 @@ def test_load_split_real_sizes():
 
 Thông báo lỗi: `"Nhãn không hợp lệ: {token}"` cho khía cạnh hoặc cảm xúc lạ (token là phần trong ngoặc đã strip); `"Khía cạnh lặp: {aspect}"` khi một khía cạnh xuất hiện hai lần.
 
-- [ ] **Step 3: Chạy `pytest tests/test_data.py -v`**, kỳ vọng FAIL (`ModuleNotFoundError: absa`).
+- [x] **Step 3: Chạy `pytest tests/test_data.py -v`**, kỳ vọng FAIL (`ModuleNotFoundError: absa`).
 
-- [ ] **Step 4: Tạo khung dự án.**
+- [x] **Step 4: Tạo khung dự án.**
   - `pyproject.toml`: layout `src/`, package `absa`, `requires-python = ">=3.10"`, `[tool.pytest.ini_options] pythonpath = ["src"]`, `testpaths = ["tests"]`.
   - `.gitignore`: `data/`, `models/`, `results/predictions/`, `*.pt`, `.ipynb_checkpoints/`, `.venv/`, `__pycache__/`.
   - `requirements.txt` (cận dưới, không ghim): `pandas>=2.0, numpy>=1.24, scikit-learn>=1.3, underthesea>=6.8, py_vncorenlp>=0.1.4, torch>=2.1, transformers>=4.40, sentencepiece>=0.1.99, gradio>=4.0, matplotlib>=3.7, PyYAML>=6.0, tabulate>=0.9, jupyter, nbconvert, pytest>=7`. Ghi chú đầu file: trên Windows nên cài torch bản CPU bằng `pip install torch --index-url https://download.pytorch.org/whl/cpu` trước.
   - `docs/decisions.md`: tiêu đề, chép nguyên phần "Quyết định so với spec" ở trên, rồi thêm mục trống `## Nhật ký quyết định khi chạy`.
 
-- [ ] **Step 5: Viết `scripts/download_data.py`.** Tải URL ở Global Constraints bằng `urllib.request`, kiểm tra SHA-256 (sai thì xóa file tạm, báo lỗi, exit 1), giải nén bằng `zipfile` vào `data/raw/`. Nếu cả 3 CSV đã có thì in `"Đã có dữ liệu"` và bỏ qua. Có tham số `--data-dir` (mặc định `data/raw`).
+- [x] **Step 5: Viết `scripts/download_data.py`.** Tải URL ở Global Constraints bằng `urllib.request`, kiểm tra SHA-256 (sai thì xóa file tạm, báo lỗi, exit 1), giải nén bằng `zipfile` vào `data/raw/`. Nếu cả 3 CSV đã có thì in `"Đã có dữ liệu"` và bỏ qua. Có tham số `--data-dir` (mặc định `data/raw`).
 
-- [ ] **Step 6: Cài đặt `src/absa/data.py`.** Tách token bằng regex `\{([^}]*)\}`, strip từng token. Token phải là `OTHERS` hoặc `ASPECT#POLARITY` với ASPECT ∈ `ASPECTS` và POLARITY ∈ `POLARITIES`. Đọc CSV bằng `encoding="utf-8"`. `load_split` báo `ValueError` nếu thiếu cột bắt buộc; tên file là `{Name}.csv` (Train/Dev/Test).
+- [x] **Step 6: Cài đặt `src/absa/data.py`.** Tách token bằng regex `\{([^}]*)\}`, strip từng token. Token phải là `OTHERS` hoặc `ASPECT#POLARITY` với ASPECT ∈ `ASPECTS` và POLARITY ∈ `POLARITIES`. Đọc CSV bằng `encoding="utf-8"`. `load_split` báo `ValueError` nếu thiếu cột bắt buộc; tên file là `{Name}.csv` (Train/Dev/Test).
 
-- [ ] **Step 7: Chạy `pip install -e . && pip install -r requirements.txt && python scripts/download_data.py && pytest tests/test_data.py -v`**. Kỳ vọng PASS toàn bộ, kể cả `test_load_split_real_sizes`. Chạy `pip freeze > requirements.lock.txt`.
+- [x] **Step 7: Chạy `pip install -e . && pip install -r requirements.txt && python scripts/download_data.py && pytest tests/test_data.py -v`**. Kỳ vọng PASS toàn bộ, kể cả `test_load_split_real_sizes`. Chạy `pip freeze > requirements.lock.txt`.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add pyproject.toml .gitignore requirements.txt requirements.lock.txt docs/ scripts/download_data.py src/absa/__init__.py src/absa/data.py tests/conftest.py tests/test_data.py
@@ -294,7 +294,7 @@ git commit -m "feat: project skeleton, data download and label parsing"
   - Mọi giá trị là `float` Python (không phải `np.float64`, để ghi JSON được), nằm trong [0, 1], không làm tròn.
   - `confusion_by_aspect(Y_true: np.ndarray, Y_pred: np.ndarray, aspect: str) -> np.ndarray`: shape `(4, 4)`, hàng là gold, cột là dự đoán, nhãn 0..3.
 
-- [ ] **Step 1: Viết test (fail)**
+- [x] **Step 1: Viết test (fail)**
 
 ```python
 import json
@@ -354,10 +354,10 @@ def test_confusion_by_aspect():
     assert cm[1, 1] == 1 and cm[3, 1] == 1 and cm[0, 2] == 1
 ```
 
-- [ ] **Step 2: Chạy `pytest tests/test_evaluate.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt** bằng `sklearn.metrics.precision_recall_fscore_support(average=None, zero_division=0)` trên ma trận nhị phân, rồi tự lấy trung bình trên các cột có support > 0. Micro dùng `average="micro"`. Confusion dùng `sklearn.metrics.confusion_matrix(labels=[0, 1, 2, 3])`.
-- [ ] **Step 4: Chạy lại test**, kỳ vọng PASS.
-- [ ] **Step 5: Viết `docs/metric_notes.md`.** Đọc phần Experiments của Phan et al. (2021) (bản PDF qua thư viện trường hoặc liên hệ tác giả) và ghi lại:
+- [x] **Step 2: Chạy `pytest tests/test_evaluate.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt** bằng `sklearn.metrics.precision_recall_fscore_support(average=None, zero_division=0)` trên ma trận nhị phân, rồi tự lấy trung bình trên các cột có support > 0. Micro dùng `average="micro"`. Confusion dùng `sklearn.metrics.confusion_matrix(labels=[0, 1, 2, 3])`.
+- [x] **Step 4: Chạy lại test**, kỳ vọng PASS.
+- [ ] **Step 5: Viết `docs/metric_notes.md`.** _(Đã có bản tạm `published_metric: null`; chờ đọc bài báo ở issue #18.)_ Đọc phần Experiments của Phan et al. (2021) (bản PDF qua thư viện trường hoặc liên hệ tác giả) và ghi lại:
   - (a) F1 khía cạnh 84,48 là micro, macro hay weighted?
   - (b) F1 cảm xúc 63,06 tính trên toàn bộ cặp (khía cạnh, cảm xúc), hay chỉ trên khía cạnh đã phát hiện đúng?
   - (c) Họ đánh giá trên Dev hay Test?
@@ -372,7 +372,7 @@ def test_confusion_by_aspect():
   ````
 
   Không truy cập được bài báo thì ghi đúng như vậy và đặt `published_metric: null`; khi đó bảng dùng nhãn "không cùng định nghĩa".
-- [ ] **Step 6: Commit** `feat: ABSA evaluation metrics and notes on paper metric` (gồm `src/absa/evaluate.py`, `tests/test_evaluate.py`, `docs/metric_notes.md`).
+- [x] **Step 6: Commit** `feat: ABSA evaluation metrics and notes on paper metric` (gồm `src/absa/evaluate.py`, `tests/test_evaluate.py`, `docs/metric_notes.md`).
 
 ---
 
@@ -910,7 +910,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
 **Phụ trách:** B
 
 **Files:**
-- Create: `README.md`, `scripts/run_all.py`, `requirements.lock.txt` (cập nhật)
+- Modify: `README.md` (bản ngắn đã có từ PR onboarding; viết đầy đủ theo Step 4). Create: `scripts/run_all.py`, `requirements.lock.txt` (cập nhật)
 - Test: `tests/test_smoke_pipeline.py`
 
 **Interfaces:**
