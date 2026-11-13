@@ -1,0 +1,6 @@
+{
+  "train_dup": 2,
+  "train_dev_overlap": 3,
+  "train_test_overlap": 5,
+  "dev_test_overlap": 0
+}
