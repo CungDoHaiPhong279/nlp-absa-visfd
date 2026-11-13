@@ -4,11 +4,13 @@ Bài tập lớn môn Xử lý ngôn ngữ tự nhiên. Với mỗi bình luận
 
 > README đầy đủ (cách tái tạo từng bảng/hình, thời gian chạy) sẽ được viết ở Task 13.
 
+Thành viên: A = [@CungDoHaiPhong279](https://github.com/CungDoHaiPhong279), B = [@Longdaica11](https://github.com/Longdaica11).
+
 ## Thành viên mới: đọc theo thứ tự
 
 1. [docs/TEAM.md](docs/TEAM.md): công cụ, quy định nhóm, checklist việc ngoài code.
 2. [CONTRIBUTING.md](CONTRIBUTING.md): cài đặt, quy trình nhánh/PR, ai phụ trách file nào, các bất biến không được đổi.
-3. [AGENTS.md](AGENTS.md): quy tắc cho trợ lý AI (Claude Code, Gemini CLI tự đọc).
+3. [AGENTS.md](AGENTS.md): tổng quan kiến trúc, lệnh và quy tắc cho trợ lý AI (Codex, Claude Code, Gemini CLI tự đọc).
 4. [Plan](docs/superpowers/plans/2026-11-13-absa-visfd.md): yêu cầu chi tiết từng task; [spec](docs/spec/phac_thao_du_an_ABSA_UIT-ViSFD.md); [quyết định](docs/decisions.md).
 
 Tiến độ: xem [Issues](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues) và [Milestones](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/milestones).

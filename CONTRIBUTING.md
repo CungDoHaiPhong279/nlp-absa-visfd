@@ -2,7 +2,7 @@
 
 Công cụ, quy định nhóm và checklist ngoài code: xem [docs/TEAM.md](docs/TEAM.md).
 
-Repo có hai thành viên (A và B), mỗi người có thể dùng trợ lý AI. File này giúp hai người không lệch hướng và không xung đột khi merge.
+Repo có hai thành viên: **A** = `@CungDoHaiPhong279`, **B** = `@Longdaica11`. Mỗi người có thể dùng trợ lý AI. File này giúp hai người không lệch hướng và không xung đột khi merge.
 
 ## 1. Nguồn sự thật
 
@@ -16,9 +16,9 @@ Code mâu thuẫn với các file này là lỗi.
 
 ## 2. Cài đặt
 
-Windows (PowerShell). **Không dùng Python của MSYS2.**
+Windows (PowerShell). **Không dùng Python của MSYS2.** Lệnh cho Linux / Codex cloud: [AGENTS.md mục 4](AGENTS.md).
 
-```
+```powershell
 py -3.11 -m venv .venv
 .venv\Scripts\activate
 pip install torch --index-url https://download.pytorch.org/whl/cpu
@@ -45,7 +45,7 @@ Conventional Commits bằng tiếng Anh như plan: `feat:`, `fix:`, `docs:`, `te
 
 ## 5. Phân công và quyền sở hữu file
 
-Người phụ trách viết/sửa; người kia review PR. Sửa file của người kia thì báo trước trong nhóm chat.
+Người phụ trách viết/sửa; người kia review PR. GitHub tự gán người review theo `.github/CODEOWNERS`, file này khớp với bảng dưới. Sửa file của người kia thì báo trước trong nhóm chat.
 
 | File / thư mục | Phụ trách | Review |
 |---|---|---|
@@ -97,6 +97,7 @@ Muốn đổi: mở một PR chỉ sửa `docs/decisions.md` (ghi lý do và ả
 
 ## 10. Dùng trợ lý AI
 
-- Trợ lý phải đọc `AGENTS.md`.
+- Trợ lý phải đọc `AGENTS.md`. Codex tự đọc file này; Claude Code và Gemini CLI đọc qua `CLAUDE.md` và `GEMINI.md`. Chỉ sửa quy tắc AI ở `AGENTS.md`.
+- Giao việc cho trợ lý theo mẫu: "Làm Task N trong plan (issue #M), theo AGENTS.md". Không giao việc mơ hồ kiểu "làm tiếp dự án".
 - Người dùng AI vẫn chịu trách nhiệm hiểu và giải thích được code (yêu cầu môn học).
 - Ghi phạm vi dùng AI vào báo cáo.

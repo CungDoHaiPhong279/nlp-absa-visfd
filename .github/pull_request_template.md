@@ -14,5 +14,6 @@ Task số / tên:
 - [ ] Có / không đổi interface hoặc bất biến (nếu có: link mục trong `docs/decisions.md`):
 - [ ] Không có dữ liệu/model trong diff
 - [ ] Đã tick checkbox task trong plan
+- [ ] Không có dòng `Co-Authored-By` / ghi công AI trong commit và PR
 
-Người review: @...
+Người review: GitHub tự gán theo `.github/CODEOWNERS` (người còn lại).

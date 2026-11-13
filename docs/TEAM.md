@@ -2,7 +2,9 @@
 
 ## 1. Mục đích
 
-File này cho hai thành viên (A, B) biết nhóm dùng công cụ gì, làm việc với nhau theo quy định nào và còn những việc ngoài code nào phải làm. Thứ tự đọc: `docs/TEAM.md` (con người, công cụ) → [CONTRIBUTING.md](../CONTRIBUTING.md) (Git) → [AGENTS.md](../AGENTS.md) (trợ lý AI) → [plan](superpowers/plans/2026-11-13-absa-visfd.md).
+Thành viên: **A** = `@CungDoHaiPhong279` (dùng Claude Code), **B** = `@Longdaica11` (dùng Codex). Mọi chỗ ghi "A"/"B" trong repo, nhãn issue và plan đều theo quy ước này.
+
+File này cho hai thành viên biết nhóm dùng công cụ gì, làm việc với nhau theo quy định nào và còn những việc ngoài code nào phải làm. Thứ tự đọc: `docs/TEAM.md` (con người, công cụ) → [CONTRIBUTING.md](../CONTRIBUTING.md) (Git) → [AGENTS.md](../AGENTS.md) (trợ lý AI) → [plan](superpowers/plans/2026-11-13-absa-visfd.md).
 
 ## 2. Công cụ
 
@@ -21,14 +23,14 @@ File này cho hai thành viên (A, B) biết nhóm dùng công cụ gì, làm vi
 | Overleaf (LaTeX) | Báo cáo `NLP_BTL_MaNhom.pdf` và slide (Beamer) | Xem mục 5 |
 | Zalo | Trao đổi hằng ngày | Chỉ trao đổi nhanh, xem mục 3 |
 | Google Meet | Họp tuần | Xem mục 3 |
-| Trợ lý AI (Claude Code, Gemini CLI…) | Hỗ trợ viết code | Theo [AGENTS.md](../AGENTS.md); ghi phạm vi dùng vào phụ lục báo cáo |
+| Trợ lý AI: Codex (B), Claude Code (A), Gemini CLI | Hỗ trợ viết code | Cả ba tự đọc [AGENTS.md](../AGENTS.md) (Codex đọc trực tiếp; Claude/Gemini qua `CLAUDE.md`/`GEMINI.md`). Codex cloud: dán khối lệnh Linux ở AGENTS.md mục 4 vào "setup script" của môi trường. Ghi phạm vi dùng AI vào phụ lục báo cáo |
 
 ## 3. Quy định nhóm
 
 - **Họp tuần:** Google Meet mỗi tuần một lần (giờ cố định do nhóm chốt). Mỗi người demo phần mình đã làm, **giải thích lại phần của người kia** (rủi ro vấn đáp, xem [spec mục 6](spec/phac_thao_du_an_ABSA_UIT-ViSFD.md)), cập nhật Issues. Ghi biên bản ngắn vào một comment trong issue "Họp tuần" ([#29](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/29)) hoặc vào Zalo note.
 - **Zalo chỉ để trao đổi nhanh.** Mọi quyết định kỹ thuật phải nằm trong Issue, PR hoặc [docs/decisions.md](decisions.md); quyết định chỉ có trên Zalo coi như chưa có.
 - **Nhận việc:** ai nhận việc thì gán nhãn `A`/`B` cho issue và chuyển sang "đang làm" bằng comment; không hai người cùng làm một issue.
-- **Định nghĩa "xong" một task:** test xanh trên máy và CI; PR được người kia duyệt và merge; issue đóng qua `Closes #`; checkbox trong plan được tick; `docs/decisions.md` cập nhật nếu có quyết định mới.
+- **Định nghĩa "xong" một task:** đạt checklist [CONTRIBUTING.md mục 9](../CONTRIBUTING.md); test xanh trên máy và CI; PR được người kia duyệt và merge; issue đóng qua `Closes #`; checkbox trong plan được tick; `docs/decisions.md` cập nhật nếu có quyết định mới.
 - **Chạy GPU trên Colab:** trước khi chạy, comment trên issue cấu hình sẽ chạy (tránh hai người chạy trùng, tốn quota); sau mỗi lần chạy sao lưu lên Drive; commit `results/runs/*.json` bằng PR.
 - **Liêm chính học thuật** (hướng dẫn môn học mục 6): không bịa số liệu; mọi số trong báo cáo truy được về `results/runs/` hoặc `results/tables/`; trích dẫn Phan et al. (2021) và mọi nguồn; không sao chép của nhóm khác.
 - **Dữ liệu và bảo mật:** không đăng lại UIT-ViSFD (chỉ dùng cho nghiên cứu); không commit token, mật khẩu, file `.env`; repo đang public.
