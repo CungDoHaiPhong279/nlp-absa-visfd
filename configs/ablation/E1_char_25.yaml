@@ -1,0 +1,5 @@
+base: ../tfidf_lr_base.yaml
+name: E1_char_25
+groups: [E1]
+# Cùng một yếu tố khảo sát: đổi loại đặc trưng từ n-gram từ sang n-gram ký tự.
+model: {analyzer: char_wb, ngram_range: [2, 5]}
