@@ -1,0 +1,5 @@
+base: phobert_joint.yaml
+name: visobert_joint
+preprocess: {segment: null}
+# ViSoBERT reads raw text (no word segmentation); max_length from its own p99 (D9, Task 4)
+model: {model_name: uitnlp/visobert, max_length: 224}

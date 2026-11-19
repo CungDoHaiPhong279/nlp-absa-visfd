@@ -1,0 +1,4 @@
+base: ../phobert_joint.yaml
+name: E5_phobert_star
+groups: [E5]
+preprocess: {use_star: true}

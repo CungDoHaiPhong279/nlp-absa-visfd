@@ -694,7 +694,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
 
 ### Task 9: Huấn luyện transformer, Colab, PhoBERT/ViSoBERT và E3–E6
 
-**Phụ trách:** B (A chạy E3, E5 trên Colab)
+**Phụ trách:** B (A chạy E3, E5 trên Colab). Thực tế: A làm phần code (Step 1–7)
 
 **Files:**
 - Create: `src/absa/training.py`, `configs/phobert_joint.yaml`, `configs/visobert_joint.yaml`, `configs/ablation/E3_phobert_strip_emoji.yaml`, `E4_phobert_weight.yaml`, `E5_phobert_star.yaml`, `E6_phobert_split.yaml`, `configs/smoke/tiny_transformer.yaml`, `notebooks/02_colab_train.ipynb`
@@ -719,19 +719,19 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
     - `save(path: Path)`: ghi `absa_config.json` (gồm `model_type: "transformer"`, `model_name`, `mode`, `max_length`, `threshold`, `dropout`, và `preprocess`, khóa này do `run_experiment` gán vào `model.preprocess_cfg` trước khi save), `model.pt` (`state_dict` của `AbsaHead`), `encoder.config.save_pretrained(path)` (tạo `config.json`, để Task 12 dựng lại encoder mà không cần mạng, kể cả với `__tiny__`) và `tokenizer.save_pretrained(path)`.
   - Sửa nhỏ `run_experiment` (Task 5): gán `model.preprocess_cfg = cfg["preprocess"]` trước `model.save`.
 
-- [ ] **Step 1: Viết `tests/test_training.py` (fail).**
+- [x] **Step 1: Viết `tests/test_training.py` (fail).**
   - `test_set_seed_reproducible`: hai lần `set_seed(1); torch.rand(3)` cho kết quả bằng nhau.
   - `test_early_stopping_restores_best`: module là `nn.Linear(1, 1)`. `predict_dev` lần lượt trả các ma trận cho `sentiment_macro_f1` = 1.0, 0.0, 0.0, 0.0 (đúng hết, rồi sai hết). Mỗi lần gọi, lưu lại `module.weight.clone()`. Với `epochs=5, patience=2`: kỳ vọng `best_epoch == 1`, `len(history) == 3`, và trọng số cuối bằng bản đã lưu ở lần gọi thứ nhất.
   - `test_no_dev_runs_all_epochs`: `predict_dev=None, epochs=2` → `len(history) == 2`, `best_dev_sentiment_macro_f1 is None`.
-- [ ] **Step 2: Viết `tests/test_transformer_model.py` (fail).** Dùng `model_name="__tiny__"`, `epochs=1`, `batch_size=4`, `fp16=False`.
+- [x] **Step 2: Viết `tests/test_transformer_model.py` (fail).** Dùng `model_name="__tiny__"`, `epochs=1`, `batch_size=4`, `fp16=False`.
   - `test_fit_predict_joint` và `test_fit_predict_split`: 8 văn bản → `predict` cho shape `(8, 10)`, int8. Ở split có dev: `info["threshold"] in THRESHOLD_GRID`.
   - `test_truncation_long_input`: `predict([" ".join(["pin"] * 2000)])` chạy không lỗi với `max_length=256`.
   - `test_class_weight_split_raises`; `test_max_length_over_256_raises`.
   - `test_save_writes_files(tmp_path)`: có `absa_config.json`, `model.pt`, `config.json` và file tokenizer; `absa_config.json` có `mode` và `threshold`.
-- [ ] **Step 3: Chạy hai file test**, kỳ vọng FAIL.
-- [ ] **Step 4: Cài đặt `training.py` và `TransformerAbsa`.** Thiết bị: `"cuda" if torch.cuda.is_available() else "cpu"`. Khi dự đoán thì gọi `module.eval()` và `torch.no_grad()`.
-- [ ] **Step 5: Chạy toàn bộ test**, kỳ vọng PASS.
-- [ ] **Step 6: Viết các file YAML.**
+- [x] **Step 3: Chạy hai file test**, kỳ vọng FAIL.
+- [x] **Step 4: Cài đặt `training.py` và `TransformerAbsa`.** Thiết bị: `"cuda" if torch.cuda.is_available() else "cpu"`. Khi dự đoán thì gọi `module.eval()` và `torch.no_grad()`.
+- [x] **Step 5: Chạy toàn bộ test**, kỳ vọng PASS.
+- [x] **Step 6: Viết các file YAML.**
 
 ```yaml
 # configs/phobert_joint.yaml
@@ -747,7 +747,7 @@ model: {type: transformer, model_name: vinai/phobert-base-v2, mode: joint, max_l
   - Ablation (`base: ../phobert_joint.yaml`): `E3_phobert_strip_emoji` → `preprocess.strip_emoji: true`; `E4_phobert_weight` → `model.class_weight: true`; `E5_phobert_star` → `preprocess.use_star: true`; `E6_phobert_split` → `model.mode: split`. Mỗi file có `groups` là nhóm của chính nó.
   - `visobert_joint.yaml`: `base: phobert_joint.yaml`, `name: visobert_joint`, `preprocess.segment: null`, `model.model_name: uitnlp/visobert`, `max_length` lấy theo số đo ViSoBERT (≤ 256), không có groups.
   - `smoke/tiny_transformer.yaml`: `base: ../phobert_joint.yaml`, `name: tiny_transformer`, `preprocess.segment: null`, `model: {model_name: __tiny__, epochs: 1, batch_size: 8, fp16: false}`.
-- [ ] **Step 7: Viết `notebooks/02_colab_train.ipynb`.** Các ô theo thứ tự:
+- [x] **Step 7: Viết `notebooks/02_colab_train.ipynb`.** Các ô theo thứ tự:
   1. Kiểm tra GPU (`!nvidia-smi`).
   2. Mount Google Drive; đặt `DRIVE=/content/drive/MyDrive/nlp-absa-visfd`.
   3. `git clone` repo của nhóm (biến `REPO_URL` để trống, nhóm tự điền).

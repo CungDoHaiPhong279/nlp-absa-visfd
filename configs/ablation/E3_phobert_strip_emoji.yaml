@@ -1,0 +1,4 @@
+base: ../phobert_joint.yaml
+name: E3_phobert_strip_emoji
+groups: [E3]
+preprocess: {strip_emoji: true}
