@@ -760,7 +760,7 @@ model: {type: transformer, model_name: vinai/phobert-base-v2, mode: joint, max_l
   10. Chạy đo thời gian.
   11. Một ô chạy cho mỗi cấu hình.
   12. Sao lưu `results/`, `data/processed/` và `models/final_*` lên Drive sau mỗi lần chạy.
-- [ ] **Step 8: Đo thời gian trên Colab T4.** Chạy `python scripts/run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1`. Ghi thời gian và VRAM vào `docs/decisions.md`, rồi ước lượng thời gian một lần chạy đầy đủ. Nếu một lần chạy hơn 60 phút: giảm `max_length` theo EDA trước, rồi mới tăng `batch_size` lên 32. Ghi lại quyết định.
+- [x] **Step 8: Đo thời gian trên Colab T4.** Chạy `python scripts/run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1`. Ghi thời gian và VRAM vào `docs/decisions.md`, rồi ước lượng thời gian một lần chạy đầy đủ. Nếu một lần chạy hơn 60 phút: giảm `max_length` theo EDA trước, rồi mới tăng `batch_size` lên 32. Ghi lại quyết định.
 - [ ] **Step 9: Chạy đầy đủ, seed 42, trên Colab:** `phobert_joint`, `E6_phobert_split`, `E4_phobert_weight`, `E3_phobert_strip_emoji`, `E5_phobert_star`, `visobert_joint`. Tức là 6 lần chạy; `phobert_joint` là nhánh gốc chung, không chạy lại cho từng khảo sát (D4). Sao lưu sau mỗi lần chạy. Kéo `results/runs/*.json` về máy, chạy `python scripts/make_tables.py`, kiểm tra có `ablation_E3_dev.md` đến `ablation_E6_dev.md`.
 - [ ] **Step 10: Commit** `feat: transformer training loop, PhoBERT/ViSoBERT configs and Colab notebook` (gồm code, configs, notebook, `docs/decisions.md`, `results/tables/`).
 
