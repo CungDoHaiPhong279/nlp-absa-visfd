@@ -1,0 +1,173 @@
+{
+  "name": "E3_phobert_strip_emoji",
+  "seed": 42,
+  "groups": [
+    "E3"
+  ],
+  "config": {
+    "seed": 42,
+    "preprocess": {
+      "lowercase": false,
+      "strip_emoji": true,
+      "strip_punct": false,
+      "segment": "vncorenlp",
+      "use_star": false
+    },
+    "model": {
+      "type": "transformer",
+      "model_name": "vinai/phobert-base-v2",
+      "mode": "joint",
+      "max_length": 128,
+      "lr": 2e-05,
+      "batch_size": 16,
+      "epochs": 10,
+      "class_weight": false,
+      "fp16": true,
+      "patience": 2
+    },
+    "name": "E3_phobert_strip_emoji",
+    "groups": [
+      "E3"
+    ]
+  },
+  "dev": {
+    "aspect_macro_f1": 0.8197995481105123,
+    "aspect_micro_f1": 0.9181954887218046,
+    "sentiment_macro_f1": 0.5411450841414135,
+    "sentiment_micro_f1": 0.8333834586466166,
+    "polarity_macro_f1_detected": 0.8105808063804275,
+    "exact_match": 0.49010791366906475,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.8188976377952756,
+        "recall": 0.859504132231405,
+        "f1": 0.8387096774193549,
+        "support": 121
+      },
+      "CAMERA": {
+        "precision": 0.9448051948051948,
+        "recall": 0.9831081081081081,
+        "f1": 0.9635761589403974,
+        "support": 296
+      },
+      "FEATURES": {
+        "precision": 0.9047619047619048,
+        "recall": 0.8976377952755905,
+        "f1": 0.9011857707509882,
+        "support": 381
+      },
+      "BATTERY": {
+        "precision": 0.9670542635658915,
+        "recall": 0.9900793650793651,
+        "f1": 0.9784313725490196,
+        "support": 504
+      },
+      "PERFORMANCE": {
+        "precision": 0.9034941763727121,
+        "recall": 0.9329896907216495,
+        "f1": 0.9180050718512257,
+        "support": 582
+      },
+      "STORAGE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      },
+      "DESIGN": {
+        "precision": 0.9116022099447514,
+        "recall": 0.8823529411764706,
+        "f1": 0.8967391304347826,
+        "support": 187
+      },
+      "PRICE": {
+        "precision": 0.9022556390977443,
+        "recall": 0.9523809523809523,
+        "f1": 0.9266409266409267,
+        "support": 252
+      },
+      "GENERAL": {
+        "precision": 0.9054441260744985,
+        "recall": 0.9172714078374455,
+        "f1": 0.9113193943763518,
+        "support": 689
+      },
+      "SER&ACC": {
+        "precision": 0.915057915057915,
+        "recall": 0.8172413793103448,
+        "f1": 0.8633879781420765,
+        "support": 290
+      }
+    }
+  },
+  "test": null,
+  "train_seconds": 693.1363798810007,
+  "limit": null,
+  "model_info": {
+    "best_epoch": 10,
+    "best_dev_sentiment_macro_f1": 0.5411450841414135,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.8886942917316601,
+        "dev_sentiment_macro_f1": 0.23290525125252426
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.5380300815222934,
+        "dev_sentiment_macro_f1": 0.34710460510323743
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.40150064835802973,
+        "dev_sentiment_macro_f1": 0.45077449486734095
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.3278765916151188,
+        "dev_sentiment_macro_f1": 0.4786299670824571
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.27792556363576737,
+        "dev_sentiment_macro_f1": 0.5117108810938942
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.24200155012294253,
+        "dev_sentiment_macro_f1": 0.5214105426051685
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.21612970146983557,
+        "dev_sentiment_macro_f1": 0.5303966624054266
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.19664055445600584,
+        "dev_sentiment_macro_f1": 0.5330678661055995
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.18319224326027983,
+        "dev_sentiment_macro_f1": 0.5370263166750008
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.1749300523766257,
+        "dev_sentiment_macro_f1": 0.5411450841414135
+      }
+    ],
+    "threshold": 0.5,
+    "device": "cuda"
+  },
+  "git_commit": "5a10bf18f1339ca530a24bee2eac22c76c4514ab",
+  "timestamp": "2026-11-19T19:48:28.039253+00:00",
+  "versions": {
+    "python": "3.13.16",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.6.1",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.1"
+  }
+}

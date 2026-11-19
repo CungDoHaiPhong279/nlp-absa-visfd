@@ -36,3 +36,15 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - **Task 9 – đo thời gian trên Colab T4 (Step 8):** `run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1` mất 17 giây train (47 giây cả lệnh, gồm tải mô hình và tách từ VnCoreNLP). Ước lượng tuyến tính cho Train đầy đủ (7.786 dòng): khoảng 4–5 phút mỗi epoch, tối đa 5 epoch, tức khoảng 25 phút mỗi lần chạy PhoBERT; ViSoBERT (`max_length` 224) dài hơn. Dưới ngưỡng 60 phút nên giữ `max_length` 128/224 và `batch_size` 16. VRAM chưa đo được (lệnh `nvidia-smi` chạy sau khi tiến trình đã kết thúc).
 - **Notebook Colab:** chỉ lưu bằng Ctrl+S vào Drive, không dùng "Lưu bản sao vào GitHub" (lệnh này đẩy thẳng lên `main`, bỏ qua PR và nbstripout). Ba commit "Được tạo bằng Colab" ngày 2026-11-20 đã được đưa notebook về bản sạch.
 - **Task 9 – PhoBERT tối đa 10 epoch (thay 5):** lần chạy đầy đủ đầu tiên của `phobert_joint` (seed 42, T4) cho Dev sentiment macro-F1 theo epoch 24,4 → 36,9 → 44,7 → 46,7 → **48,2**, vẫn tăng ở epoch cuối, nên early stopping chưa hề kích hoạt (aspect 80,17 / sentiment 48,16, 346 giây). Tăng `epochs` lên 10 trong `phobert_joint.yaml` (các file E3–E6 và `visobert_joint` kế thừa), giữ `patience: 2` để dừng khi Dev không tăng nữa. Mỗi epoch khoảng 70 giây trên T4. Lần chạy 5 epoch không được giữ lại trong `results/runs/`.
+- **Task 9 – kết quả 6 lần chạy đầy đủ (seed 42, Colab T4, tối đa 10 epoch, Dev):**
+
+  | Cấu hình | Aspect macro-F1 | Sentiment macro-F1 | Epoch tốt nhất | Thời gian train |
+  |---|---|---|---|---|
+  | `phobert_joint` | 81,91 | 54,38 | 10 | 692 s |
+  | `E3_phobert_strip_emoji` | 81,98 | 54,11 | 10 | 693 s |
+  | `E4_phobert_weight` | 88,16 | **64,69** | 9 | 690 s |
+  | `E5_phobert_star` | 82,16 | 55,37 | 10 | 704 s |
+  | `E6_phobert_split` (ngưỡng 0,40) | 82,70 | 58,34 | 9 | 694 s |
+  | `visobert_joint` | 83,49 | 56,09 | 7 (dừng sớm ở epoch 9) | 773 s |
+
+  `phobert_joint`, E3 và E5 đạt tốt nhất ở epoch cuối nhưng epoch 9 → 10 chỉ tăng 0,2–0,4 điểm, nên coi là gần hội tụ; không chạy lại. Báo cáo ghi rõ giới hạn này.

@@ -1,0 +1,164 @@
+{
+  "name": "visobert_joint",
+  "seed": 42,
+  "groups": [],
+  "config": {
+    "seed": 42,
+    "preprocess": {
+      "lowercase": false,
+      "strip_emoji": false,
+      "strip_punct": false,
+      "segment": null,
+      "use_star": false
+    },
+    "model": {
+      "type": "transformer",
+      "model_name": "uitnlp/visobert",
+      "mode": "joint",
+      "max_length": 224,
+      "lr": 2e-05,
+      "batch_size": 16,
+      "epochs": 10,
+      "class_weight": false,
+      "fp16": true,
+      "patience": 2
+    },
+    "name": "visobert_joint",
+    "groups": []
+  },
+  "dev": {
+    "aspect_macro_f1": 0.8348743240034772,
+    "aspect_micro_f1": 0.8903502064535862,
+    "sentiment_macro_f1": 0.5609418385625506,
+    "sentiment_micro_f1": 0.790334913595351,
+    "polarity_macro_f1_detected": 0.8094082708387366,
+    "exact_match": 0.4064748201438849,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.8461538461538461,
+        "recall": 0.7272727272727273,
+        "f1": 0.7822222222222223,
+        "support": 121
+      },
+      "CAMERA": {
+        "precision": 0.9153094462540716,
+        "recall": 0.9493243243243243,
+        "f1": 0.9320066334991708,
+        "support": 296
+      },
+      "FEATURES": {
+        "precision": 0.9085872576177285,
+        "recall": 0.8608923884514436,
+        "f1": 0.8840970350404312,
+        "support": 381
+      },
+      "BATTERY": {
+        "precision": 0.9578544061302682,
+        "recall": 0.9920634920634921,
+        "f1": 0.9746588693957114,
+        "support": 504
+      },
+      "PERFORMANCE": {
+        "precision": 0.8943661971830986,
+        "recall": 0.872852233676976,
+        "f1": 0.8834782608695653,
+        "support": 582
+      },
+      "STORAGE": {
+        "precision": 0.7142857142857143,
+        "recall": 0.35714285714285715,
+        "f1": 0.47619047619047616,
+        "support": 14
+      },
+      "DESIGN": {
+        "precision": 0.8742138364779874,
+        "recall": 0.7433155080213903,
+        "f1": 0.8034682080924855,
+        "support": 187
+      },
+      "PRICE": {
+        "precision": 0.9163498098859315,
+        "recall": 0.9563492063492064,
+        "f1": 0.9359223300970874,
+        "support": 252
+      },
+      "GENERAL": {
+        "precision": 0.8818443804034583,
+        "recall": 0.888243831640058,
+        "f1": 0.8850325379609545,
+        "support": 689
+      },
+      "SER&ACC": {
+        "precision": 0.8781512605042017,
+        "recall": 0.7206896551724138,
+        "f1": 0.7916666666666666,
+        "support": 290
+      }
+    }
+  },
+  "test": null,
+  "train_seconds": 772.6233522040002,
+  "limit": null,
+  "model_info": {
+    "best_epoch": 7,
+    "best_dev_sentiment_macro_f1": 0.5609418385625506,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.6988575700249761,
+        "dev_sentiment_macro_f1": 0.3634124067364964
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.39877402164363274,
+        "dev_sentiment_macro_f1": 0.42270336714881124
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.2954398886868596,
+        "dev_sentiment_macro_f1": 0.4982679238466839
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.22520237131468815,
+        "dev_sentiment_macro_f1": 0.5213364439701348
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.16893742343667106,
+        "dev_sentiment_macro_f1": 0.5437873051305903
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.12681220637852406,
+        "dev_sentiment_macro_f1": 0.5510541604814657
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.09575191043026639,
+        "dev_sentiment_macro_f1": 0.5609418385625506
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.07276672340960107,
+        "dev_sentiment_macro_f1": 0.541348072417364
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.05901852206497222,
+        "dev_sentiment_macro_f1": 0.5539464773305018
+      }
+    ],
+    "threshold": 0.5,
+    "device": "cuda"
+  },
+  "git_commit": "5a10bf18f1339ca530a24bee2eac22c76c4514ab",
+  "timestamp": "2026-11-19T20:13:45.996035+00:00",
+  "versions": {
+    "python": "3.13.16",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.6.1",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.1"
+  }
+}
