@@ -457,7 +457,7 @@ def test_cache_hit(tmp_path, monkeypatch):
   - Backend `underthesea`: `underthesea.word_tokenize(text, format="text")`.
   - Backend `vncorenlp`: nạp `py_vncorenlp.VnCoreNLP(annotators=["wseg"], save_dir=str(Path("models/vncorenlp").resolve()))` một lần (biến module), tải model bằng `py_vncorenlp.download_model` nếu chưa có. Lưu `os.getcwd()` trước khi nạp và `os.chdir` về sau, kể cả khi lỗi (`try/finally`). Mỗi văn bản: `" ".join(rdr.word_segment(text))`.
 - [x] **Step 4: Chạy test**, kỳ vọng PASS (`test_vncorenlp_keeps_cwd` có thể bị skip nếu máy không có Java; B chạy lại trên Colab để xác nhận PASS).
-- [ ] **Step 5: Commit** `feat: Vietnamese normalization, segmentation and preprocessing cache`
+- [x] **Step 5: Commit** `feat: Vietnamese normalization, segmentation and preprocessing cache`
 
 ---
 
@@ -496,7 +496,7 @@ def test_cache_hit(tmp_path, monkeypatch):
   - Ô tùy chọn (chỉ chạy khi có `transformers` và mạng): đếm số token con (subword) của PhoBERT sau tách từ VnCoreNLP, và của ViSoBERT trên văn bản thô, trên Train. Ghi `results/tables/eda_subword_len.csv` (các cột mean, p95, p99, max).
 - [x] **Step 5: Chạy `pytest tests/test_eda.py -v`** (PASS), rồi `jupyter nbconvert --execute --to notebook --inplace notebooks/01_eda.ipynb` (không lỗi). Mở `eda_duplicates.json`: nếu `train_test_overlap > 0` thì ghi số đó vào `docs/decisions.md` (không xóa mẫu, vì phải giữ split gốc).
 - [x] **Step 6: Ghi `max_length` vào `docs/decisions.md`** theo D9, dùng `eda_subword_len.csv` (ô tùy chọn có thể chạy trên Colab). Kỳ vọng thô: p95 khoảng 78 âm tiết, nên `max_length` có lẽ là 128 hoặc 160; hãy dùng số đo thật.
-- [ ] **Step 7: Commit** `feat: EDA module, notebook and figures` (gồm cả `results/tables/eda_*` và `results/figures/eda_*`).
+- [x] **Step 7: Commit** `feat: EDA module, notebook and figures` (gồm cả `results/tables/eda_*` và `results/figures/eda_*`).
 
 ---
 
@@ -528,28 +528,28 @@ def test_cache_hit(tmp_path, monkeypatch):
     8. Trả về dict đã ghi.
   - CLI: `python scripts/run.py --config A.yaml [B.yaml ...] [--seeds 42 43 44] [--eval-test] [--limit N] [--set k=v ...]`. Cấu hình chạy lần lượt, mỗi seed một lần. `--seeds` ghi đè `cfg["seed"]`. Với `--eval-test`, gọi `assert_final_config` cho từng file trước khi chạy bất cứ thứ gì. Sau mỗi lần chạy in một dòng `"{name} seed={seed} dev aspect={:.2%} sentiment={:.2%} ({train_seconds:.0f}s)"`.
 
-- [ ] **Step 1: Viết `tests/test_config.py` (fail):**
+- [x] **Step 1: Viết `tests/test_config.py` (fail):**
   - `test_inherit_deep_merge`: base `{name: b, seed: 42, groups: [E1], preprocess: {lowercase: true}, model: {type: tfidf, C: 1}}`, con `{base: base.yaml, name: c, model: {C: 2}}`. Kỳ vọng `cfg["model"] == {"type": "tfidf", "C": 2}`, `cfg["preprocess"] == {"lowercase": True}`, `cfg["groups"] == []`, `"base" not in cfg`.
   - `test_missing_name_raises`.
   - `test_override_suffix_and_parse`: `apply_overrides(cfg, ["model.C=0.5", "preprocess.segment=null"])` cho `C == 0.5`, `segment is None`, `name == "b__C=0.5__segment=null"`, `groups == []`; dict gốc không đổi.
   - `test_override_unknown_key_raises`: `["model.Cc=1"]` báo `ValueError`.
-- [ ] **Step 2: Viết `tests/test_experiment.py` (fail)**, dùng `fake_data_dir` và một `DummyModel` đăng ký bằng `monkeypatch.setitem(registry.REGISTRY, "dummy", DummyModel)`. `DummyModel.fit` lưu lại `texts` và `dev_texts`; `predict` trả ma trận 0.
+- [x] **Step 2: Viết `tests/test_experiment.py` (fail)**, dùng `fake_data_dir` và một `DummyModel` đăng ký bằng `monkeypatch.setitem(registry.REGISTRY, "dummy", DummyModel)`. `DummyModel.fit` lưu lại `texts` và `dev_texts`; `predict` trả ma trận 0.
   - `test_run_writes_json_and_predictions`: `run_experiment({"name": "d", "seed": 42, "preprocess": {}, "model": {"type": "dummy"}}, data_dir=fake, out_dir=tmp, cache_dir=None)`. Kỳ vọng có `tmp/runs/d__seed42.json` với `test is None` và `dev["exact_match"] == 0.25` (1/4 dòng dev là `{OTHERS}`); file `d__seed42__dev.csv` có 4 dòng, cột đúng.
   - `test_fit_never_sees_test`: với `eval_test=True`, không chuỗi nào trong `fit_texts + fit_dev_texts` bắt đầu bằng `"test "`; file JSON có `test` khác None.
   - `test_limit_slices_train_dev`: `limit=3` → fit nhận đúng 3 văn bản train và 3 văn bản dev.
   - `test_eval_test_with_limit_raises`.
   - `test_eval_test_requires_final_config`: `assert_final_config(Path("configs/tfidf_lr_base.yaml"))` báo lỗi; `assert_final_config(Path("configs/final/x.yaml"))` không báo lỗi.
   - `test_unknown_model_type_raises`: `build_model({"type": "abc"}, 42)` báo `ValueError` có chữ `tfidf`.
-- [ ] **Step 3: Chạy `pytest tests/test_config.py tests/test_experiment.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 4: Cài đặt** `config.py`, `registry.py`, `experiment.py`, `scripts/run.py`. `set_seed` lấy từ `absa.training` (Task 9). Trước khi có Task 9, `run_experiment` chỉ đặt `random.seed` và `numpy.random.seed`, rồi `try: from absa.training import set_seed`.
-- [ ] **Step 5: Chạy test**, kỳ vọng PASS.
-- [ ] **Step 6: Commit** `feat: config inheritance, model registry and experiment runner`
+- [x] **Step 3: Chạy `pytest tests/test_config.py tests/test_experiment.py -v`**, kỳ vọng FAIL.
+- [x] **Step 4: Cài đặt** `config.py`, `registry.py`, `experiment.py`, `scripts/run.py`. `set_seed` lấy từ `absa.training` (Task 9). Trước khi có Task 9, `run_experiment` chỉ đặt `random.seed` và `numpy.random.seed`, rồi `try: from absa.training import set_seed`.
+- [x] **Step 5: Chạy test**, kỳ vọng PASS.
+- [x] **Step 6: Commit** `feat: config inheritance, model registry and experiment runner`
 
 ---
 
 ### Task 6: Baseline TF-IDF và khảo sát E0–E3, E6 (TF-IDF)
 
-**Phụ trách:** A
+**Phụ trách:** A (thực tế: B làm ở PR #36, A sửa sau review ở PR #37)
 
 **Files:**
 - Create: `src/absa/baseline.py`, `configs/tfidf_lr_base.yaml`, `configs/tfidf_svm.yaml`, `configs/ablation/E1_ngram_1.yaml`, `E1_ngram_13.yaml`, `E1_char_25.yaml`, `E2_word.yaml`, `E3_tfidf_strip_emoji.yaml`, `E6_tfidf_joint.yaml`, `configs/smoke/tfidf_smoke.yaml`
@@ -565,7 +565,7 @@ def test_cache_hit(tmp_path, monkeypatch):
   - `mode` hoặc `classifier` lạ: báo `ValueError` ngay trong `__init__`.
   - `fit` bỏ qua `dev_texts`/`Y_dev`; `predict` trả int8 `(n, 10)`.
 
-- [ ] **Step 1: Viết test (fail)**, các test dùng `min_df=1`:
+- [x] **Step 1: Viết test (fail)**, các test dùng `min_df=1`:
   - `test_predict_shape_dtype`: trên 4 văn bản đồ chơi, shape `(n, 10)`, dtype int8, giá trị ⊆ {0, 1, 2, 3}, cho cả `split` và `joint`.
   - `test_vectorizer_fit_on_train_only`: fit trên `["pin trâu", "pin yếu"]`; sau `predict(["camera đẹp"])` thì `vectorizer.vocabulary_` không đổi và không chứa `"camera"`.
   - `test_single_class_aspect`: cột STORAGE toàn 0 → fit không lỗi, dự đoán STORAGE toàn 0 (cả hai mode).
@@ -573,9 +573,9 @@ def test_cache_hit(tmp_path, monkeypatch):
   - `test_learns_trivial_signal`: 10 lần `"pin tốt"` → BATTERY=1, 10 lần `"pin tệ"` → BATTERY=3, 10 lần `"giao nhanh"` → SER&ACC=1. Kỳ vọng `predict(["pin tốt", "pin tệ"])[:, 3].tolist() == [1, 3]`, cho cả hai mode và cả `lr`, `svm`.
   - `test_invalid_mode_raises`: `TfidfAbsa(mode="x")` báo `ValueError`.
   - `test_run_experiment_smoke_real` (skip nếu chưa có `data/raw/Train.csv`): `run_experiment(load_config(Path("configs/smoke/tfidf_smoke.yaml")), limit=200, out_dir=tmp_path)`; có JSON, `test is None`, `0 <= dev["aspect_macro_f1"] <= 1`.
-- [ ] **Step 2: Chạy `pytest tests/test_baseline.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `baseline.py`.**
-- [ ] **Step 4: Viết các file YAML.** Cấu hình gốc:
+- [x] **Step 2: Chạy `pytest tests/test_baseline.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `baseline.py`.**
+- [x] **Step 4: Viết các file YAML.** Cấu hình gốc:
 
 ```yaml
 # configs/tfidf_lr_base.yaml
@@ -595,8 +595,8 @@ model: {type: tfidf, mode: split, analyzer: word, ngram_range: [1, 2], min_df: 2
   - `E6_tfidf_joint`: `model.mode: joint`
 
   `tfidf_svm.yaml`: `base: tfidf_lr_base.yaml`, `name: tfidf_svm`, `model.classifier: svm`, không có groups. `smoke/tfidf_smoke.yaml`: `base: ../tfidf_lr_base.yaml`, `name: tfidf_smoke`.
-- [ ] **Step 5: Chạy test**, kỳ vọng PASS.
-- [ ] **Step 6: E0 – dò C trên Dev.** Chạy cả 5 giá trị qua `--set`, để tên run có hậu tố `__C=` và không trùng với run gốc:
+- [x] **Step 5: Chạy test**, kỳ vọng PASS.
+- [x] **Step 6: E0 – dò C trên Dev.** Chạy cả 5 giá trị qua `--set`, để tên run có hậu tố `__C=` và không trùng với run gốc: _(Thực tế: C của LR chạm mép lưới nên đã dò tiếp tới 1024, chốt LR C=512, SVM C=4; xem `docs/decisions.md`.)_
 
 ```bash
 python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=0.25
@@ -607,14 +607,14 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
 ```
 
   Lặp lại 5 lệnh trên với `configs/tfidf_svm.yaml`. Với mỗi bộ phân loại, chọn C có `dev.sentiment_macro_f1` cao nhất; bằng nhau thì chọn C nhỏ hơn. Ghi C của LR vào `tfidf_lr_base.yaml`; nếu C tốt nhất của SVM khác thì ghi đè `model.C` trong `tfidf_svm.yaml`. Ghi cả hai bảng 5 giá trị kèm lựa chọn vào `docs/decisions.md`. `sweep_table` lọc các run theo tiền tố `tfidf_lr__C=` và `tfidf_svm__C=`.
-- [ ] **Step 7: Chạy cấu hình chính và ablation** (cùng C đã chốt): `python scripts/run.py --config configs/tfidf_lr_base.yaml configs/tfidf_svm.yaml configs/ablation/E1_ngram_1.yaml configs/ablation/E1_ngram_13.yaml configs/ablation/E1_char_25.yaml configs/ablation/E2_word.yaml configs/ablation/E3_tfidf_strip_emoji.yaml configs/ablation/E6_tfidf_joint.yaml`. Kỳ vọng: mỗi cấu hình in một dòng dev. Ghi thời gian chạy của `tfidf_lr` vào `docs/decisions.md` (để đưa vào README).
-- [ ] **Step 8: Commit** `feat: TF-IDF baseline, E0 sweep and TF-IDF ablations` (gồm `configs/`, `docs/decisions.md`, `src/absa/baseline.py`, test).
+- [x] **Step 7: Chạy cấu hình chính và ablation** (cùng C đã chốt): `python scripts/run.py --config configs/tfidf_lr_base.yaml configs/tfidf_svm.yaml configs/ablation/E1_ngram_1.yaml configs/ablation/E1_ngram_13.yaml configs/ablation/E1_char_25.yaml configs/ablation/E2_word.yaml configs/ablation/E3_tfidf_strip_emoji.yaml configs/ablation/E6_tfidf_joint.yaml`. Kỳ vọng: mỗi cấu hình in một dòng dev. Ghi thời gian chạy của `tfidf_lr` vào `docs/decisions.md` (để đưa vào README).
+- [x] **Step 8: Commit** `feat: TF-IDF baseline, E0 sweep and TF-IDF ablations` (gồm `configs/`, `docs/decisions.md`, `src/absa/baseline.py`, test).
 
 ---
 
 ### Task 7: Bảng so sánh tự động
 
-**Phụ trách:** A
+**Phụ trách:** A (thực tế: B làm ở PR #36)
 
 **Files:**
 - Create: `src/absa/report.py`, `scripts/make_tables.py`
@@ -638,17 +638,17 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
 
     `published_metric` đọc từ một khối YAML trong `docs/metric_notes.md` có dạng ```` ```yaml published_metric: {...} ``` ````; không có khối đó thì dùng `None`.
 
-- [ ] **Step 1: Viết test (fail).** Tạo JSON giả trong `tmp_path/runs`:
+- [x] **Step 1: Viết test (fail).** Tạo JSON giả trong `tmp_path/runs`:
   - 2 run `phobert` với seed 42 và 43, `aspect_macro_f1` dev là 0.80 và 0.82; 1 run `tfidf` seed 42 có `groups: ["E1"]`.
   - Kỳ vọng ô `aspect_macro_f1` của `phobert` là `"81.00 ± 1.41"`, ô của `tfidf` là `"80.00"`, `n_seeds` lần lượt 2 và 1.
   - Hàng cuối có `source == "published"`. Khi `published_metric=None`, cột `note` chứa `"không cùng định nghĩa"`.
   - `comparison_table(runs, "test")` rỗng (trừ hàng published) khi không run nào có test.
   - `ablation_table(runs, "E1")` chỉ có `tfidf`.
   - `per_aspect_table` có 10 hàng.
-- [ ] **Step 2: Chạy `pytest tests/test_report.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt.**
+- [x] **Step 2: Chạy `pytest tests/test_report.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt.**
 - [x] **Step 4: Chạy test** (PASS), rồi `python scripts/make_tables.py`. Kỳ vọng có `results/tables/comparison_dev.md`, `ablation_E1_dev.md`, `ablation_E2_dev.md`, `ablation_E3_dev.md`, `ablation_E6_tfidf_dev.md`, `sweep_E0_tfidf_lr_dev.md`, mỗi bảng có hàng `tfidf_lr`.
-- [ ] **Step 5: Commit** `feat: comparison, ablation and per-aspect tables` (gồm cả `results/tables/*.md|csv`).
+- [x] **Step 5: Commit** `feat: comparison, ablation and per-aspect tables` (gồm cả `results/tables/*.md|csv`).
 
 ---
 
@@ -687,7 +687,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
   - `test_best_threshold`: `Y_true` có 2 hàng với CAMERA=1; `aspect_probs` bằng 0.4 ở ô có CAMERA, 0.1 ở các ô khác; `polarity_codes` toàn 1. Kỳ vọng `best_threshold(...) == 0.35`.
 - [ ] **Step 2: Chạy `pytest tests/test_transformer_core.py -v`**, kỳ vọng FAIL.
 - [ ] **Step 3: Cài đặt** `tiny.py` và phần lõi của `transformer.py`.
-- [x] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
+- [ ] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
 - [ ] **Step 5: Commit** `feat: transformer ABSA heads, losses, decoding and class weights`
 
 ---
@@ -809,7 +809,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
         freeze_embedding: false, patience: 3}
 ```
 
-- [x] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
+- [ ] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
 - [ ] **Step 5: Commit** `feat: BiLSTM+fastText approximate reproduction baseline`
 
 ---
@@ -896,7 +896,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - `test_from_dir_roundtrip(tmp_path)`: train `TransformerAbsa("__tiny__", epochs=1)`, gán `preprocess_cfg`, `save`, rồi `Predictor.from_dir` → `predict("pin trâu")` trả dict có khóa ⊆ `ASPECTS`, và khớp với `model.predict(["pin trâu"])` sau khi đổi về dict.
 - [ ] **Step 2: Chạy `pytest tests/test_inference.py -v`**, kỳ vọng FAIL.
 - [ ] **Step 3: Cài đặt `inference.py` và `demo/app.py`.**
-- [x] **Step 4: Chạy test** (PASS). Chạy thật:
+- [ ] **Step 4: Chạy test** (PASS). Chạy thật:
   - Trên Colab: `python demo/app.py --model models/final_phobert__seed42 --share`.
   - Trên máy local: chỉ chạy nếu có Java (vì PhoBERT cần VnCoreNLP) và đã tải checkpoint từ Drive.
 
