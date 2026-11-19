@@ -33,3 +33,5 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
   | SVM | 44,60 | 47,88 | 49,34 | 49,92 | **50,20** | 50,13 | 49,95 | 49,88 | | | | | |
 
   Chốt LR `C=512` (gần như không regularize; aspect macro-F1 gần phẳng từ C=32, 78,9–79,0%) và SVM `C=4`. Thời gian train `tfidf_lr` khoảng 12 giây trên CPU (laptop của A).
+- **Task 9 – đo thời gian trên Colab T4 (Step 8):** `run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1` mất 17 giây train (47 giây cả lệnh, gồm tải mô hình và tách từ VnCoreNLP). Ước lượng tuyến tính cho Train đầy đủ (7.786 dòng): khoảng 4–5 phút mỗi epoch, tối đa 5 epoch, tức khoảng 25 phút mỗi lần chạy PhoBERT; ViSoBERT (`max_length` 224) dài hơn. Dưới ngưỡng 60 phút nên giữ `max_length` 128/224 và `batch_size` 16. VRAM chưa đo được (lệnh `nvidia-smi` chạy sau khi tiến trình đã kết thúc).
+- **Notebook Colab:** chỉ lưu bằng Ctrl+S vào Drive, không dùng "Lưu bản sao vào GitHub" (lệnh này đẩy thẳng lên `main`, bỏ qua PR và nbstripout). Ba commit "Được tạo bằng Colab" ngày 2026-11-20 đã được đưa notebook về bản sạch.
