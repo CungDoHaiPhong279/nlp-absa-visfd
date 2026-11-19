@@ -1,0 +1,2 @@
+base: ../tfidf_lr_base.yaml
+name: tfidf_smoke

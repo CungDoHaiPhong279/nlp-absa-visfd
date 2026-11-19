@@ -1,0 +1,4 @@
+base: ../tfidf_lr_base.yaml
+name: E2_word
+groups: [E2]
+preprocess: {segment: underthesea}

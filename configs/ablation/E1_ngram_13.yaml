@@ -1,0 +1,4 @@
+base: ../tfidf_lr_base.yaml
+name: E1_ngram_13
+groups: [E1]
+model: {ngram_range: [1, 3]}

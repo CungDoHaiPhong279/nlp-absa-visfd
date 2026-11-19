@@ -1,0 +1,5 @@
+name,aspect_macro_f1,sentiment_macro_f1,polarity_macro_f1_detected,exact_match,n_seeds,source,note
+E1_char_25,76.29,46.50,75.81,30.04,1,ours,
+E1_ngram_13,74.16,44.22,77.31,30.22,1,ours,
+E1_ngram_1,76.48,46.91,76.31,30.22,1,ours,
+tfidf_lr,75.96,45.61,77.51,31.29,1,ours,
