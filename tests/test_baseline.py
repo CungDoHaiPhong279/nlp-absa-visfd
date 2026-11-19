@@ -94,3 +94,10 @@ def test_run_experiment_smoke_real(tmp_path: Path) -> None:
     assert (tmp_path / "runs" / "tfidf_smoke__seed42.json").exists()
     assert result["test"] is None
     assert 0 <= result["dev"]["aspect_macro_f1"] <= 1
+
+
+def test_word_tokens_keep_emoji_and_single_chars() -> None:
+    model = TfidfAbsa(min_df=1).fit(
+        ["pin tốt 😍", "ý kiến tệ"], _labels([{"BATTERY": 1}, {"GENERAL": 3}])
+    )
+    assert {"😍", "ý"} <= set(model.vectorizer.vocabulary_)

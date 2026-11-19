@@ -47,6 +47,7 @@ def write_table(table, out_dir: Path, name: str) -> None:
     (out_dir / f"{name}.md").write_text(
         markdown + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
 

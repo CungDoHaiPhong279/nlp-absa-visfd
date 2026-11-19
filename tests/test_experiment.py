@@ -45,7 +45,9 @@ def test_run_writes_json_and_predictions(fake_data_dir: Path, tmp_path: Path, mo
         cache_dir=None,
     )
 
-    saved = json.loads((tmp_path / "runs" / "d__seed42.json").read_text(encoding="utf-8"))
+    raw = (tmp_path / "runs" / "d__seed42.json").read_bytes()
+    assert raw.endswith(b"}\n") and b"\r\n" not in raw
+    saved = json.loads(raw.decode("utf-8"))
     predictions = pd.read_csv(tmp_path / "predictions" / "d__seed42__dev.csv")
 
     assert saved["test"] is None

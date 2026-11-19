@@ -10,6 +10,9 @@ from sklearn.svm import LinearSVC
 
 from absa.data import ASPECTS
 
+# Words of any length, plus each emoji as its own token (same ranges as preprocess strip_emoji).
+WORD_TOKEN_PATTERN = r"(?u)\b\w+\b|[\U0001F000-\U0001FAFF☀-➿⬀-⯿]"
+
 
 class TfidfAbsa:
     """Train one classifier per aspect, with optional separate sentiment classifiers."""
@@ -32,11 +35,14 @@ class TfidfAbsa:
         self.classifier = classifier
         self.C = C
         self.seed = seed
+        # sklearn's default token_pattern drops emoji and 1-char words ("ý"), which made E3 a no-op.
+        extra = {"token_pattern": WORD_TOKEN_PATTERN} if analyzer == "word" else {}
         self.vectorizer = TfidfVectorizer(
             sublinear_tf=True,
             min_df=min_df,
             analyzer=analyzer,
             ngram_range=tuple(ngram_range),
+            **extra,
         )
         self.aspect_models: list = []
         self.sentiment_models: list = []
