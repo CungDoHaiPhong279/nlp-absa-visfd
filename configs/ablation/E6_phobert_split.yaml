@@ -1,0 +1,4 @@
+base: ../phobert_joint.yaml
+name: E6_phobert_split
+groups: [E6]
+model: {mode: split}

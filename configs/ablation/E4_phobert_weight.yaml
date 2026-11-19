@@ -1,0 +1,4 @@
+base: ../phobert_joint.yaml
+name: E4_phobert_weight
+groups: [E4]
+model: {class_weight: true}

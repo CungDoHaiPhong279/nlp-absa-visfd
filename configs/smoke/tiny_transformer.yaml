@@ -1,0 +1,4 @@
+base: ../phobert_joint.yaml
+name: tiny_transformer
+preprocess: {segment: null}
+model: {model_name: __tiny__, epochs: 1, batch_size: 8, fp16: false}
