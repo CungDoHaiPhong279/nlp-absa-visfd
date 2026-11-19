@@ -1,0 +1,7 @@
+name: bilstm_fasttext
+seed: 42
+# syllables, no word segmentation: cc.vi.300 vectors are mostly per syllable (D8)
+preprocess: {lowercase: true, strip_emoji: false, strip_punct: false, segment: null, use_star: false}
+model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_path: models/fasttext_vi_train_vocab.json,
+        hidden: 256, layers: 1, dropout: 0.3, epochs: 20, lr: 1.0e-3, batch_size: 32, max_len: 128,
+        freeze_embedding: false, patience: 3}
