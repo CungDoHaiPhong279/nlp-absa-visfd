@@ -4,4 +4,4 @@ groups: [E3, E4, E5, E6]
 preprocess: {lowercase: false, strip_emoji: false, strip_punct: false, segment: vncorenlp, use_star: false}
 # max_length = p99 of PhoBERT subword length on Train, rounded up to a multiple of 32 (D9, Task 4)
 model: {type: transformer, model_name: vinai/phobert-base-v2, mode: joint, max_length: 128,
-        lr: 2.0e-5, batch_size: 16, epochs: 5, class_weight: false, fp16: true, patience: 2}
+        lr: 2.0e-5, batch_size: 16, epochs: 10, class_weight: false, fp16: true, patience: 2}
