@@ -133,8 +133,9 @@ def run_experiment(
 
     stem = f"{name}__seed{seed}"
     (runs_dir / f"{stem}.json").write_text(
-        json.dumps(result, ensure_ascii=False, indent=2),
+        json.dumps(result, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     dev_predictions.to_csv(
         predictions_dir / f"{stem}__dev.csv",

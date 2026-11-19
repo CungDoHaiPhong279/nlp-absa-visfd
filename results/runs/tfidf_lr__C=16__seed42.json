@@ -1,0 +1,112 @@
+{
+  "name": "tfidf_lr__C=16",
+  "seed": 42,
+  "groups": [],
+  "config": {
+    "name": "tfidf_lr__C=16",
+    "seed": 42,
+    "groups": [],
+    "preprocess": {
+      "lowercase": true,
+      "strip_emoji": false,
+      "strip_punct": false,
+      "segment": null,
+      "use_star": false
+    },
+    "model": {
+      "type": "tfidf",
+      "mode": "split",
+      "analyzer": "word",
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "classifier": "lr",
+      "C": 16
+    }
+  },
+  "dev": {
+    "aspect_macro_f1": 0.7780642486561267,
+    "aspect_micro_f1": 0.8586550435865504,
+    "sentiment_macro_f1": 0.4765664775650604,
+    "sentiment_micro_f1": 0.7434620174346201,
+    "polarity_macro_f1_detected": 0.7764109981690058,
+    "exact_match": 0.322841726618705,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.8064516129032258,
+        "recall": 0.6198347107438017,
+        "f1": 0.7009345794392523,
+        "support": 121
+      },
+      "CAMERA": {
+        "precision": 0.9290780141843972,
+        "recall": 0.8851351351351351,
+        "f1": 0.9065743944636678,
+        "support": 296
+      },
+      "FEATURES": {
+        "precision": 0.9171779141104295,
+        "recall": 0.7847769028871391,
+        "f1": 0.8458274398868458,
+        "support": 381
+      },
+      "BATTERY": {
+        "precision": 0.9681908548707754,
+        "recall": 0.9662698412698413,
+        "f1": 0.9672293942403177,
+        "support": 504
+      },
+      "PERFORMANCE": {
+        "precision": 0.8596187175043327,
+        "recall": 0.852233676975945,
+        "f1": 0.8559102674719585,
+        "support": 582
+      },
+      "STORAGE": {
+        "precision": 0.5,
+        "recall": 0.14285714285714285,
+        "f1": 0.2222222222222222,
+        "support": 14
+      },
+      "DESIGN": {
+        "precision": 0.9051094890510949,
+        "recall": 0.6631016042780749,
+        "f1": 0.7654320987654321,
+        "support": 187
+      },
+      "PRICE": {
+        "precision": 0.9128630705394191,
+        "recall": 0.873015873015873,
+        "f1": 0.8924949290060852,
+        "support": 252
+      },
+      "GENERAL": {
+        "precision": 0.8168044077134986,
+        "recall": 0.8606676342525399,
+        "f1": 0.8381625441696113,
+        "support": 689
+      },
+      "SER&ACC": {
+        "precision": 0.91324200913242,
+        "recall": 0.6896551724137931,
+        "f1": 0.7858546168958742,
+        "support": 290
+      }
+    }
+  },
+  "test": null,
+  "train_seconds": 12.56960329998401,
+  "limit": null,
+  "model_info": {},
+  "git_commit": "d175bdd70cdcc3f4d562f2c2b28c403aa16f8384",
+  "timestamp": "2026-11-19T18:23:31.658354+07:00",
+  "versions": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.9.1",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.22.2"
+  }
+}

@@ -24,3 +24,12 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - **Task 4 – trùng lặp giữa các split:** `eda_duplicates.json` cho `train_dup=2`, `train_dev_overlap=3`, `train_test_overlap=5`, `dev_test_overlap=0` (so sánh trên `normalize(..., lowercase=True)`, đếm số văn bản khác nhau). Không xóa mẫu để giữ split gốc.
 - **Task 4 – `max_length` (D9):** đo trên Train, gồm token đặc biệt (`results/tables/eda_subword_len.csv`). PhoBERT (VnCoreNLP tách từ): mean 40,8, p95 86, p99 119, max 199, nên `max_length = 128`. ViSoBERT (văn bản thô sau `normalize`): mean 68,3, p95 145, p99 197, max 350, nên `max_length = 224` (p99 làm tròn lên bội số của 32, dưới trần 256; khoảng 1% bình luận bị cắt ở cả hai mô hình).
 - **Task 4 – protobuf cho tokenizer ViSoBERT:** tokenizer sentencepiece của ViSoBERT cần `protobuf` để nạp dưới transformers 5.x (thiếu thì rơi về TikToken và báo thiếu `tiktoken`). Đã thêm `protobuf>=4.21` vào `requirements.txt`; không cần `tiktoken`. Lệnh nạp đã chạy được (không cần `use_fast=False`): `AutoTokenizer.from_pretrained("uitnlp/visobert")`. Task 9 phải nạp đúng như vậy.
+- **Task 6 – TF-IDF giữ emoji và từ 1 ký tự:** `token_pattern` mặc định của scikit-learn (`\b\w\w+\b`) bỏ mọi emoji và từ 1 ký tự (ví dụ "ý"), nên E3 (giữ/bỏ emoji) với TF-IDF cho kết quả giống hệt nhau. `TfidfAbsa` với `analyzer="word"` dùng `WORD_TOKEN_PATTERN` (từ mọi độ dài, mỗi emoji là một token, cùng dải Unicode với `strip_emoji`). Mọi run TF-IDF đã chạy lại sau thay đổi này.
+- **Task 6 – E0, lưới C mở rộng so với D10:** với lưới {0,25…4}, C tốt nhất của LR nằm ở mép trên nên dò tiếp tới khi `dev.sentiment_macro_f1` giảm. Sentiment macro-F1 trên Dev (%):
+
+  | C | 0,25 | 0,5 | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 |
+  |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+  | LR | 29,44 | 34,67 | 38,89 | 42,72 | 45,71 | 47,36 | 47,66 | 48,64 | 48,97 | 49,44 | 49,76 | **50,49** | 50,33 |
+  | SVM | 44,60 | 47,88 | 49,34 | 49,92 | **50,20** | 50,13 | 49,95 | 49,88 | | | | | |
+
+  Chốt LR `C=512` (gần như không regularize; aspect macro-F1 gần phẳng từ C=32, 78,9–79,0%) và SVM `C=4`. Thời gian train `tfidf_lr` khoảng 12 giây trên CPU (laptop của A).

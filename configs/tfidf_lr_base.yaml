@@ -2,4 +2,4 @@ name: tfidf_lr
 seed: 42
 groups: [E1, E2, E3, E6_tfidf]
 preprocess: {lowercase: true, strip_emoji: false, strip_punct: false, segment: null, use_star: false}
-model: {type: tfidf, mode: split, analyzer: word, ngram_range: [1, 2], min_df: 2, classifier: lr, C: 4}
+model: {type: tfidf, mode: split, analyzer: word, ngram_range: [1, 2], min_df: 2, classifier: lr, C: 512}
