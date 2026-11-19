@@ -790,15 +790,15 @@ model: {type: transformer, model_name: vinai/phobert-base-v2, mode: joint, max_l
     - In tỉ lệ phủ theo token và theo kiểu từ.
   - File fastText (khoảng 1,2 GB): `https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.vi.300.vec.gz`. Tải trên Colab, không tải về máy local.
 
-- [ ] **Step 1: Viết test (fail)** với embedding ngẫu nhiên, `emb_dim=8, hidden=8, epochs=1`:
+- [x] **Step 1: Viết test (fail)** với embedding ngẫu nhiên, `emb_dim=8, hidden=8, epochs=1`:
   - `test_build_vocab_order`: `build_vocab(["b a a", "c"])[:3] == ["<pad>", "<unk>", "a"]`.
   - `test_encode_oov_and_empty`: `encode(["xyz", ""], vocab, 5) == [[1], [1]]`.
   - `test_bilstm_truncates`: một văn bản 500 token với `max_len=128` → `len(encode(...)[0]) == 128`, và `predict` chạy được.
   - `test_output_shape`: `predict` trả `(n, 10)` int8, giá trị ⊆ {0..3}.
   - `test_padding_invariance`: ở chế độ eval, logits của `"pin trâu"` khi chạy một mình bằng logits của nó khi chung lô với một văn bản 50 token (`torch.allclose`, `atol=1e-5`).
   - `test_load_pretrained_embedding(tmp_path)`: tạo `.npy` (5×8) và `.json` với vocab 5 từ → `fit` chạy, và `model.module.embedding.weight[2]` khớp hàng 2 của ma trận khi `freeze_embedding=True`.
-- [ ] **Step 2: Chạy `pytest tests/test_bilstm.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `bilstm.py` và `prepare_fasttext.py`.** Viết `configs/bilstm_fasttext.yaml`:
+- [x] **Step 2: Chạy `pytest tests/test_bilstm.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `bilstm.py` và `prepare_fasttext.py`.** Viết `configs/bilstm_fasttext.yaml`:
 
 ```yaml
 name: bilstm_fasttext
