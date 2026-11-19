@@ -654,7 +654,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
 
 ### Task 8: Lõi transformer (head, loss, decode, trọng số lớp, ngưỡng)
 
-**Phụ trách:** B
+**Phụ trách:** B (thực tế: A làm, vì Task 8 chặn Task 9, 10, 12)
 
 **Files:**
 - Create: `src/absa/tiny.py`, `src/absa/transformer.py` (phần lõi; phần `TransformerAbsa` thêm ở Task 9)
@@ -675,7 +675,7 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
   - `THRESHOLD_GRID = (0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70)`
   - `best_threshold(aspect_probs: np.ndarray, polarity_codes: np.ndarray, Y_true: np.ndarray, grid=THRESHOLD_GRID) -> float`: dự đoán là `np.where(aspect_probs > t, polarity_codes, 0)`; chọn `t` có `evaluate(...)["sentiment_macro_f1"]` cao nhất; bằng nhau thì chọn `t` gần 0.5 nhất.
 
-- [ ] **Step 1: Viết test (fail).** Fixture `tiny = build_tiny(["pin trâu", "máy đẹp quá", "giá cao"])`.
+- [x] **Step 1: Viết test (fail).** Fixture `tiny = build_tiny(["pin trâu", "máy đẹp quá", "giá cao"])`.
   - `test_build_tiny_offline`: `tokenizer(["pin trâu"])["input_ids"][0][0] == tokenizer.convert_tokens_to_ids("<s>")`; `encoder.config.pad_token_id == tokenizer.pad_token_id`.
   - `test_joint_shapes`, `test_split_shapes`: với batch 2, shape như phần Interfaces.
   - `test_joint_loss_with_weights`: loss là scalar hữu hạn khi có `compute_class_weights(Y)`.
@@ -685,10 +685,10 @@ python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
   - `test_decode_joint_argmax`; `test_decode_split_threshold`: `aspect_logits` âm cho ra 0; dương và `polarity_logits` lớn nhất ở chỉ số 2 cho ra 3.
   - `test_class_weights_zero_column`: Y có cột STORAGE toàn 0 → shape `(10, 4)`, mọi giá trị hữu hạn và nằm trong [0.1, 10]; ở một cột có lớp 0 nhiều hơn hẳn lớp 1, `w[a, 0] < w[a, 1]`.
   - `test_best_threshold`: `Y_true` có 2 hàng với CAMERA=1; `aspect_probs` bằng 0.4 ở ô có CAMERA, 0.1 ở các ô khác; `polarity_codes` toàn 1. Kỳ vọng `best_threshold(...) == 0.35`.
-- [ ] **Step 2: Chạy `pytest tests/test_transformer_core.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt** `tiny.py` và phần lõi của `transformer.py`.
-- [ ] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
-- [ ] **Step 5: Commit** `feat: transformer ABSA heads, losses, decoding and class weights`
+- [x] **Step 2: Chạy `pytest tests/test_transformer_core.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt** `tiny.py` và phần lõi của `transformer.py`.
+- [x] **Step 4: Chạy test**, kỳ vọng PASS (CPU, dưới 30 giây).
+- [x] **Step 5: Commit** `feat: transformer ABSA heads, losses, decoding and class weights`
 
 ---
 
