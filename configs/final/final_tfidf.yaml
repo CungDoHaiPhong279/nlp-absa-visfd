@@ -1,0 +1,4 @@
+# Dev sentiment macro-F1 50.49: best TF-IDF branch (tfidf_lr, tfidf_svm, E1-E3, E6_tfidf)
+base: ../tfidf_lr_base.yaml
+name: final_tfidf
+groups: [final]

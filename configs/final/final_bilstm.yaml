@@ -1,0 +1,4 @@
+# The only Bi-LSTM config (Dev sentiment macro-F1 56.36)
+base: ../bilstm_fasttext.yaml
+name: final_bilstm
+groups: [final]

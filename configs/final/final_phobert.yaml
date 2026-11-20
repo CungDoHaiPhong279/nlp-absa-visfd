@@ -1,0 +1,5 @@
+# Dev sentiment macro-F1 64.69: best of phobert_joint, E3, E4, E6 (E5 excluded: star rating is reported separately)
+base: ../ablation/E4_phobert_weight.yaml
+name: final_phobert
+groups: [final]
+save: true  # checkpoint for the Gradio demo (Task 12)
