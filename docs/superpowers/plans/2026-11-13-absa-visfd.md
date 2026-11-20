@@ -852,15 +852,15 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - Máy local: `python scripts/run.py --config configs/final/final_tfidf.yaml --seeds 42 43 44 --eval-test`. TF-IDF+LR không có yếu tố ngẫu nhiên nên std = 0; ghi chú điều này dưới bảng.
   - Colab: lần lượt `final_bilstm`, `final_phobert`, `final_visobert` với `--seeds 42 43 44 --eval-test`. Sao lưu sau mỗi seed.
 - [x] **Step 6: Chạy `python scripts/make_tables.py`.** Mở `results/tables/comparison_test.md`, kiểm tra: đủ 4 mô hình `final_*`, mỗi mô hình `n_seeds == 3`, và có hàng published (đúng cột, hoặc ghi "không cùng định nghĩa", theo `docs/metric_notes.md`). Kiểm tra `per_aspect_test.md` có cột `support` (STORAGE ở Test là 27).
-- [ ] **Step 7: Phân tích lỗi trên Dev** trong `notebooks/03_error_analysis.ipynb`:
+- [x] **Step 7: Phân tích lỗi trên Dev** trong `notebooks/03_error_analysis.ipynb`:
   1. Nạp `results/predictions/final_phobert__seed42__dev.csv` (hoặc của mô hình transformer tốt nhất).
   2. `collect_errors` → ghi `results/error_analysis/dev_errors_final_phobert.csv`.
   3. `sample_errors(n=40)` → điền tay `error_type` (một giá trị trong `ERROR_TYPES`), `cause` và `fix` → ghi `dev_errors_sample_labeled.csv`. Thống kê số lượng theo `error_type`.
   4. So sánh chéo: đếm số bình luận dev mà TF-IDF sai nhưng PhoBERT đúng, và ngược lại. Ghi `results/tables/cross_errors_dev.csv`.
   5. Chọn 8–10 ví dụ tiêu biểu, phủ ít nhất 5 loại lỗi. Ghi `results/error_analysis/selected_examples.md` thành bảng: bình luận, n_star, nhãn đúng, nhãn dự đoán, loại lỗi, nguyên nhân giả định, hướng khắc phục.
-- [ ] **Step 8: Vẽ confusion matrix trên Test** cho mô hình transformer tốt nhất (seed 42; chỉ để báo cáo, không dùng để chọn gì): `plot_confusions(..., ["GENERAL", "PERFORMANCE", "BATTERY", "FEATURES", "STORAGE"], Path("results/figures/confusion_test_final_phobert.png"))`.
-- [ ] **Step 9: Chạy `pytest -q`**, kỳ vọng toàn bộ PASS.
-- [ ] **Step 10: Commit** `feat: final runs, test evaluation and error analysis` (gồm `src/absa/errors.py`, notebook, `results/tables`, `results/figures`, `results/error_analysis`, `docs/decisions.md`).
+- [x] **Step 8: Vẽ confusion matrix trên Test** cho mô hình transformer tốt nhất (seed 42; chỉ để báo cáo, không dùng để chọn gì): `plot_confusions(..., ["GENERAL", "PERFORMANCE", "BATTERY", "FEATURES", "STORAGE"], Path("results/figures/confusion_test_final_phobert.png"))`.
+- [x] **Step 9: Chạy `pytest -q`**, kỳ vọng toàn bộ PASS.
+- [x] **Step 10: Commit** `feat: final runs, test evaluation and error analysis` (gồm `src/absa/errors.py`, notebook, `results/tables`, `results/figures`, `results/error_analysis`, `docs/decisions.md`).
 
 ---
 
