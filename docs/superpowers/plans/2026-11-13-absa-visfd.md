@@ -834,13 +834,13 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
     - Cùng `seed` thì cùng kết quả. Nếu `len(errors) <= n` thì trả toàn bộ.
   - `plot_confusions(Y_true: np.ndarray, Y_pred: np.ndarray, aspects: list[str], path: Path) -> None`: lưới heatmap 4×4 (nhãn None/Pos/Neu/Neg), tiêu đề mỗi ô ghi tên khía cạnh và `support`; dùng backend `Agg`.
 
-- [ ] **Step 1: Viết test (fail)**
+- [x] **Step 1: Viết test (fail)**
   - `test_collect_errors_categories`: gold `{CAMERA: Positive, PRICE: Negative}`, dự đoán `{CAMERA: Negative, BATTERY: Positive}`, thêm một hàng đúng hoàn toàn. Kỳ vọng còn 1 hàng; `missed == ["PRICE"]`, `spurious == ["BATTERY"]`, `wrong_polarity == ["CAMERA"]`, `n_errors == 3`.
   - `test_sample_errors_deterministic_and_stratified`: 30 hàng lỗi giả (10 mỗi nhóm), `n=9` → 9 hàng; đủ cả 3 nhóm; gọi hai lần cho cùng chỉ mục. Với `n=100` thì trả 30 hàng.
   - `test_load_predictions_roundtrip(tmp_path)`: ghi CSV có `gold` và `pred` dạng `format_label` → `Y_true` khớp `labels_to_matrix`.
   - `test_plot_confusions_writes_png(tmp_path)`: file tồn tại và kích thước > 0.
-- [ ] **Step 2: Chạy `pytest tests/test_errors.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `errors.py`.** Chạy test, kỳ vọng PASS.
+- [x] **Step 2: Chạy `pytest tests/test_errors.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `errors.py`.** Chạy test, kỳ vọng PASS.
 - [ ] **Step 4: Chốt cấu hình, chỉ dựa trên `results/tables/comparison_dev.md` và các bảng ablation.**
   - `final_tfidf`: chọn giữa `tfidf_lr`, `tfidf_svm` và các nhánh E1–E3, E6_tfidf, theo `dev.sentiment_macro_f1`; bằng nhau thì xét `aspect_macro_f1`.
   - `final_bilstm`: `bilstm_fasttext`.
