@@ -1,0 +1,243 @@
+{
+  "name": "final_phobert",
+  "seed": 43,
+  "groups": [
+    "final"
+  ],
+  "config": {
+    "seed": 43,
+    "preprocess": {
+      "lowercase": false,
+      "strip_emoji": false,
+      "strip_punct": false,
+      "segment": "vncorenlp",
+      "use_star": false
+    },
+    "model": {
+      "type": "transformer",
+      "model_name": "vinai/phobert-base-v2",
+      "mode": "joint",
+      "max_length": 128,
+      "lr": 2e-05,
+      "batch_size": 16,
+      "epochs": 10,
+      "class_weight": true,
+      "fp16": true,
+      "patience": 2
+    },
+    "name": "final_phobert",
+    "groups": [
+      "final"
+    ],
+    "save": true
+  },
+  "dev": {
+    "aspect_macro_f1": 0.8819992109567577,
+    "aspect_micro_f1": 0.9018475750577367,
+    "sentiment_macro_f1": 0.6511404812353966,
+    "sentiment_micro_f1": 0.812066974595843,
+    "polarity_macro_f1_detected": 0.8392163072191954,
+    "exact_match": 0.4289568345323741,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.7785714285714286,
+        "recall": 0.9008264462809917,
+        "f1": 0.8352490421455939,
+        "support": 121
+      },
+      "CAMERA": {
+        "precision": 0.8802395209580839,
+        "recall": 0.9932432432432432,
+        "f1": 0.9333333333333333,
+        "support": 296
+      },
+      "FEATURES": {
+        "precision": 0.8519417475728155,
+        "recall": 0.9212598425196851,
+        "f1": 0.8852459016393442,
+        "support": 381
+      },
+      "BATTERY": {
+        "precision": 0.9599236641221374,
+        "recall": 0.998015873015873,
+        "f1": 0.9785992217898832,
+        "support": 504
+      },
+      "PERFORMANCE": {
+        "precision": 0.8462732919254659,
+        "recall": 0.936426116838488,
+        "f1": 0.8890701468189234,
+        "support": 582
+      },
+      "STORAGE": {
+        "precision": 0.9,
+        "recall": 0.6428571428571429,
+        "f1": 0.75,
+        "support": 14
+      },
+      "DESIGN": {
+        "precision": 0.8686868686868687,
+        "recall": 0.9197860962566845,
+        "f1": 0.8935064935064935,
+        "support": 187
+      },
+      "PRICE": {
+        "precision": 0.8487972508591065,
+        "recall": 0.9801587301587301,
+        "f1": 0.9097605893186004,
+        "support": 252
+      },
+      "GENERAL": {
+        "precision": 0.8403141361256544,
+        "recall": 0.9317851959361393,
+        "f1": 0.8836889194769443,
+        "support": 689
+      },
+      "SER&ACC": {
+        "precision": 0.8542372881355932,
+        "recall": 0.8689655172413793,
+        "f1": 0.8615384615384616,
+        "support": 290
+      }
+    }
+  },
+  "test": {
+    "aspect_macro_f1": 0.8798726637888372,
+    "aspect_micro_f1": 0.9016731933072267,
+    "sentiment_macro_f1": 0.6800161674402164,
+    "sentiment_micro_f1": 0.8175151299394803,
+    "polarity_macro_f1_detected": 0.8512627167167589,
+    "exact_match": 0.4370503597122302,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.8133333333333334,
+        "recall": 0.9070631970260223,
+        "f1": 0.8576449912126538,
+        "support": 269
+      },
+      "CAMERA": {
+        "precision": 0.9009287925696594,
+        "recall": 0.9897959183673469,
+        "f1": 0.9432739059967585,
+        "support": 588
+      },
+      "FEATURES": {
+        "precision": 0.8068459657701712,
+        "recall": 0.9282700421940928,
+        "f1": 0.8633093525179856,
+        "support": 711
+      },
+      "BATTERY": {
+        "precision": 0.946277097078228,
+        "recall": 0.9901380670611439,
+        "f1": 0.967710843373494,
+        "support": 1014
+      },
+      "PERFORMANCE": {
+        "precision": 0.8665620094191523,
+        "recall": 0.9419795221843004,
+        "f1": 0.902698282910875,
+        "support": 1172
+      },
+      "STORAGE": {
+        "precision": 0.6896551724137931,
+        "recall": 0.7407407407407407,
+        "f1": 0.7142857142857143,
+        "support": 27
+      },
+      "DESIGN": {
+        "precision": 0.9020618556701031,
+        "recall": 0.8793969849246231,
+        "f1": 0.8905852417302799,
+        "support": 398
+      },
+      "PRICE": {
+        "precision": 0.8789808917197452,
+        "recall": 0.9701230228471002,
+        "f1": 0.9223057644110275,
+        "support": 569
+      },
+      "GENERAL": {
+        "precision": 0.8321588725176169,
+        "recall": 0.940622737146995,
+        "f1": 0.8830727396329028,
+        "support": 1381
+      },
+      "SER&ACC": {
+        "precision": 0.8365695792880259,
+        "recall": 0.8718381112984823,
+        "f1": 0.8538398018166804,
+        "support": 593
+      }
+    }
+  },
+  "train_seconds": 686.5407247589999,
+  "limit": null,
+  "model_info": {
+    "best_epoch": 10,
+    "best_dev_sentiment_macro_f1": 0.6511404812353966,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.1448014554791381,
+        "dev_sentiment_macro_f1": 0.3608616183451022
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.8631044158700555,
+        "dev_sentiment_macro_f1": 0.4771791217342035
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.696505807141259,
+        "dev_sentiment_macro_f1": 0.5590114930451942
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.5843696309678119,
+        "dev_sentiment_macro_f1": 0.6024053833331529
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.49697038433390234,
+        "dev_sentiment_macro_f1": 0.6397769200365845
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.4324472323824982,
+        "dev_sentiment_macro_f1": 0.6292942675350337
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.3811210537715614,
+        "dev_sentiment_macro_f1": 0.6403835125204782
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.34207537363319673,
+        "dev_sentiment_macro_f1": 0.6478564206323595
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.3154529774335865,
+        "dev_sentiment_macro_f1": 0.6475712648062321
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.2985990742026413,
+        "dev_sentiment_macro_f1": 0.6511404812353966
+      }
+    ],
+    "threshold": 0.5,
+    "device": "cuda"
+  },
+  "git_commit": "4ff4f74e683a3de007635e5bb09e9a42e0be8c34",
+  "timestamp": "2026-11-20T17:38:03.759341+00:00",
+  "versions": {
+    "python": "3.13.16",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.6.1",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.1"
+  }
+}

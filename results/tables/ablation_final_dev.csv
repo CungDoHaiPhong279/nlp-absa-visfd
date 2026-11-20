@@ -1,0 +1,5 @@
+name,aspect_macro_f1,sentiment_macro_f1,polarity_macro_f1_detected,exact_match,n_seeds,source,note
+final_bilstm,80.57 ± 0.48,55.90 ± 0.47,81.84 ± 0.05,38.79 ± 0.54,3,ours,
+final_phobert,88.40 ± 0.38,65.47 ± 1.00,83.69 ± 0.38,44.00 ± 0.96,3,ours,
+final_tfidf,79.00 ± 0.00,50.49 ± 0.00,77.99 ± 0.00,31.65 ± 0.00,3,ours,
+final_visobert,83.60 ± 0.16,55.12 ± 1.28,80.33 ± 0.88,39.93 ± 1.58,3,ours,

@@ -56,3 +56,13 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
   - `final_phobert` = `E4_phobert_weight` (trọng số lớp): 64,69, cao nhất trong `phobert_joint` 54,38, E3 54,11, E6 58,34; E5 (55,37) bị loại theo spec vì dùng số sao. Có `save: true` để làm demo.
   - `final_visobert` = `visobert_joint`: 56,09; thấp hơn `final_phobert` nên không lưu checkpoint.
   - Lưu ý khi so sánh trên Test: chỉ `final_phobert` có trọng số lớp; ViSoBERT và Bi-LSTM không được khảo sát E4 nên không dùng trọng số lớp. Báo cáo phải ghi rõ chênh lệch PhoBERT–ViSoBERT một phần do trọng số lớp, không chỉ do mô hình.
+- **Task 11 – đánh giá Test, lần duy nhất (Step 5–6, 2026-11-21):** B đồng ý qua tin nhắn (ghi ở issue #21). `final_tfidf` chạy trên máy A; `final_bilstm`, `final_phobert`, `final_visobert` chạy trên Colab T4; mỗi mô hình 3 seed (42, 43, 44). Kết quả Test (trung bình ± độ lệch chuẩn, theo `results/tables/comparison_test.md`):
+
+  | Mô hình | Aspect macro-F1 | Sentiment macro-F1 | Exact match |
+  |---|---|---|---|
+  | `final_tfidf` | 81,77 ± 0,00 | 52,85 ± 0,00 | 31,29 ± 0,00 |
+  | `final_bilstm` | 81,16 ± 0,92 | 56,60 ± 0,27 | 38,92 ± 0,29 |
+  | `final_visobert` | 84,88 ± 0,34 | 56,60 ± 1,40 | 39,24 ± 0,21 |
+  | `final_phobert` | **88,21 ± 0,25** | **68,45 ± 0,86** | **44,74 ± 0,93** |
+
+  **TF-IDF + LR có std = 0:** `LogisticRegression` dùng solver mặc định `lbfgs` (tất định, `random_state` không có tác dụng) và TF-IDF không có yếu tố ngẫu nhiên, nên 3 seed cho cùng một kết quả. Báo cáo phải ghi chú điều này dưới bảng; `comparison_test.md` sinh tự động nên không sửa tay. STORAGE trên Test (support 27): Bi-LSTM 22,98, TF-IDF 59,09, ViSoBERT 67,54, PhoBERT 71,98. Thứ hạng giống Dev; không có quyết định nào được chọn lại dựa trên Test.
