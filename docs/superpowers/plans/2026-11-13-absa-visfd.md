@@ -841,7 +841,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - `test_plot_confusions_writes_png(tmp_path)`: file tồn tại và kích thước > 0.
 - [x] **Step 2: Chạy `pytest tests/test_errors.py -v`**, kỳ vọng FAIL.
 - [x] **Step 3: Cài đặt `errors.py`.** Chạy test, kỳ vọng PASS.
-- [ ] **Step 4: Chốt cấu hình, chỉ dựa trên `results/tables/comparison_dev.md` và các bảng ablation.**
+- [x] **Step 4: Chốt cấu hình, chỉ dựa trên `results/tables/comparison_dev.md` và các bảng ablation.**
   - `final_tfidf`: chọn giữa `tfidf_lr`, `tfidf_svm` và các nhánh E1–E3, E6_tfidf, theo `dev.sentiment_macro_f1`; bằng nhau thì xét `aspect_macro_f1`.
   - `final_bilstm`: `bilstm_fasttext`.
   - `final_phobert`: chọn trong `phobert_joint`, E3, E4, E6. **Không** chọn E5 (số sao), vì spec E5 chỉ báo cáo riêng.

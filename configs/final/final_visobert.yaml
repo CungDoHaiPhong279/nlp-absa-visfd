@@ -1,0 +1,4 @@
+# The only ViSoBERT config (Dev sentiment macro-F1 56.09, below final_phobert, so no checkpoint)
+base: ../visobert_joint.yaml
+name: final_visobert
+groups: [final]
