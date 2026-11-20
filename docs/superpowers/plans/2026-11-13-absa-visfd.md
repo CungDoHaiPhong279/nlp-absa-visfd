@@ -848,10 +848,10 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - `final_visobert`: `visobert_joint`.
 
   Mỗi file có dạng `base: ../<cấu hình thắng>.yaml`, `name: final_<x>`, `groups: [final]`. `final_phobert` thêm `save: true` (để làm demo); nếu ViSoBERT tốt hơn trên dev thì đặt `save: true` cho `final_visobert`. Ghi lý do chọn kèm số dev vào `docs/decisions.md`. **Commit các cấu hình này trước khi chạy Test**, để lịch sử git chứng minh không chọn lại sau khi đã xem Test.
-- [ ] **Step 5: Chạy Test, lần duy nhất.**
+- [x] **Step 5: Chạy Test, lần duy nhất.**
   - Máy local: `python scripts/run.py --config configs/final/final_tfidf.yaml --seeds 42 43 44 --eval-test`. TF-IDF+LR không có yếu tố ngẫu nhiên nên std = 0; ghi chú điều này dưới bảng.
   - Colab: lần lượt `final_bilstm`, `final_phobert`, `final_visobert` với `--seeds 42 43 44 --eval-test`. Sao lưu sau mỗi seed.
-- [ ] **Step 6: Chạy `python scripts/make_tables.py`.** Mở `results/tables/comparison_test.md`, kiểm tra: đủ 4 mô hình `final_*`, mỗi mô hình `n_seeds == 3`, và có hàng published (đúng cột, hoặc ghi "không cùng định nghĩa", theo `docs/metric_notes.md`). Kiểm tra `per_aspect_test.md` có cột `support` (STORAGE ở Test là 27).
+- [x] **Step 6: Chạy `python scripts/make_tables.py`.** Mở `results/tables/comparison_test.md`, kiểm tra: đủ 4 mô hình `final_*`, mỗi mô hình `n_seeds == 3`, và có hàng published (đúng cột, hoặc ghi "không cùng định nghĩa", theo `docs/metric_notes.md`). Kiểm tra `per_aspect_test.md` có cột `support` (STORAGE ở Test là 27).
 - [ ] **Step 7: Phân tích lỗi trên Dev** trong `notebooks/03_error_analysis.ipynb`:
   1. Nạp `results/predictions/final_phobert__seed42__dev.csv` (hoặc của mô hình transformer tốt nhất).
   2. `collect_errors` → ghi `results/error_analysis/dev_errors_final_phobert.csv`.
