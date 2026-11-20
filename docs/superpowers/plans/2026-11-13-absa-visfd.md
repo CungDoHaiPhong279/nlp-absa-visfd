@@ -809,8 +809,8 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
         freeze_embedding: false, patience: 3}
 ```
 
-- [ ] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
-- [ ] **Step 5: Commit** `feat: BiLSTM+fastText approximate reproduction baseline`
+- [x] **Step 4: Chạy test** (PASS). Trên Colab: tải fastText, chạy `python scripts/prepare_fasttext.py ...`, ghi tỉ lệ phủ vào `docs/decisions.md`, rồi `python scripts/run.py --config configs/bilstm_fasttext.yaml`. Sao lưu lên Drive.
+- [x] **Step 5: Commit** `feat: BiLSTM+fastText approximate reproduction baseline`
 
 ---
 

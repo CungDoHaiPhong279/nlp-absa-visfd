@@ -48,3 +48,5 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
   | `visobert_joint` | 83,49 | 56,09 | 7 (dừng sớm ở epoch 9) | 773 s |
 
   `phobert_joint`, E3 và E5 đạt tốt nhất ở epoch cuối nhưng epoch 9 → 10 chỉ tăng 0,2–0,4 điểm, nên coi là gần hội tụ; không chạy lại. Báo cáo ghi rõ giới hạn này.
+- **Task 10 – Bi-LSTM + fastText trên Colab T4 (seed 42):** `prepare_fasttext.py` cho vocab 6.667 âm tiết (Train, chữ thường), **tỉ lệ phủ fastText `cc.vi.300`: 84,46% số âm tiết khác nhau, 98,97% số token của Train**; OOV trên Dev 1,05%. Kết quả Dev: aspect macro-F1 80,22, sentiment macro-F1 56,36, exact match 38,85; tốt nhất ở epoch 16, dừng sớm ở epoch 19, train 88 giây.
+- **Task 10 – STORAGE quyết định macro-F1:** F1 của STORAGE trên Dev: `phobert_joint` 0,0 (không đoán đúng lần nào), Bi-LSTM 11,1, TF-IDF SVM 36,4, ViSoBERT 47,6, `E4_phobert_weight` 72,0. Vì macro-F1 chia đều cho 10 khía cạnh, riêng STORAGE kéo sentiment/aspect macro-F1 của `phobert_joint` xuống nhiều điểm; đây là lý do chính Bi-LSTM (56,36) nhỉnh hơn `phobert_joint` (54,38) và E4 tăng mạnh. Các khía cạnh khác PhoBERT đều cao hơn Bi-LSTM. Báo cáo phải nêu điều này khi so sánh mô hình.

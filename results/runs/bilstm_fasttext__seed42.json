@@ -1,0 +1,119 @@
+{
+  "name": "bilstm_fasttext",
+  "seed": 42,
+  "groups": [],
+  "config": {
+    "name": "bilstm_fasttext",
+    "seed": 42,
+    "preprocess": {
+      "lowercase": true,
+      "strip_emoji": false,
+      "strip_punct": false,
+      "segment": null,
+      "use_star": false
+    },
+    "model": {
+      "type": "bilstm",
+      "embedding_path": "models/fasttext_vi_train_vocab.npy",
+      "vocab_path": "models/fasttext_vi_train_vocab.json",
+      "hidden": 256,
+      "layers": 1,
+      "dropout": 0.3,
+      "epochs": 20,
+      "lr": 0.001,
+      "batch_size": 32,
+      "max_len": 128,
+      "freeze_embedding": false,
+      "patience": 3
+    },
+    "groups": []
+  },
+  "dev": {
+    "aspect_macro_f1": 0.802174084544335,
+    "aspect_micro_f1": 0.8884534217666566,
+    "sentiment_macro_f1": 0.5635822019599315,
+    "sentiment_micro_f1": 0.790171842025927,
+    "polarity_macro_f1_detected": 0.8188464859437673,
+    "exact_match": 0.38848920863309355,
+    "per_aspect": {
+      "SCREEN": {
+        "precision": 0.7950819672131147,
+        "recall": 0.8016528925619835,
+        "f1": 0.7983539094650206,
+        "support": 121
+      },
+      "CAMERA": {
+        "precision": 0.9155844155844156,
+        "recall": 0.9527027027027027,
+        "f1": 0.9337748344370861,
+        "support": 296
+      },
+      "FEATURES": {
+        "precision": 0.9013333333333333,
+        "recall": 0.8871391076115486,
+        "f1": 0.8941798941798942,
+        "support": 381
+      },
+      "BATTERY": {
+        "precision": 0.9666666666666667,
+        "recall": 0.9781746031746031,
+        "f1": 0.9723865877712031,
+        "support": 504
+      },
+      "PERFORMANCE": {
+        "precision": 0.8843537414965986,
+        "recall": 0.8934707903780069,
+        "f1": 0.8888888888888888,
+        "support": 582
+      },
+      "STORAGE": {
+        "precision": 0.25,
+        "recall": 0.07142857142857142,
+        "f1": 0.1111111111111111,
+        "support": 14
+      },
+      "DESIGN": {
+        "precision": 0.8693181818181818,
+        "recall": 0.8181818181818182,
+        "f1": 0.8429752066115702,
+        "support": 187
+      },
+      "PRICE": {
+        "precision": 0.8872180451127819,
+        "recall": 0.9365079365079365,
+        "f1": 0.9111969111969112,
+        "support": 252
+      },
+      "GENERAL": {
+        "precision": 0.8740849194729137,
+        "recall": 0.8664731494920174,
+        "f1": 0.8702623906705539,
+        "support": 689
+      },
+      "SER&ACC": {
+        "precision": 0.8041958041958042,
+        "recall": 0.7931034482758621,
+        "f1": 0.7986111111111112,
+        "support": 290
+      }
+    }
+  },
+  "test": null,
+  "train_seconds": 87.69587252999997,
+  "limit": null,
+  "model_info": {
+    "best_epoch": 16,
+    "best_dev_sentiment_macro_f1": 0.5635822019599315,
+    "vocab_size": 6667,
+    "oov_rate_dev": 0.010505596118193678
+  },
+  "git_commit": "d05b95c740af5c001e8df5528e16afe13bce3994",
+  "timestamp": "2026-11-20T12:53:03.337645+00:00",
+  "versions": {
+    "python": "3.13.16",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.6.1",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.1"
+  }
+}
