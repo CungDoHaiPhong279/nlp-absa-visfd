@@ -887,15 +887,15 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
     - Tab 1: ô nhập văn bản → HTML. Có sẵn 5 ví dụ lấy từ `selected_examples.md` (dán chuỗi vào code).
     - Tab 2: tải lên CSV → kiểm tra có cột `comment` (thiếu thì `gr.Error("File CSV cần có cột 'comment'")`) → cắt còn `--max-rows` dòng và ghi chú nếu bị cắt → bảng tổng hợp và biểu đồ cột chồng khen/chê theo khía cạnh (matplotlib) → nêu khía cạnh bị chê nhiều nhất.
 
-- [ ] **Step 1: Viết test (fail)**, không cần model thật:
+- [x] **Step 1: Viết test (fail)**, không cần model thật:
   - `test_render_negative_color`: `render_html("pin yếu", {"BATTERY": "Negative"})` chứa `"Pin"` và `"#cf222e"`.
   - `test_render_empty`: `render_html("", {})` bắt đầu bằng `"<div"`, kết thúc bằng `"</div>"`, và chứa `"Không phát hiện"`.
   - `test_render_escapes_script`: `render_html("<script>alert(1)</script>", {})` không chứa `"<script>"` mà chứa `"&lt;script&gt;"`.
   - `test_predict_empty_and_emoji_only`: tạo `Predictor` qua `object.__new__`, gán mô hình giả (gọi đến là báo lỗi) → `predict("")` và `predict("😍😍")` đều trả `{}` mà không gọi mô hình.
   - `test_summarize_predictions`: `[{"BATTERY": "Negative"}, {"BATTERY": "Positive"}, {}]` → `.loc["BATTERY", "Total"] == 2`.
   - `test_from_dir_roundtrip(tmp_path)`: train `TransformerAbsa("__tiny__", epochs=1)`, gán `preprocess_cfg`, `save`, rồi `Predictor.from_dir` → `predict("pin trâu")` trả dict có khóa ⊆ `ASPECTS`, và khớp với `model.predict(["pin trâu"])` sau khi đổi về dict.
-- [ ] **Step 2: Chạy `pytest tests/test_inference.py -v`**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `inference.py` và `demo/app.py`.**
+- [x] **Step 2: Chạy `pytest tests/test_inference.py -v`**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `inference.py` và `demo/app.py`.**
 - [ ] **Step 4: Chạy test** (PASS). Chạy thật:
   - Trên Colab: `python demo/app.py --model models/final_phobert__seed42 --share`.
   - Trên máy local: chỉ chạy nếu có Java (vì PhoBERT cần VnCoreNLP) và đã tải checkpoint từ Drive.
