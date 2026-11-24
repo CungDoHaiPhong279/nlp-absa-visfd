@@ -28,6 +28,11 @@ def test_read_comments_semicolon_and_bom(tmp_path):
     assert df["comment"].tolist() == ["pin trâu"]
 
 
+def test_read_comments_keeps_na_like_text(tmp_path):
+    df = app.read_comments(_write(tmp_path, "comment\nNA\nNone\nok\n"), 10)
+    assert df["comment"].tolist() == ["NA", "None", "ok"]
+
+
 def test_read_comments_stops_after_max_rows_plus_one(tmp_path):
     text = "comment\n" + "".join(f"c{i}\n" for i in range(50))
     assert len(app.read_comments(_write(tmp_path, text), 5)) == 6

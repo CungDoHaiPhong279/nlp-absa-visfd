@@ -19,8 +19,8 @@ File này cho hai thành viên biết nhóm dùng công cụ gì, làm việc v�
 | Google Colab (GPU T4) | Huấn luyện PhoBERT, ViSoBERT, Bi-LSTM | Dùng `notebooks/02_colab_train.ipynb` |
 | Google Drive | Chia sẻ predictions, checkpoint, cache | Thư mục chung `nlp-absa-visfd/`, cấu trúc ở mục 4 |
 | Hugging Face Hub | Tải `vinai/phobert-base-v2`, `uitnlp/visobert` | Không cần token |
-| Thư viện chính: pandas, scikit-learn, underthesea, py_vncorenlp, PyTorch, transformers, Gradio, matplotlib | Xử lý dữ liệu, mô hình, demo, biểu đồ | Phiên bản: `requirements.txt` và `requirements.lock*.txt` |
-| Overleaf (LaTeX) | Báo cáo `NLP_BTL_MaNhom.pdf` và slide (Beamer) | Xem mục 5 |
+| Thư viện chính: pandas, scikit-learn, underthesea, py_vncorenlp, PyTorch, transformers, Gradio, matplotlib | Xử lý dữ liệu, mô hình, demo, biểu đồ | Phiên bản: `requirements.lock.txt` (máy A) và khóa `versions` trong `results/runs/*.json` (mọi lần chạy, kể cả Colab) |
+| Microsoft Word, PowerPoint | Báo cáo `NLP_BTL_MaNhom.pdf` (xuất từ .docx) và slide (.pptx) | Xem mục 5 |
 | Zalo | Trao đổi hằng ngày | Chỉ trao đổi nhanh, xem mục 3 |
 | Google Meet | Họp tuần | Xem mục 3 |
 | Trợ lý AI: Codex (B), Claude Code (A), Gemini CLI | Hỗ trợ viết code | Cả ba tự đọc [AGENTS.md](../AGENTS.md) (Codex đọc trực tiếp; Claude/Gemini qua `CLAUDE.md`/`GEMINI.md`). Codex cloud: dán khối lệnh Linux ở AGENTS.md mục 4 vào "setup script" của môi trường. Ghi phạm vi dùng AI vào phụ lục báo cáo |
@@ -48,13 +48,11 @@ nlp-absa-visfd/
 
 Quy định: không xóa file của người kia; tên file giữ nguyên như code sinh ra.
 
-## 5. Overleaf
+## 5. Báo cáo và slide
 
-- Một project chung, cả hai có quyền sửa.
-- Cấu trúc: `main.tex`, `sections/01_gioi_thieu.tex` … `07_phan_cong.tex` (theo [spec mục 9](spec/phac_thao_du_an_ABSA_UIT-ViSFD.md)), `figures/` (copy từ `results/figures/`), `tables/`.
-- Số trong bảng chép từ `results/tables/*.md` và phải khớp.
-- Dùng tính năng History của Overleaf thay cho gửi file qua lại.
-- Slide: `slides.tex` (Beamer) trong cùng project.
+- Báo cáo viết bằng Word (.docx), xuất PDF `NLP_BTL_MaNhom.pdf`; slide bằng PowerPoint (.pptx). Cả hai dựng ở máy A bằng script từ nguồn văn bản, không đưa lên Git; nộp theo kênh của môn học.
+- Bố cục 7 mục theo hướng dẫn bài tập lớn của môn và [spec mục 9](spec/phac_thao_du_an_ABSA_UIT-ViSFD.md); hình lấy từ `results/figures/`.
+- Số trong bảng sinh từ `results/tables/*.csv` và phải khớp.
 - Ai viết mục nào: theo cột "Phụ trách" ở plan Task 14 và [spec mục 7](spec/phac_thao_du_an_ABSA_UIT-ViSFD.md).
 
 ## 6. Checklist việc ngoài code
@@ -70,7 +68,7 @@ Mỗi mục có issue tương ứng (xem Issues). Người phụ trách theo [sp
 - [x] Gán nhãn 40 lỗi, chọn 8–10 ví dụ (plan Task 11 Step 7) — B ([#22](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/22))
 - [x] Chạy demo thật, chụp màn hình (plan Task 12 Step 4) — A ([#23](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/23))
 - [ ] Kiểm tra tái lập trên máy khác theo README (plan Task 13 Step 6) — A ([#24](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/24))
-- [ ] Viết báo cáo trên Overleaf theo dàn ý (plan Task 14) — cả hai; kiểm tra chéo số liệu ([#25](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/25))
+- [ ] Viết báo cáo (Word) theo dàn ý (plan Task 14) — cả hai; kiểm tra chéo số liệu ([#25](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/25))
 - [ ] Slide 10 phút + video demo dự phòng — cả hai ([#26](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/26))
 - [ ] Tập thuyết trình và vấn đáp chéo — cả hai ([#27](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/27))
 - [ ] Nộp bài: PDF `NLP_BTL_MaNhom.pdf`, link repo (cấp quyền xem cho giảng viên), README, thư mục `results/` — cả hai ([#28](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/issues/28))

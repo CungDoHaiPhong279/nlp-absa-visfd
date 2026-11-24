@@ -74,7 +74,7 @@ python scripts/download_data.py
 pytest -q
 ```
 
-Phiên bản đã dùng trên máy A ghi ở `requirements.lock.txt`.
+Phiên bản trên máy A ghi ở `requirements.lock.txt`. Phiên bản thật của từng lần chạy, kể cả trên Colab (Python 3.13, torch 2.14.1+cu130, transformers 5.22.1), nằm trong khóa `versions` của mỗi `results/runs/*.json`.
 
 ### Colab (phần GPU)
 
@@ -127,10 +127,22 @@ foreach ($c in 0.25,0.5,1,2,4,8,16,32) { python scripts/run.py --config configs/
 python scripts/make_tables.py
 ```
 
-Các mô hình GPU chạy trên Colab bằng `notebooks/02_colab_train.ipynb`, ví dụ:
+Các mô hình GPU chạy trên Colab (GPU T4). `notebooks/02_colab_train.ipynb` dựng môi trường và chạy 6 cấu hình PhoBERT/ViSoBERT trên Dev, ví dụ:
 
 ```bash
 python scripts/run.py --config configs/phobert_joint.yaml
+```
+
+Bi-LSTM chạy bằng các lệnh dưới đây trong cùng phiên Colab, sau ô cài đặt của notebook. Tải vector fastText (khoảng 1,2 GB, nên tải trên Colab):
+
+```bash
+wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.vi.300.vec.gz
+```
+
+Bi-LSTM chạy bằng các lệnh dưới đây trong cùng phiên Colab, sau ô cài đặt của notebook. Tải vector fastText (khoảng 1,2 GB, nên tải trên Colab):
+
+```bash
+wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.vi.300.vec.gz
 ```
 
 ```bash
@@ -141,15 +153,23 @@ python scripts/prepare_fasttext.py --vec cc.vi.300.vec.gz --config configs/bilst
 python scripts/run.py --config configs/bilstm_fasttext.yaml
 ```
 
-Phân tích lỗi: chạy `notebooks/03_error_analysis.ipynb` (cần `results/predictions/` của các lần chạy final). Demo:
+Phân tích lỗi: chạy `notebooks/03_error_analysis.ipynb`. Notebook cần `results/predictions/`: mỗi lần chạy ghi dự đoán vào thư mục này, nhưng thư mục không được commit vì chứa nguyên văn dữ liệu UIT-ViSFD; tạo lại bằng các lệnh final ở cuối mục này, hoặc xin nhóm bản sao (Drive nhóm `nlp-absa-visfd/backups/`). Demo:
 
 ```bash
 python demo/app.py --model models/final_phobert__seed42
 ```
 
-Checkpoint `final_phobert__seed42` (540 MB) không có trên Git; tải cả thư mục từ Drive nhóm `nlp-absa-visfd/models/` về `models/`. Trên Colab thêm `--share` để có đường link công khai. Tab tổng hợp CSV chỉ phân tích 2.000 dòng đầu; đổi bằng `--max-rows`.
+Checkpoint `final_phobert__seed42` (540 MB) không có trên Git. Nhóm gửi link Drive (quyền xem) của thư mục `models/final_phobert__seed42/` kèm bài nộp; hoặc tự tạo lại trên Colab bằng `python scripts/run.py --config configs/final/final_phobert.yaml --seeds 42` (cấu hình có `save: true`, khoảng 12 phút trên T4; lần chạy có `--limit` không ghi checkpoint). Trên Colab thêm `--share` để có đường link công khai. Tab tổng hợp CSV chỉ phân tích 2.000 dòng đầu; đổi bằng `--max-rows`.
 
-Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`, đã chạy ở PR #49), không chạy lại.
+Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`, đã chạy ở PR #49), không chạy lại. Lệnh đã dùng, ghi lại để truy vết (TF-IDF trên máy cá nhân, ba mô hình còn lại trên Colab T4):
+
+```bash
+python scripts/run.py --config configs/final/final_tfidf.yaml configs/final/final_bilstm.yaml configs/final/final_phobert.yaml configs/final/final_visobert.yaml --seeds 42 43 44 --eval-test
+``` Lệnh đã dùng, ghi lại để truy vết (TF-IDF trên máy cá nhân, ba mô hình còn lại trên Colab T4):
+
+```bash
+python scripts/run.py --config configs/final/final_tfidf.yaml configs/final/final_bilstm.yaml configs/final/final_phobert.yaml configs/final/final_visobert.yaml --seeds 42 43 44 --eval-test
+```
 
 ## 6. Bảng và hình trong báo cáo
 
@@ -167,6 +187,8 @@ Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`,
 | So lỗi chéo TF-IDF với PhoBERT | `notebooks/03_error_analysis.ipynb` | `results/tables/cross_errors_dev.csv` |
 | Phân tích lỗi (RQ3) | `notebooks/03_error_analysis.ipynb` (gán nhãn lỗi bằng tay) | `results/error_analysis/dev_errors_sample_labeled.csv`, `selected_examples.md`; danh sách đủ 617 lỗi `dev_errors_final_phobert.csv` chỉ tạo ra trên máy, không đưa lên Git (chứa nguyên văn dữ liệu) |
 | Ảnh demo | `demo/app.py` (chụp màn hình) | `results/figures/demo_single_comment.png`, `demo_csv_summary.png` |
+| Dự đoán minh họa | `notebooks/03_error_analysis.ipynb`, `demo/app.py` | `results/error_analysis/selected_examples.md` (9 ví dụ: nhãn đúng và dự đoán), `dev_errors_sample_labeled.csv` (40 mẫu), ảnh demo ở trên; dự đoán đầy đủ `results/predictions/` không commit vì chứa nguyên văn dữ liệu |
+| Dự đoán minh họa | `notebooks/03_error_analysis.ipynb`, `demo/app.py` | `results/error_analysis/selected_examples.md` (9 ví dụ: nhãn đúng và dự đoán), `dev_errors_sample_labeled.csv` (40 mẫu), ảnh demo ở trên; dự đoán đầy đủ `results/predictions/` không commit vì chứa nguyên văn dữ liệu |
 
 Không sửa tay `results/tables/*`; chạy lại `make_tables.py`.
 
@@ -210,5 +232,9 @@ Nhóm dùng trợ lý AI để hỗ trợ viết code, test và tài liệu: A d
 | Demo Gradio (Task 12) | A |
 | README, `run_all.py` (Task 13) | A (thay B) |
 | Báo cáo và slide (Task 14) | Cả hai |
+
+Báo cáo `NLP_BTL_MaNhom.pdf` và slide nộp riêng theo kênh của môn học, không có trong repo.
+
+Báo cáo `NLP_BTL_MaNhom.pdf` và slide nộp riêng theo kênh của môn học, không có trong repo.
 
 Chi tiết theo từng PR ở [lịch sử Pull Request](https://github.com/CungDoHaiPhong279/nlp-absa-visfd/pulls?q=is%3Apr).

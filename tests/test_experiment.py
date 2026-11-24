@@ -91,6 +91,21 @@ def test_limit_slices_train_dev(fake_data_dir: Path, tmp_path: Path, monkeypatch
     assert len(model.fit_dev_texts) == 3
 
 
+def test_limit_run_never_saves_model(fake_data_dir: Path, tmp_path: Path, monkeypatch):
+    class SaveableDummyModel(DummyModel):
+        def save(self, path: Path) -> None:
+            raise AssertionError("a --limit run must not overwrite the checkpoint")
+
+    monkeypatch.setitem(registry.REGISTRY, "dummy", SaveableDummyModel)
+    monkeypatch.chdir(tmp_path)
+    cfg = _config()
+    cfg["save"] = True
+    run_experiment(
+        cfg, limit=4, data_dir=fake_data_dir, out_dir=tmp_path / "results", cache_dir=None
+    )
+    assert not Path("models").exists()
+
+
 def test_saves_model_when_config_requests_it(fake_data_dir: Path, tmp_path: Path, monkeypatch):
     class SaveableDummyModel(DummyModel):
         def save(self, path: Path) -> None:
