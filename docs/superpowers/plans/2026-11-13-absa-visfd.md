@@ -896,12 +896,12 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - `test_from_dir_roundtrip(tmp_path)`: train `TransformerAbsa("__tiny__", epochs=1)`, gán `preprocess_cfg`, `save`, rồi `Predictor.from_dir` → `predict("pin trâu")` trả dict có khóa ⊆ `ASPECTS`, và khớp với `model.predict(["pin trâu"])` sau khi đổi về dict.
 - [x] **Step 2: Chạy `pytest tests/test_inference.py -v`**, kỳ vọng FAIL.
 - [x] **Step 3: Cài đặt `inference.py` và `demo/app.py`.**
-- [ ] **Step 4: Chạy test** (PASS). Chạy thật:
+- [x] **Step 4: Chạy test** (PASS). Chạy thật:
   - Trên Colab: `python demo/app.py --model models/final_phobert__seed42 --share`.
   - Trên máy local: chỉ chạy nếu có Java (vì PhoBERT cần VnCoreNLP) và đã tải checkpoint từ Drive.
 
   Thử 5 câu trong `selected_examples.md`, một câu rỗng, một câu toàn emoji, một CSV thiếu cột `comment`, và `results/predictions/...test.csv` (có cột `comment`). Chụp màn hình vào `results/figures/demo_*.png` để đưa vào báo cáo.
-- [ ] **Step 5: Commit** `feat: Gradio demo with aspect highlighting and CSV summary`
+- [x] **Step 5: Commit** `feat: Gradio demo with aspect highlighting and CSV summary`
 
 ---
 
