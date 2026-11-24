@@ -55,9 +55,10 @@ Người phụ trách viết/sửa; người kia review PR. GitHub tự gán ng�
 | `configs/tfidf_*.yaml`, `configs/bilstm_fasttext.yaml` | A | B |
 | `configs/ablation/E1_*`, `E2_*`, `E3_tfidf_*`, `E6_tfidf_*` | A | B |
 | `src/absa/evaluate.py`, `config.py`, `registry.py`, `experiment.py`, `tiny.py`, `transformer.py`, `training.py` | B | A |
-| `scripts/run.py`, `scripts/run_all.py` | B | A |
+| `scripts/run.py` | B | A |
 | `configs/phobert_*.yaml`, `configs/visobert_*.yaml`, `configs/ablation/*_phobert_*` | B | A |
-| `notebooks/02_colab_train.ipynb`, `README.md` | B | A |
+| `notebooks/02_colab_train.ipynb` | B | A |
+| `README.md`, `scripts/run_all.py` (A nhận thay B ở Task 13) | A | B |
 | `src/absa/errors.py`, `notebooks/03_error_analysis.ipynb`, `configs/final/` | Cả hai | Cả hai đồng ý |
 | `docs/`, `.github/`, `pyproject.toml`, `requirements*.txt` | Cả hai | Cả hai đồng ý |
 
