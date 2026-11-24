@@ -23,8 +23,8 @@ Thứ tự ưu tiên khi mâu thuẫn: spec (`docs/spec/`) → plan → `docs/de
 - Gói Python `absa` ở `src/absa/`, mỗi module một bước pipeline. Test ở `tests/`, script CLI ở `scripts/`, cấu hình thí nghiệm YAML ở `configs/`.
 - **Ma trận nhãn:** mọi mô hình nhận `list[str]` và trả `np.ndarray` int8 shape `(n, 10)`, mã `0=None, 1=Positive, 2=Neutral, 3=Negative`. Cột theo đúng thứ tự `absa.data.ASPECTS`. Một hàm `absa.evaluate.evaluate` dùng chung cho mọi mô hình.
 - `{OTHERS}` không phải khía cạnh; bình luận chỉ có `{OTHERS}` là hàng toàn 0.
-- Đã có: `absa.data` (`ASPECTS`, `POLARITIES`, `POLARITY_CODE`, `parse_label`, `has_others`, `format_label`, `labels_to_matrix`, `matrix_to_labels`, `load_split`) và `absa.evaluate` (`evaluate`, `confusion_by_aspect`). Dùng lại, không viết lại.
-- Module chưa có thì tạo đúng tên và chữ ký trong mục Interfaces của task; task sau phụ thuộc vào đúng tên đó.
+- Mọi module trong `src/absa/` đã có (dữ liệu, tiền xử lý, các mô hình, huấn luyện, đánh giá, bảng, phân tích lỗi, suy luận cho demo). Dùng lại, không viết lại; ví dụ nhãn dùng `absa.data`, chỉ số dùng `absa.evaluate.evaluate`.
+- Giữ nguyên tên và chữ ký đã có; code khác phụ thuộc vào đúng tên đó.
 
 ## 4. Lệnh
 

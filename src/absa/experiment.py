@@ -69,7 +69,8 @@ def run_experiment(
         raise ValueError("Không đánh giá test khi dùng --limit")
 
     seed = int(cfg.get("seed", 42))
-    frames = {split: load_split(split, data_dir=data_dir) for split in ("train", "dev", "test")}
+    splits = ("train", "dev", "test") if eval_test else ("train", "dev")
+    frames = {split: load_split(split, data_dir=data_dir) for split in splits}
     texts = {
         split: preprocess_df(
             frame,

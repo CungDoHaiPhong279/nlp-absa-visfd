@@ -2,7 +2,7 @@
 
 ## Quyết định so với spec và bản plan cũ
 
-Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc plan cũ. Task 1 chép nguyên phần này vào `docs/decisions.md`; các quyết định phát sinh khi chạy (C tốt nhất, `max_length`, cấu hình chốt) được ghi tiếp vào file đó để báo cáo truy vết được.
+Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc plan cũ. Các quyết định phát sinh khi chạy (C tốt nhất, `max_length`, cấu hình chốt) được ghi tiếp ở mục nhật ký bên dưới để báo cáo truy vết được.
 
 - **D1 – Baseline TF-IDF theo đúng spec 3.2:** chế độ mặc định `mode: split`. Bước 1: 10 bộ phân loại nhị phân (có/không khía cạnh). Bước 2: mỗi khía cạnh một bộ 3 lớp, chỉ train trên các bình luận có khía cạnh đó. Chế độ `joint` (4 lớp cho mỗi khía cạnh) là một nhánh của khảo sát E6.
 - **D2 – Số sao (E5) là bước tiền xử lý** (`preprocess.use_star`), không phải tham số mô hình, vì mô hình chỉ nhận văn bản. Tiền tố `"[{n_star} sao] "` được thêm **sau** khi tách từ.
@@ -33,7 +33,7 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
   | SVM | 44,60 | 47,88 | 49,34 | 49,92 | **50,20** | 50,13 | 49,95 | 49,88 | | | | | |
 
   Chốt LR `C=512` (gần như không regularize; aspect macro-F1 gần phẳng từ C=32, 78,9–79,0%) và SVM `C=4`. Thời gian train `tfidf_lr` khoảng 12 giây trên CPU (laptop của A).
-- **Task 9 – đo thời gian trên Colab T4 (Step 8):** `run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1` mất 17 giây train (47 giây cả lệnh, gồm tải mô hình và tách từ VnCoreNLP). Ước lượng tuyến tính cho Train đầy đủ (7.786 dòng): khoảng 4–5 phút mỗi epoch, tối đa 5 epoch, tức khoảng 25 phút mỗi lần chạy PhoBERT; ViSoBERT (`max_length` 224) dài hơn. Dưới ngưỡng 60 phút nên giữ `max_length` 128/224 và `batch_size` 16. VRAM chưa đo được (lệnh `nvidia-smi` chạy sau khi tiến trình đã kết thúc).
+- **Task 9 – đo thời gian trên Colab T4 (Step 8):** `run.py --config configs/phobert_joint.yaml --limit 500 --set model.epochs=1` mất 17 giây train (47 giây cả lệnh, gồm tải mô hình và tách từ VnCoreNLP). Ước lượng tuyến tính cho Train đầy đủ (7.786 dòng): khoảng 4–5 phút mỗi epoch, tối đa 5 epoch, tức khoảng 25 phút mỗi lần chạy PhoBERT (thực tế chỉ khoảng 70 giây mỗi epoch, xem mục "PhoBERT tối đa 10 epoch"); ViSoBERT (`max_length` 224) dài hơn. Dưới ngưỡng 60 phút nên giữ `max_length` 128/224 và `batch_size` 16. VRAM chưa đo được (lệnh `nvidia-smi` chạy sau khi tiến trình đã kết thúc).
 - **Notebook Colab:** chỉ lưu bằng Ctrl+S vào Drive, không dùng "Lưu bản sao vào GitHub" (lệnh này đẩy thẳng lên `main`, bỏ qua PR và nbstripout). Ba commit "Được tạo bằng Colab" ngày 2026-11-20 đã được đưa notebook về bản sạch.
 - **Task 9 – PhoBERT tối đa 10 epoch (thay 5):** lần chạy đầy đủ đầu tiên của `phobert_joint` (seed 42, T4) cho Dev sentiment macro-F1 theo epoch 24,4 → 36,9 → 44,7 → 46,7 → **48,2**, vẫn tăng ở epoch cuối, nên early stopping chưa hề kích hoạt (aspect 80,17 / sentiment 48,16, 346 giây). Tăng `epochs` lên 10 trong `phobert_joint.yaml` (các file E3–E6 và `visobert_joint` kế thừa), giữ `patience: 2` để dừng khi Dev không tăng nữa. Mỗi epoch khoảng 70 giây trên T4. Lần chạy 5 epoch không được giữ lại trong `results/runs/`.
 - **Task 9 – kết quả 6 lần chạy đầy đủ (seed 42, Colab T4, tối đa 10 epoch, Dev):**

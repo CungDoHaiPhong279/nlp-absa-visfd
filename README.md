@@ -65,7 +65,7 @@ Thành viên mới đọc theo thứ tự: [docs/TEAM.md](docs/TEAM.md) → [CON
 2. Cài Java 17 trở lên (VnCoreNLP cần Java để tách từ), ví dụ Temurin từ <https://adoptium.net>. Kiểm tra bằng `java -version`.
 3. Trong PowerShell, từ thư mục gốc repo:
 
-```bash
+```powershell
 py -3.11 -m venv .venv
 .venv\Scripts\activate
 pip install torch --index-url https://download.pytorch.org/whl/cpu
@@ -82,7 +82,7 @@ Mở `notebooks/02_colab_train.ipynb` trên Colab, chọn GPU T4 rồi chạy l�
 
 ## 5. Chạy từng bước
 
-Toàn bộ phần CPU (tải dữ liệu, EDA, các cấu hình TF-IDF, tạo bảng) bằng một lệnh:
+Toàn bộ phần CPU (tải dữ liệu, EDA, 8 cấu hình TF-IDF, tạo bảng; trừ lưới C của E0, lệnh ở dưới) bằng một lệnh:
 
 ```bash
 python scripts/run_all.py
@@ -116,7 +116,12 @@ python scripts/run.py --config configs/ablation/E1_char_25.yaml configs/ablation
 python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=4
 ```
 
-Lệnh trên là một điểm của E0; `--set` tự đặt tên lần chạy là `tfidf_lr__C=4`.
+Lệnh trên là một điểm của E0; `--set` tự đặt tên lần chạy là `tfidf_lr__C=4`. Cả lưới E0 (LR: C = 0,25 đến 1024, nhân đôi mỗi bước; SVM: C = 0,25 đến 32) trong PowerShell:
+
+```powershell
+foreach ($c in 0.25,0.5,1,2,4,8,16,32,64,128,256,512,1024) { python scripts/run.py --config configs/tfidf_lr_base.yaml --set model.C=$c }
+foreach ($c in 0.25,0.5,1,2,4,8,16,32) { python scripts/run.py --config configs/tfidf_svm.yaml --set model.C=$c }
+```
 
 ```bash
 python scripts/make_tables.py
@@ -129,7 +134,7 @@ python scripts/run.py --config configs/phobert_joint.yaml
 ```
 
 ```bash
-python scripts/prepare_fasttext.py
+python scripts/prepare_fasttext.py --vec cc.vi.300.vec.gz --config configs/bilstm_fasttext.yaml
 ```
 
 ```bash
@@ -142,7 +147,7 @@ Phân tích lỗi: chạy `notebooks/03_error_analysis.ipynb` (cần `results/pr
 python demo/app.py --model models/final_phobert__seed42
 ```
 
-Checkpoint `final_phobert__seed42` (540 MB) không có trên Git; tải cả thư mục từ Drive nhóm `nlp-absa-visfd/models/` về `models/`. Trên Colab thêm `--share` để có đường link công khai.
+Checkpoint `final_phobert__seed42` (540 MB) không có trên Git; tải cả thư mục từ Drive nhóm `nlp-absa-visfd/models/` về `models/`. Trên Colab thêm `--share` để có đường link công khai. Tab tổng hợp CSV chỉ phân tích 2.000 dòng đầu; đổi bằng `--max-rows`.
 
 Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`, đã chạy ở PR #49), không chạy lại.
 

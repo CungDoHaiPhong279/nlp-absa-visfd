@@ -30,6 +30,7 @@ def test_predict_empty_and_emoji_only() -> None:
     p.tokenizer = _Boom()
     assert p.predict("") == {}
     assert p.predict("😍😍") == {}
+    assert p.predict("!!! ...") == {}
 
 
 def test_summarize_predictions() -> None:

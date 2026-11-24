@@ -110,3 +110,14 @@ def test_sweep_table_filters_by_prefix(tmp_path):
         "tfidf_lr__C=0.25",
         "tfidf_lr__C=0.5",
     ]
+
+
+def test_sweep_table_sorts_c_numerically(tmp_path):
+    runs_dir = tmp_path / "runs"
+    runs_dir.mkdir()
+    for c in ("1024", "128", "2", "0.5"):
+        _write_run(runs_dir, f"tfidf_lr__C={c}", 42, 0.5)
+
+    table = sweep_table(collect_runs(runs_dir), prefix="tfidf_lr__C=")
+
+    assert [n.split("=")[1] for n in table["name"]] == ["0.5", "2", "128", "1024"]

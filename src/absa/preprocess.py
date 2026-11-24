@@ -102,7 +102,8 @@ def _get_vncorenlp():
         _ensure_java_home()
         import py_vncorenlp
 
-        save_dir = Path("models/vncorenlp").resolve()
+        # anchored to the repo root so notebooks/ or other cwds do not download a second copy
+        save_dir = Path(__file__).resolve().parents[2] / "models" / "vncorenlp"
         cwd = os.getcwd()
         try:
             _ensure_vncorenlp(save_dir)
@@ -136,7 +137,12 @@ def preprocess_df(
 
     path = None
     if cache_dir is not None and cache_tag is not None:
-        digest = hashlib.sha1(json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:10]
+        # key covers the config and the raw input, so a changed CSV never reuses old texts
+        h = hashlib.sha1(json.dumps(cfg, sort_keys=True).encode())
+        h.update("\n".join(map(str, df["comment"])).encode())
+        if cfg["use_star"]:
+            h.update(",".join(map(str, df["n_star"])).encode())
+        digest = h.hexdigest()[:10]
         path = Path(cache_dir) / f"{cache_tag}__{digest}.json"
         if path.exists():
             cached = json.loads(path.read_text(encoding="utf-8"))

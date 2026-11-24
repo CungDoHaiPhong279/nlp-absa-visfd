@@ -10,7 +10,7 @@ from sklearn.svm import LinearSVC
 
 from absa.data import ASPECTS
 
-# Words of any length, plus each emoji as its own token (same ranges as preprocess strip_emoji).
+# Words of any length, plus each emoji as its own token (main emoji ranges of preprocess._EMOJI).
 WORD_TOKEN_PATTERN = r"(?u)\b\w+\b|[\U0001F000-\U0001FAFF☀-➿⬀-⯿]"
 
 

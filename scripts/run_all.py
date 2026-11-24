@@ -41,7 +41,11 @@ def main() -> None:
     sys.stderr.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--smoke", action="store_true", help="chạy nhanh trên 200 dòng, CPU")
-    parser.add_argument("--workdir", type=Path, help="thư mục ghi results/ và data/processed/")
+    parser.add_argument(
+        "--workdir",
+        type=Path,
+        help="thư mục ghi results/ và data/processed/ (notebook EDA và data/raw vẫn ở repo)",
+    )
     args = parser.parse_args()
 
     work = args.workdir.resolve() if args.workdir else ROOT
