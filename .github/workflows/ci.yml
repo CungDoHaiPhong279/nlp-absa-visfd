@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: requirements*.txt
       - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: pip install -e . -r requirements.txt -r requirements-dev.txt
-      - run: ruff check .
-      - run: ruff format --check .
+      # ruff, ruff-format, nbstripout, line endings, large files: same hooks as local commits
+      - run: pre-commit run --all-files --show-diff-on-failure
       - run: python scripts/download_data.py
       - run: pytest -q

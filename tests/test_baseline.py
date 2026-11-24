@@ -82,14 +82,17 @@ def test_invalid_mode_raises() -> None:
 
 
 def test_run_experiment_smoke_real(tmp_path: Path) -> None:
-    if not Path("data/raw/Train.csv").exists():
+    from absa import config, experiment
+
+    root = Path(__file__).resolve().parents[1]
+    if not (root / "data/raw/Train.csv").exists():
         pytest.skip("Dữ liệu UIT-ViSFD chưa được tải")
-    experiment = pytest.importorskip("absa.experiment", reason="Task 5 chưa được tích hợp")
-    config = pytest.importorskip("absa.config", reason="Task 5 chưa được tích hợp")
     result = experiment.run_experiment(
-        config.load_config(Path("configs/smoke/tfidf_smoke.yaml")),
+        config.load_config(root / "configs/smoke/tfidf_smoke.yaml"),
         limit=200,
+        data_dir=root / "data/raw",
         out_dir=tmp_path,
+        cache_dir=None,  # always exercise the real preprocessing code
     )
     assert (tmp_path / "runs" / "tfidf_smoke__seed42.json").exists()
     assert result["test"] is None

@@ -12,7 +12,7 @@ dẫn ghi theo số mục và số bảng; bản Springer tương ứng là tran
   85,77 / 83,22 / 84,48). Bài báo không đưa công thức.
   - Bảng 5 có **11 hàng**, gồm cả `Others` (F1 60,82). Trung bình 11 F1 khía cạnh trong Bảng 5
     là khoảng 84,42, gần 84,48. Như vậy macro của bài báo **có tính `Others`**, còn
-    `aspect_macro_f1` của nhóm chỉ lấy 10 khía cạnh (D2: `{OTHERS}` không phải khía cạnh).
+    `aspect_macro_f1` của nhóm chỉ lấy 10 khía cạnh (plan, Global Constraints: `{OTHERS}` không phải khía cạnh).
   - Precision khía cạnh ở Bảng 4 là 87,55 nhưng ở Bảng 5 là 85,77. Bài báo không giải thích.
 - **(b) F1 cảm xúc 63,06 tính trên toàn bộ cặp, hay chỉ trên khía cạnh phát hiện đúng?** Bài báo
   **không nói**. Mục 5.2 chỉ ghi `Others` không có cảm xúc nên để NaN. Bảng 5 cho F1 cảm xúc theo

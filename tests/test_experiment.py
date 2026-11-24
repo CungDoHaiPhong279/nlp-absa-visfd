@@ -134,3 +134,31 @@ def test_eval_test_requires_final_config():
 def test_unknown_model_type_raises():
     with pytest.raises(ValueError, match="tfidf"):
         build_model({"type": "abc"}, 42)
+
+
+def test_cli_rejects_eval_test_on_non_final_config(tmp_path: Path):
+    import os
+    import subprocess
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run.py",
+            "--config",
+            "configs/tfidf_lr_base.yaml",
+            "--eval-test",
+            "--out-dir",
+            str(tmp_path),
+        ],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        timeout=120,
+    )
+    assert proc.returncode != 0
+    assert "configs/final" in proc.stderr
+    assert not (tmp_path / "runs").exists()

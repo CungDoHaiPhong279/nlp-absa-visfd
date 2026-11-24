@@ -12,11 +12,13 @@ from absa.report import (
     sweep_table,
 )
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Tạo bảng từ kết quả các lần chạy.")
-    parser.add_argument("--runs", type=Path, default=Path("results/runs"))
-    parser.add_argument("--out", type=Path, default=Path("results/tables"))
+    parser.add_argument("--runs", type=Path, default=ROOT / "results/runs")
+    parser.add_argument("--out", type=Path, default=ROOT / "results/tables")
     return parser
 
 
@@ -43,7 +45,7 @@ def write_table(table, out_dir: Path, name: str) -> None:
         index=False,
         lineterminator="\n",
     )
-    markdown = output.to_markdown(index=False)
+    markdown = output.to_markdown(index=False, disable_numparse=True)
     (out_dir / f"{name}.md").write_text(
         markdown + "\n",
         encoding="utf-8",
@@ -55,7 +57,7 @@ def main() -> None:
     args = build_parser().parse_args()
 
     runs = collect_runs(args.runs)
-    published_metric = read_published_metric(Path("docs/metric_notes.md"))
+    published_metric = read_published_metric(ROOT / "docs/metric_notes.md")
 
     write_table(
         comparison_table(runs, "dev", published_metric=published_metric),

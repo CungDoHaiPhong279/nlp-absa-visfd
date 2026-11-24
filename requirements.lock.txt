@@ -1,4 +1,4 @@
-# Snapshot Windows/CPU (Python 3.11.9, torch tu index CPU). Ban Colab: requirements.lock.colab.txt (tao sau).
+# Ảnh chụp môi trường Windows/CPU (Python 3.11.9, torch từ index CPU). Colab dùng thư viện có sẵn của Colab cộng requirements.txt.
 annotated-doc==0.0.6
 annotated-types==0.8.0
 anyio==4.16.0

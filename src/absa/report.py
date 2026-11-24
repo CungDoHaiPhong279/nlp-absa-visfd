@@ -35,7 +35,8 @@ def collect_runs(runs_dir: Path = Path("results/runs")) -> pd.DataFrame:
     ]
     rows = []
 
-    for path in sorted(Path(runs_dir).glob("*.json")):
+    # case-insensitive so Windows and Linux produce the same row order
+    for path in sorted(Path(runs_dir).glob("*.json"), key=lambda p: p.name.lower()):
         run = json.loads(path.read_text(encoding="utf-8"))
 
         for split in ("dev", "test"):
@@ -90,6 +91,9 @@ def comparison_table(
         row["note"] = ""
         rows.append(row)
 
+    if names is not None:  # rows follow the caller's order (e.g. C ascending in sweeps)
+        rows.sort(key=lambda r: names.index(r["name"]))
+
     published_name, published_values = next(iter(PUBLISHED.items()))
     published_row = {
         "name": published_name,
@@ -131,7 +135,10 @@ def sweep_table(
         (runs["split"] == split) & runs["name"].astype(str).str.startswith(prefix)
     ].copy()
 
-    names = selected["name"].drop_duplicates().tolist()
+    names = sorted(
+        selected["name"].drop_duplicates(),
+        key=lambda name: float(name[len(prefix) :].split("__")[0]),
+    )
     table = comparison_table(selected, split, names=names)
 
     return table.loc[table["source"] == "ours"].reset_index(drop=True)

@@ -29,6 +29,11 @@ POLARITY_VI = {"Positive": "Tích cực", "Neutral": "Trung tính", "Negative": 
 _TAG = "color:#fff;padding:6px 12px;border-radius:999px;font-weight:600;display:inline-block"
 
 
+def _has_words(text: str) -> bool:
+    """Emoji-only or punctuation-only input carries no aspect; skip the model for it."""
+    return normalize(text, strip_emoji=True, strip_punct=True) != ""
+
+
 class Predictor:
     """A saved `TransformerAbsa` checkpoint, rebuilt without network access."""
 
@@ -68,12 +73,12 @@ class Predictor:
         return segment(out, self.pre["segment"]) if self.pre["segment"] else out
 
     def predict(self, text: str) -> dict[str, str]:
-        if normalize(text, strip_emoji=True) == "":
+        if not _has_words(text):
             return {}
         return self.predict_batch([text])[0]
 
     def predict_batch(self, texts: list[str], batch_size: int = 32) -> list[dict[str, str]]:
-        keep = [i for i, t in enumerate(texts) if normalize(str(t), strip_emoji=True) != ""]
+        keep = [i for i, t in enumerate(texts) if _has_words(str(t))]
         result: list[dict[str, str]] = [{} for _ in texts]
         prepared = self._prepare([str(texts[i]) for i in keep])
         for start in range(0, len(keep), batch_size):

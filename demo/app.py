@@ -12,6 +12,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
+from matplotlib.ticker import MaxNLocator  # noqa: E402
 
 from absa.inference import (  # noqa: E402
     ASPECT_VI,
@@ -39,7 +40,7 @@ EXAMPLES = [
 ]
 
 CSS = """
-.gradio-container{max-width:1120px !important;margin:auto}
+.gradio-container{max-width:1120px !important;width:100% !important;margin:auto}
 footer{display:none !important}
 .hero{padding:28px 4px 8px}
 .hero h1{font-size:30px;font-weight:700;margin:0 0 6px;letter-spacing:-.3px}
@@ -66,7 +67,8 @@ footer{display:none !important}
   font-size:14px;font-weight:600;margin-bottom:10px}
 .note{font-size:13px;color:var(--body-text-color-subdued);margin-bottom:10px}
 .foot{font-size:12px;color:var(--body-text-color-subdued);text-align:center;padding:18px 0 6px}
-@media (max-width:640px){.kpis{grid-template-columns:1fr}.hero h1{font-size:24px}}
+@media (max-width:640px){.kpis{grid-template-columns:1fr}.hero h1{font-size:24px}
+  .tab-container button{white-space:normal !important;flex:1 1 0;min-width:0}}
 """
 
 HERO = (
@@ -113,12 +115,28 @@ def plot_summary(table: pd.DataFrame):
     ax.tick_params(axis="y", length=0, colors=gray)
     ax.tick_params(axis="x", colors=gray)
     ax.set_xlabel("Số lần được nhắc", color=gray)
-    legend = ax.legend(ncol=3, frameon=False, loc="lower center", bbox_to_anchor=(0.5, 1.0))
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))  # counts, no 0.25 ticks
+    # top-right: the top-left corner is covered by the gr.Plot label
+    legend = ax.legend(ncol=3, frameon=False, loc="lower right", bbox_to_anchor=(1.0, 1.0))
     for text in legend.get_texts():
         text.set_color(gray)
     fig.tight_layout()
     plt.close(fig)
     return fig
+
+
+def read_comments(file, max_rows: int) -> pd.DataFrame:
+    """Read at most max_rows + 1 rows (to detect truncation); ',' or ';' separated, UTF-8."""
+    try:
+        with open(file, encoding="utf-8-sig") as fh:
+            header = fh.readline()
+        sep = ";" if header.count(";") > header.count(",") else ","  # Excel VN saves with ';'
+        df = pd.read_csv(file, sep=sep, nrows=max_rows + 1, encoding="utf-8-sig")
+    except (pd.errors.EmptyDataError, pd.errors.ParserError, UnicodeDecodeError) as err:
+        raise gr.Error("Không đọc được file: cần file CSV mã hóa UTF-8, có dòng tiêu đề.") from err
+    if "comment" not in df.columns:
+        raise gr.Error("File CSV cần có cột 'comment'")
+    return df
 
 
 def build_app(predictor: Predictor, max_rows: int = 2000) -> gr.Blocks:
@@ -130,16 +148,15 @@ def build_app(predictor: Predictor, max_rows: int = 2000) -> gr.Blocks:
     def summarize(file):
         if file is None:
             return CSV_PLACEHOLDER, None, None
-        df = pd.read_csv(file)
-        if "comment" not in df.columns:
-            raise gr.Error("File CSV cần có cột 'comment'")
-        n_all = len(df)
+        df = read_comments(file, max_rows)
+        truncated = len(df) > max_rows
         comments = df["comment"].fillna("").astype(str).head(max_rows).tolist()
         preds = predictor.predict_batch(comments)
         table = summarize_predictions(preds)
         note = (
-            f'<div class="note">File có {n_all:,} dòng; chỉ phân tích {max_rows:,} dòng đầu.</div>'
-            if n_all > max_rows
+            f'<div class="note">File có hơn {max_rows:,} dòng; chỉ phân tích {max_rows:,} dòng đầu.'
+            "</div>"
+            if truncated
             else ""
         ).replace(",", ".")
         mentioned = 100 * sum(bool(d) for d in preds) / max(len(preds), 1)

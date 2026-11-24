@@ -102,3 +102,10 @@ def test_ensure_vncorenlp_leaves_no_empty_dirs(tmp_path, monkeypatch):
     with pytest.raises(OSError, match="network down"):
         P._ensure_vncorenlp(save_dir)
     assert not save_dir.exists()
+
+
+def test_cache_miss_when_comments_change(tmp_path):
+    cfg = {"lowercase": True}
+    P.preprocess_df(pd.DataFrame({"comment": ["Pin trâu"], "n_star": [5]}), cfg, tmp_path, "train")
+    other = pd.DataFrame({"comment": ["Máy đẹp"], "n_star": [5]})
+    assert P.preprocess_df(other, cfg, tmp_path, "train") == ["máy đẹp"]

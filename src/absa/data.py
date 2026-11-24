@@ -63,7 +63,7 @@ def labels_to_matrix(labels: list[dict[str, str]]) -> np.ndarray:
 
 def matrix_to_labels(Y: np.ndarray) -> list[dict[str, str]]:
     return [
-        {a: _CODE_POLARITY[int(c)] for a, c in zip(ASPECTS, row, strict=False) if c} for row in Y
+        {a: _CODE_POLARITY[int(c)] for a, c in zip(ASPECTS, row, strict=True) if c} for row in Y
     ]
 
 

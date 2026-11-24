@@ -57,3 +57,9 @@ def test_override_unknown_key_raises() -> None:
 
     with pytest.raises(ValueError, match="Cc"):
         apply_overrides(cfg, ["model.Cc=1"])
+
+
+def test_override_scientific_notation_is_float() -> None:
+    cfg = {"name": "b", "groups": [], "model": {"lr": 2.0e-5}}
+
+    assert apply_overrides(cfg, ["model.lr=1e-5"])["model"]["lr"] == 1e-5

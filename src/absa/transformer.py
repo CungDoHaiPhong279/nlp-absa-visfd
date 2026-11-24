@@ -224,6 +224,7 @@ class TransformerAbsa:
             return absa_loss(out, batch["labels"].to(self.device), self.mode, weights)
 
         has_dev = dev_texts is not None and Y_dev is not None and len(dev_texts) > 0
+        self.threshold = 0.5  # early stopping on Dev must not reuse a threshold from a past fit
         result = fit_loop(
             self.module,
             train_batches,
@@ -237,7 +238,6 @@ class TransformerAbsa:
             device=self.device,
         )
 
-        self.threshold = 0.5
         if self.mode == "split" and has_dev:
             out = self._outputs(dev_texts)
             self.threshold = best_threshold(

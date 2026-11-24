@@ -1,4 +1,4 @@
-| name     |   aspect_macro_f1 |   sentiment_macro_f1 |   polarity_macro_f1_detected |   exact_match |   n_seeds | source   | note   |
-|:---------|------------------:|---------------------:|-----------------------------:|--------------:|----------:|:---------|:-------|
-| E2_word  |             78.86 |                49.57 |                        77.67 |         27.25 |         1 | ours     |        |
-| tfidf_lr |             79    |                50.49 |                        77.99 |         31.65 |         1 | ours     |        |
+| name     | aspect_macro_f1   | sentiment_macro_f1   | polarity_macro_f1_detected   | exact_match   | n_seeds   | source   | note   |
+|:---------|:------------------|:---------------------|:-----------------------------|:--------------|:----------|:---------|:-------|
+| E2_word  | 78.86             | 49.57                | 77.67                        | 27.25         | 1         | ours     |        |
+| tfidf_lr | 79.00             | 50.49                | 77.99                        | 31.65         | 1         | ours     |        |

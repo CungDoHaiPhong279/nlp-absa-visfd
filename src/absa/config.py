@@ -78,6 +78,11 @@ def apply_overrides(cfg: dict, overrides: list[str]) -> dict:
             raise ValueError(f"Không tìm thấy khóa cấu hình: {key_path}")
 
         value = yaml.safe_load(raw_value)
+        if isinstance(value, str):  # YAML 1.1 reads "1e-5" as a string
+            try:
+                value = float(value)
+            except ValueError:
+                pass
         target[leaf] = value
         suffixes.append(f"{leaf}={_format_value(value)}")
 

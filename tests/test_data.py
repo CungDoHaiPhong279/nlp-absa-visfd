@@ -92,7 +92,7 @@ def test_load_split_fake(fake_data_dir):
     assert int(df["aspects"].map(len).eq(0).sum()) == 3
 
 
-REAL = Path("data/raw/Train.csv")
+REAL = Path(__file__).resolve().parents[1] / "data/raw/Train.csv"
 
 
 @pytest.mark.skipif(not REAL.exists(), reason="chưa tải dữ liệu")
@@ -104,3 +104,8 @@ def test_load_split_real_sizes():
     }
     assert only_others == {"train": 115, "dev": 18, "test": 37}
     assert int(load_split("train")["aspects"].map(lambda d: "STORAGE" in d).sum()) == 91
+
+
+def test_matrix_to_labels_rejects_wrong_width() -> None:
+    with pytest.raises(ValueError):
+        matrix_to_labels(np.zeros((1, 9), dtype=np.int8))
