@@ -9,9 +9,9 @@
 
 ## 0. Phạm vi
 
-Làm **đầy đủ nhất có thể**, không giới hạn bởi hạn nộp: cả hai bài toán con, cả hai dạng đầu ra PhoBERT, ViSoBERT, tái lập Bi-LSTM + fastText, 3 seed, demo.
+Làm **đầy đủ nhất có thể**, không giới hạn bởi hạn nộp: cả hai bài toán con, cả hai dạng đầu ra PhoBERT, ViSoBERT, tái hiện xấp xỉ Bi-LSTM + fastText, 3 seed, demo.
 
-Việc còn lại: đọc bài báo gốc để biết **chính xác cách tính** F1 khía cạnh (84,48) và F1 cảm xúc (63,06). Nếu cách tính khác thì chỉ so sánh trong nội bộ các mô hình của nhóm.
+Đã đọc bài báo gốc: macro-F1 khía cạnh của bài báo tính trung bình cả nhãn OTHERS, khác cách tính của nhóm, nên chỉ so sánh trong nội bộ các mô hình của nhóm (xem `docs/metric_notes.md`).
 
 ---
 
@@ -72,7 +72,7 @@ Các sàn thương mại điện tử có hàng nghìn bình luận mỗi ngày.
 - Định dạng nhãn: `{CAMERA#Positive};{BATTERY#Negative};{OTHERS};`. Cảm xúc thuộc {Positive, Neutral, Negative}. Một khía cạnh xuất hiện tối đa một lần mỗi bình luận.
 - Nhãn đặc biệt `{OTHERS}` (không có cảm xúc): xuất hiện ở 1.694 bình luận train; 115 bình luận train (18 dev, 37 test) **chỉ** có `{OTHERS}`.
 - Tần suất khía cạnh trong train: GENERAL 4.866, PERFORMANCE 4.140, BATTERY 3.604, FEATURES 2.642, CAMERA 2.146, PRICE 2.061, SER&ACC 1.995, DESIGN 1.378, SCREEN 949, **STORAGE chỉ 91**.
-- Không có bình luận trùng trong train và không trùng giữa train với test.
+- Sau chuẩn hóa: 2 cặp trùng trong Train, 3 văn bản trùng Train–Dev, 5 trùng Train–Test, 0 trùng Dev–Test (`results/tables/eda_duplicates.json`); giữ nguyên split gốc.
 
 ### 2.2. Kế hoạch khảo sát dữ liệu (EDA)
 - Phân bố số khía cạnh trên mỗi bình luận (0, 1, 2, ≥3).
@@ -127,7 +127,7 @@ Dữ liệu thô (zip)
 
 ### 3.4. Phương án mở rộng (chỉ làm nếu còn thời gian)
 - ViSoBERT (mô hình cho tiếng Việt mạng xã hội) – không cần tách từ.
-- So sánh với Bi-LSTM + fastText (tái lập baseline của bài báo gốc).
+- So sánh với Bi-LSTM + fastText (tái hiện xấp xỉ mô hình của bài báo gốc).
 
 ---
 
@@ -137,7 +137,7 @@ Dữ liệu thô (zip)
 - Dùng **đúng split gốc** (7.786 / 1.112 / 2.224) để so sánh được với kết quả đã công bố.
 - Chọn tham số **chỉ dựa trên tập dev**; tập test chỉ chạy **một lần** ở cuối.
 - Cố định random seed (ví dụ 42); với PhoBERT chạy **3 seed** và báo cáo trung bình ± độ lệch chuẩn.
-- Ghi lại phiên bản thư viện (`requirements.txt`), cấu hình và thời gian chạy.
+- Ghi lại phiên bản thư viện (`requirements.lock.txt` và khóa `versions` trong mỗi run JSON), cấu hình và thời gian chạy.
 
 ### 4.2. Thước đo
 | Bài toán | Chỉ số chính | Bổ sung |
@@ -248,8 +248,7 @@ nlp-absa-visfd/
 │   └── predictions/          # dự đoán minh họa
 ├── demo/
 │   └── app.py                # Gradio / Streamlit
-└── report/
-    └── NLP_BTL_MaNhom.pdf
+└── (báo cáo NLP_BTL_MaNhom.pdf nộp riêng, không commit)
 ```
 
 ---

@@ -45,7 +45,7 @@ Mỗi dòng dưới đây là một điểm plan **cố ý** khác spec hoặc p
 - Bảng xuất ra dùng thang %, 2 chữ số thập phân. Hàm tính toán bên trong không làm tròn.
 - Số trong báo cáo phải truy được về một file trong `results/runs/`. Không điền tay.
 - Commit message **không** chứa dòng `Co-Authored-By` hay bất kỳ dòng ghi công AI nào.
-- Sau khi cài: `pip freeze > requirements.lock.txt` (máy local) và `requirements.lock.colab.txt` (Colab).
+- Sau khi cài: `pip freeze > requirements.lock.txt` (máy local). Phiên bản trên Colab được ghi trong khóa `versions` của mỗi file `results/runs/*.json` (thay cho `requirements.lock.colab.txt`).
 
 ## Phân công
 
@@ -65,7 +65,7 @@ Theo kế hoạch 10 tuần ở spec mục 7. Người phụ trách tự commit 
 | 10 | Bi-LSTM + fastText | A | 5–6 |
 | 11 | Chốt cấu hình, 3 seed, test, phân tích lỗi | Cả hai | 6–7 |
 | 12 | Demo Gradio | A | 9 |
-| 13 | README, `run_all.py`, kiểm tra tái lập | B | 9 |
+| 13 | README, `run_all.py`, kiểm tra tái lập | A (nhận thay B) | 9 |
 | 14 | Báo cáo PDF, slide | Cả hai | 8–10 |
 
 ## Cấu trúc file
@@ -105,7 +105,7 @@ nlp-absa-visfd/
 ├── data/ (gitignore)  raw/  processed/
 ├── models/ (gitignore)
 ├── results/  tables/  figures/  error_analysis/  runs/ (commit, D13)  predictions/ (gitignore)
-└── report/  NLP_BTL_MaNhom.pdf  slides.pdf
+└── (báo cáo .docx/.pdf và slide .pptx dựng ở máy, không commit)
 ```
 
 ## Review Focus
@@ -907,7 +907,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
 
 ### Task 13: README, `run_all.py`, kiểm tra tái lập
 
-**Phụ trách:** B
+**Phụ trách:** A (nhận thay B)
 
 **Files:**
 - Modify: `README.md` (bản ngắn đã có từ PR onboarding; viết đầy đủ theo Step 4). Create: `scripts/run_all.py`, `requirements.lock.txt` (cập nhật)
@@ -937,7 +937,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   10. Phân công.
 - [x] **Step 5: Chạy `pytest -q`**, kỳ vọng toàn bộ PASS.
 - [ ] **Step 6: Kiểm tra tái lập trên máy khác (A làm, theo đúng README, không hỏi B).** Clone repo vào thư mục mới, cài đặt, rồi chạy `python scripts/run_all.py`. So `results/tables/comparison_dev.csv` mới với bản đã commit: các hàng TF-IDF phải giống hệt (sai lệch bằng 0). Chỗ nào trong README gây vướng thì sửa README.
-- [x] **Step 7: Chạy `pip freeze > requirements.lock.txt`**, rồi commit `docs: README, run_all and reproducibility check`
+- [x] **Step 7: Chạy `pip freeze > requirements.lock.txt`**, rồi commit `docs: README, run_all and reproducibility check` _(kiểm tra tái lập trên máy khác ở Step 6 chưa làm, xem issue #24)_
 
 ---
 
@@ -946,7 +946,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
 **Phụ trách:** cả hai, theo cột "Phụ trách" ở spec mục 7 (tuần 8–10)
 
 **Files:**
-- Create: `report/NLP_BTL_MaNhom.pdf` (đổi `MaNhom` thành mã nhóm), `report/slides.pdf`
+- Ngoài repo: `NLP_BTL_MaNhom.pdf` (xuất từ Word, đổi `MaNhom` thành mã nhóm) và slide .pptx
 
 - [ ] **Step 1: Dàn ý theo spec mục 9**, dài 20–30 trang chưa tính phụ lục. Mỗi mục ghi rõ bảng/hình lấy từ file nào trong `results/` (dùng bảng ánh xạ trong README):
   - Dữ liệu: `eda_*`.
@@ -957,7 +957,7 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
 - [ ] **Step 3: Kiểm tra chéo số liệu.** Người không viết mục nào thì kiểm tra mục đó: mỗi con số trong báo cáo phải đối chiếu được với một file `results/` (đánh dấu ✓ trong bản nháp).
 - [ ] **Step 4: Phụ lục:** phân công (dẫn link commit), phạm vi dùng AI, `docs/decisions.md` rút gọn.
 - [ ] **Step 5: Slide 10 phút** theo spec mục 10. Demo chạy trực tiếp bằng Colab `--share`; chuẩn bị video quay sẵn để dự phòng khi mất mạng. Tập vấn đáp chéo: mỗi người giải thích được phần của người kia.
-- [ ] **Step 6: Commit** `docs: final report and slides`
+- [ ] **Step 6: Nộp** PDF và slide theo kênh của môn học (không commit)
 
 ---
 

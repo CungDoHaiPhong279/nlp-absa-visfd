@@ -18,6 +18,8 @@
 /scripts/download_data.py           @Longdaica11
 /scripts/make_tables.py             @Longdaica11
 /scripts/prepare_fasttext.py        @Longdaica11
+/scripts/run_all.py                 @Longdaica11
+/README.md                          @Longdaica11
 /configs/tfidf_*.yaml               @Longdaica11
 /configs/bilstm_fasttext.yaml       @Longdaica11
 /configs/ablation/E1_*              @Longdaica11
@@ -34,9 +36,7 @@
 /src/absa/transformer.py            @CungDoHaiPhong279
 /src/absa/training.py               @CungDoHaiPhong279
 /scripts/run.py                     @CungDoHaiPhong279
-/scripts/run_all.py                 @CungDoHaiPhong279
 /configs/phobert_*.yaml             @CungDoHaiPhong279
 /configs/visobert_*.yaml            @CungDoHaiPhong279
 /configs/ablation/*_phobert_*       @CungDoHaiPhong279
 /notebooks/02_colab_train.ipynb     @CungDoHaiPhong279
-/README.md                          @CungDoHaiPhong279

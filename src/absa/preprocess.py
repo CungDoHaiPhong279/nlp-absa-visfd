@@ -15,6 +15,9 @@ from typing import Literal
 import pandas as pd
 from underthesea import text_normalize, word_tokenize
 
+# Bump when normalize/segment logic changes so cached texts are recomputed.
+CACHE_VERSION = 1
+
 PRE_DEFAULTS = {
     "lowercase": False,
     "strip_emoji": False,
@@ -138,7 +141,7 @@ def preprocess_df(
     path = None
     if cache_dir is not None and cache_tag is not None:
         # key covers the config and the raw input, so a changed CSV never reuses old texts
-        h = hashlib.sha1(json.dumps(cfg, sort_keys=True).encode())
+        h = hashlib.sha1(f"v{CACHE_VERSION}".encode() + json.dumps(cfg, sort_keys=True).encode())
         h.update("\n".join(map(str, df["comment"])).encode())
         if cfg["use_star"]:
             h.update(",".join(map(str, df["n_star"])).encode())

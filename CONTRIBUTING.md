@@ -29,7 +29,7 @@ pytest -q
 ```
 
 - VnCoreNLP cần Java 17 trở lên.
-- Colab: dùng `notebooks/02_colab_train.ipynb` (tạo ở Task 9).
+- Colab: dùng `notebooks/02_colab_train.ipynb`.
 
 ## 3. Quy trình một task
 

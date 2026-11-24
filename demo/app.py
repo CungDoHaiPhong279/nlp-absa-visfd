@@ -23,7 +23,7 @@ from absa.inference import (  # noqa: E402
     summarize_predictions,
 )
 
-# From results/error_analysis/selected_examples.md (Dev comments the model gets wrong or right)
+# From results/error_analysis/selected_examples.md: Dev comments the model gets (partly) wrong
 EXAMPLES = [
     "Sp dùng rất tốt trong tầm giá tầm 2tr. "
     "Các tác vụ rất tốt không thua gì các máy tầm trung khác",
@@ -78,7 +78,7 @@ HERO = (
 )
 PLACEHOLDER = (
     '<div class="res-empty"><div class="big">Kết quả sẽ hiện ở đây</div>'
-    "Dán một bình luận hoặc chọn một ví dụ bên trái.</div>"
+    "Dán một bình luận hoặc chọn một ví dụ có sẵn.</div>"
 )
 CSV_PLACEHOLDER = '<div class="res-empty">Tải lên file CSV có cột <code>comment</code>.</div>'
 
@@ -132,11 +132,14 @@ def read_comments(file, max_rows: int) -> pd.DataFrame:
         with open(file, encoding="utf-8-sig") as fh:
             header = fh.readline()
         sep = ";" if header.count(";") > header.count(",") else ","  # Excel VN saves with ';'
-        df = pd.read_csv(file, sep=sep, nrows=max_rows + 1, encoding="utf-8-sig")
+        # keep_default_na=False: a comment that is literally "NA" or "None" stays text
+        df = pd.read_csv(
+            file, sep=sep, nrows=max_rows + 1, encoding="utf-8-sig", keep_default_na=False
+        )
     except (pd.errors.EmptyDataError, pd.errors.ParserError, UnicodeDecodeError) as err:
         raise gr.Error("Không đọc được file: cần file CSV mã hóa UTF-8, có dòng tiêu đề.") from err
     if "comment" not in df.columns:
-        raise gr.Error("File CSV cần có cột 'comment'")
+        raise gr.Error("File CSV cần có cột comment.")
     return df
 
 
@@ -216,7 +219,7 @@ def build_app(predictor: Predictor, max_rows: int = 2000) -> gr.Blocks:
                         )
                     with gr.Column(scale=8):
                         summary = gr.HTML(CSV_PLACEHOLDER)
-                        chart = gr.Plot(label="Khen / chê theo khía cạnh")
+                        chart = gr.Plot(label="Cảm xúc theo khía cạnh")
                         table = gr.Dataframe(label="Bảng tổng hợp", interactive=False)
                 f.change(summarize, f, [summary, chart, table])
         gr.HTML(

@@ -19,8 +19,9 @@ TFIDF_CONFIGS = [
 ]
 SMOKE_CONFIGS = ["configs/smoke/tfidf_smoke.yaml", "configs/smoke/tiny_transformer.yaml"]
 GPU_NOTE = """
-Phần GPU (PhoBERT, ViSoBERT, Bi-LSTM, E3–E6 transformer) chạy trên Colab:
-  mở notebooks/02_colab_train.ipynb, chọn GPU T4, chạy lần lượt các ô.
+Phần GPU (PhoBERT, ViSoBERT, Bi-LSTM, các cấu hình final) chạy trên Colab:
+  mở notebooks/02_colab_train.ipynb (GPU T4) cho PhoBERT/ViSoBERT; Bi-LSTM và
+  cấu hình final dùng các lệnh ở README mục 5, trong cùng phiên Colab.
   Chép results/runs/*.json về repo rồi chạy: python scripts/make_tables.py
 """
 

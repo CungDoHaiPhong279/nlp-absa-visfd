@@ -107,7 +107,8 @@ def run_experiment(
         test_metrics, test_predictions = _evaluate_split(model, frames["test"], texts["test"])
 
     name = cfg["name"]
-    if cfg.get("save") and hasattr(model, "save"):
+    # never save a --limit run: it would overwrite the full checkpoint under the same name
+    if cfg.get("save") and limit is None and hasattr(model, "save"):
         model_dir = Path("models") / f"{name}__seed{seed}"
         model.preprocess_cfg = cfg.get("preprocess", {})
         model.save(model_dir)
