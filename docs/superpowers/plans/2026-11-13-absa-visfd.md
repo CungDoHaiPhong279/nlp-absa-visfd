@@ -357,7 +357,7 @@ def test_confusion_by_aspect():
 - [x] **Step 2: Chạy `pytest tests/test_evaluate.py -v`**, kỳ vọng FAIL.
 - [x] **Step 3: Cài đặt** bằng `sklearn.metrics.precision_recall_fscore_support(average=None, zero_division=0)` trên ma trận nhị phân, rồi tự lấy trung bình trên các cột có support > 0. Micro dùng `average="micro"`. Confusion dùng `sklearn.metrics.confusion_matrix(labels=[0, 1, 2, 3])`.
 - [x] **Step 4: Chạy lại test**, kỳ vọng PASS.
-- [ ] **Step 5: Viết `docs/metric_notes.md`.** _(Đã có bản tạm `published_metric: null`; chờ đọc bài báo ở issue #18.)_ Đọc phần Experiments của Phan et al. (2021) (bản PDF qua thư viện trường hoặc liên hệ tác giả) và ghi lại:
+- [x] **Step 5: Viết `docs/metric_notes.md`.** _(Đã đọc arXiv:2105.15079v2: macro có tính Others, cảm xúc không rõ cách tính, nên giữ `published_metric: null`.)_ Đọc phần Experiments của Phan et al. (2021) (bản PDF qua thư viện trường hoặc liên hệ tác giả) và ghi lại:
   - (a) F1 khía cạnh 84,48 là micro, macro hay weighted?
   - (b) F1 cảm xúc 63,06 tính trên toàn bộ cặp (khía cạnh, cảm xúc), hay chỉ trên khía cạnh đã phát hiện đúng?
   - (c) Họ đánh giá trên Dev hay Test?
