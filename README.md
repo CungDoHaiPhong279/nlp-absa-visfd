@@ -165,7 +165,7 @@ Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`,
 | Chọn cấu hình cuối | `scripts/make_tables.py` | `results/tables/ablation_final_dev.*` |
 | Ma trận nhầm lẫn PhoBERT | `notebooks/03_error_analysis.ipynb` | `results/figures/confusion_test_final_phobert.png` |
 | So lỗi chéo TF-IDF với PhoBERT | `notebooks/03_error_analysis.ipynb` | `results/tables/cross_errors_dev.csv` |
-| Phân tích lỗi (RQ3) | `notebooks/03_error_analysis.ipynb` (gán nhãn lỗi bằng tay) | `results/error_analysis/dev_errors_final_phobert.csv`, `dev_errors_sample_labeled.csv`, `selected_examples.md` |
+| Phân tích lỗi (RQ3) | `notebooks/03_error_analysis.ipynb` (gán nhãn lỗi bằng tay) | `results/error_analysis/dev_errors_sample_labeled.csv`, `selected_examples.md`; danh sách đủ 617 lỗi `dev_errors_final_phobert.csv` chỉ tạo ra trên máy, không đưa lên Git (chứa nguyên văn dữ liệu) |
 | Ảnh demo | `demo/app.py` (chụp màn hình) | `results/figures/demo_single_comment.png`, `demo_csv_summary.png` |
 
 Không sửa tay `results/tables/*`; chạy lại `make_tables.py`.
