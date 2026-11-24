@@ -2,6 +2,8 @@
 data/
 models/
 results/predictions/
+# 617 Dev comments verbatim (UIT-ViSFD is research-only); notebook 03 regenerates it
+results/error_analysis/dev_errors_final_phobert.csv
 *.pt
 .ipynb_checkpoints/
 .venv/

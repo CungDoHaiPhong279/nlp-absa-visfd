@@ -115,7 +115,8 @@ def plot_summary(table: pd.DataFrame):
     ax.tick_params(axis="y", length=0, colors=gray)
     ax.tick_params(axis="x", colors=gray)
     ax.set_xlabel("Số lần được nhắc", color=gray)
-    ax.xaxis.set_major_locator(MaxNLocator(integer=True))  # counts, no 0.25 ticks
+    # counts: integer ticks on round steps (no 0.25, no 150)
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
     # top-right: the top-left corner is covered by the gr.Plot label
     legend = ax.legend(ncol=3, frameon=False, loc="lower right", bbox_to_anchor=(1.0, 1.0))
     for text in legend.get_texts():
