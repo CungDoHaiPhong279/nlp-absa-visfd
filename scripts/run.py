@@ -12,6 +12,8 @@ def main() -> None:
     parser.add_argument("--eval-test", action="store_true")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--set", nargs="*", default=[], dest="overrides")
+    parser.add_argument("--out-dir", type=Path, default=Path("results"))
+    parser.add_argument("--cache-dir", type=Path, default=Path("data/processed"))
     args = parser.parse_args()
 
     configs = []
@@ -35,6 +37,8 @@ def main() -> None:
                 run_config,
                 eval_test=args.eval_test,
                 limit=args.limit,
+                out_dir=args.out_dir,
+                cache_dir=args.cache_dir,
             )
             dev = result["dev"]
             print(
