@@ -921,10 +921,10 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   - Mỗi bước gọi `subprocess.run([sys.executable, ...], check=True)` và in tên bước kèm thời gian. Lỗi thì dừng và in bước bị lỗi.
   - `--workdir`: mọi output (`results`, `data/processed`) ghi vào thư mục này; dữ liệu thô vẫn đọc từ `data/raw` của repo. Cần thêm tham số `--out-dir` và `--cache-dir` cho `scripts/run.py`, và `--runs`, `--out` cho `make_tables.py`.
 
-- [ ] **Step 1: Viết test (fail).** `test_smoke_pipeline` (skip nếu chưa có `data/raw/Train.csv`): chạy `subprocess.run([sys.executable, "scripts/run_all.py", "--smoke", "--workdir", str(tmp_path)], check=True, timeout=900)`. Kỳ vọng có `tmp_path/results/tables/comparison_dev.md` và trong đó có `tfidf_smoke` và `tiny_transformer`.
-- [ ] **Step 2: Chạy test**, kỳ vọng FAIL.
-- [ ] **Step 3: Cài đặt `run_all.py`** cùng các tham số `--out-dir`, `--cache-dir`, `--runs`, `--out`.
-- [ ] **Step 4: Viết `README.md`.** Bố cục:
+- [x] **Step 1: Viết test (fail).** `test_smoke_pipeline` (skip nếu chưa có `data/raw/Train.csv`): chạy `subprocess.run([sys.executable, "scripts/run_all.py", "--smoke", "--workdir", str(tmp_path)], check=True, timeout=900)`. Kỳ vọng có `tmp_path/results/tables/comparison_dev.md` và trong đó có `tfidf_smoke` và `tiny_transformer`.
+- [x] **Step 2: Chạy test**, kỳ vọng FAIL.
+- [x] **Step 3: Cài đặt `run_all.py`** cùng các tham số `--out-dir`, `--cache-dir`, `--runs`, `--out`.
+- [x] **Step 4: Viết `README.md`.** Bố cục:
   1. Mục tiêu và hai bài toán con.
   2. Dữ liệu: nguồn, trích dẫn BibTeX của Phan et al. (2021), ghi chú "chỉ dùng cho nghiên cứu", không commit dữ liệu.
   3. Cấu trúc thư mục (rút gọn từ plan).
@@ -935,9 +935,9 @@ model: {type: bilstm, embedding_path: models/fasttext_vi_train_vocab.npy, vocab_
   8. Giới hạn đã biết (emoticon dạng chữ, STORAGE ít mẫu, cách tính F1 khác bài báo nếu có).
   9. Phạm vi đã dùng công cụ AI.
   10. Phân công.
-- [ ] **Step 5: Chạy `pytest -q`**, kỳ vọng toàn bộ PASS.
+- [x] **Step 5: Chạy `pytest -q`**, kỳ vọng toàn bộ PASS.
 - [ ] **Step 6: Kiểm tra tái lập trên máy khác (A làm, theo đúng README, không hỏi B).** Clone repo vào thư mục mới, cài đặt, rồi chạy `python scripts/run_all.py`. So `results/tables/comparison_dev.csv` mới với bản đã commit: các hàng TF-IDF phải giống hệt (sai lệch bằng 0). Chỗ nào trong README gây vướng thì sửa README.
-- [ ] **Step 7: Chạy `pip freeze > requirements.lock.txt`**, rồi commit `docs: README, run_all and reproducibility check`
+- [x] **Step 7: Chạy `pip freeze > requirements.lock.txt`**, rồi commit `docs: README, run_all and reproducibility check`
 
 ---
 
