@@ -358,7 +358,7 @@ def build_app(
             sentiment_note = (
                 '<div class="table-note"><b>Phân bố toàn bộ lượt nhắc:</b> '
                 + f"Tích cực {total_positive:,} · Trung tính {total_neutral:,} · "
-                + f"Tiêu cực {total_negative:,}.".replace(",", ".")
+                f"Tiêu cực {total_negative:,}.".replace(",", ".")
                 + " Tỷ lệ trong bảng được tính riêng trên từng khía cạnh.</div>"
             )
             chart = plot_summary(table)
