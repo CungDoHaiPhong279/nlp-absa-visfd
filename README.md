@@ -156,10 +156,16 @@ python scripts/run.py --config configs/bilstm_fasttext.yaml
 Phân tích lỗi: chạy `notebooks/03_error_analysis.ipynb`. Notebook cần `results/predictions/`: mỗi lần chạy ghi dự đoán vào thư mục này, nhưng thư mục không được commit vì chứa nguyên văn dữ liệu UIT-ViSFD; tạo lại bằng các lệnh final ở cuối mục này, hoặc xin nhóm bản sao (Drive nhóm `nlp-absa-visfd/backups/`). Demo:
 
 ```bash
-python demo/app.py --model models/final_phobert__seed42
+python demo/app.py --phobert-model models/final_phobert__seed42 --tfidf-model models/final_tfidf__seed42
 ```
 
-Checkpoint `final_phobert__seed42` (540 MB) không có trên Git. Nhóm gửi link Drive (quyền xem) của thư mục `models/final_phobert__seed42/` kèm bài nộp; hoặc tự tạo lại trên Colab bằng `python scripts/run.py --config configs/final/final_phobert.yaml --seeds 42` (cấu hình có `save: true`, khoảng 12 phút trên T4; lần chạy có `--limit` không ghi checkpoint). Trên Colab thêm `--share` để có đường link công khai. Tab tổng hợp CSV chỉ phân tích 2.000 dòng đầu; đổi bằng `--max-rows`.
+Bỏ `--tfidf-model` nếu chỉ muốn demo PhoBERT (`--model` vẫn dùng được như tên cũ của `--phobert-model`). Tab CSV có nút tải bảng CSV và báo cáo PDF.
+
+Checkpoint không có trên Git. `final_phobert__seed42` (540 MB): nhóm gửi link Drive (quyền xem) của thư mục `models/final_phobert__seed42/` kèm bài nộp, hoặc tự tạo lại trên Colab (khoảng 12 phút trên T4). `final_tfidf__seed42` (khoảng 11 MB) tạo trên CPU trong khoảng 30 giây. Cả hai cấu hình có `save: true`; lần chạy có `--limit` không ghi checkpoint. **Luôn thêm `--out-dir`** để không ghi đè `results/runs/final_*__seed42.json` (file đó giữ kết quả Test đã chạy một lần):
+
+```bash
+python scripts/run.py --config configs/final/final_tfidf.yaml --seeds 42 --out-dir models/run_log
+``` Trên Colab thêm `--share` để có đường link công khai. Tab tổng hợp CSV chỉ phân tích 2.000 dòng đầu; đổi bằng `--max-rows`.
 
 Quy tắc: tập Test chỉ được đánh giá **một lần** (`--eval-test`, đã chạy ở PR #49), không chạy lại. Lệnh đã dùng, ghi lại để truy vết (TF-IDF trên máy cá nhân, ba mô hình còn lại trên Colab T4):
 

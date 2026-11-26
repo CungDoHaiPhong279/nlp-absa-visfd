@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pytest
 
 gr = pytest.importorskip("gradio")
@@ -45,3 +46,20 @@ def test_read_comments_stops_after_max_rows_plus_one(tmp_path):
 def test_read_comments_bad_files_give_clear_error(tmp_path, text, encoding):
     with pytest.raises(gr.Error):
         app.read_comments(_write(tmp_path, text, encoding), 10)
+
+
+def test_export_report_files_and_no_figure_leak():
+    from absa.inference import summarize_predictions
+
+    table = summarize_predictions([{"BATTERY": "Negative"}, {"BATTERY": "Positive"}, {}])
+    table.attrs["n_comments"] = 3
+    shown = app.detailed_table(table)
+    assert shown["Tổng lượt nhắc"].tolist() == [2]
+    plt.close("all")
+    app.plot_summary(table)
+    csv_path, pdf_path = app.export_report_files(table, shown, "TF-IDF", "c.csv")
+    assert plt.get_fignums() == []
+    assert Path(csv_path).read_text(encoding="utf-8-sig").startswith("Khía cạnh,")
+    assert Path(pdf_path).read_bytes()[:4] == b"%PDF"
+    Path(csv_path).unlink()
+    Path(pdf_path).unlink()
