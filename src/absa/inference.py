@@ -11,6 +11,7 @@ from absa.data import ASPECTS, matrix_to_labels
 from absa.eda import aspect_polarity_table
 from absa.preprocess import PRE_DEFAULTS, normalize, segment
 from absa.transformer import AbsaHead, decode
+from absa.baseline import TfidfAbsa
 
 ASPECT_VI = {
     "SCREEN": "Màn hình",
@@ -43,6 +44,8 @@ class Predictor:
 
         path = Path(path)
         cfg = json.loads((path / "absa_config.json").read_text(encoding="utf-8"))
+        if cfg.get("model_type") == "tfidf":
+            return TfidfPredictor.from_dir(path)
         pre = {**PRE_DEFAULTS, **cfg.get("preprocess", {})}
         if pre["use_star"]:
             raise ValueError("Demo không có số sao")
@@ -100,6 +103,42 @@ class Predictor:
             ):
                 result[i] = labels
         return result
+
+
+class TfidfPredictor:
+    """Adapter exposing the same demo API for a saved TF-IDF baseline."""
+
+    @classmethod
+    def from_dir(cls, path: Path) -> "TfidfPredictor":
+        path = Path(path)
+        cfg = json.loads((path / "absa_config.json").read_text(encoding="utf-8"))
+        p = object.__new__(cls)
+        p.pre = {**PRE_DEFAULTS, **cfg.get("preprocess", {})}
+        p.model = TfidfAbsa.load(path)
+        return p
+
+    def _prepare(self, texts: list[str]) -> list[str]:
+        out = [
+            normalize(
+                t,
+                lowercase=self.pre["lowercase"],
+                strip_emoji=self.pre["strip_emoji"],
+                strip_punct=self.pre["strip_punct"],
+            )
+            for t in texts
+        ]
+        return segment(out, self.pre["segment"]) if self.pre["segment"] else out
+
+    def predict_batch(self, texts: list[str], batch_size: int = 32) -> list[dict[str, str]]:
+        del batch_size  # sklearn predicts the whole sparse matrix efficiently here
+        prepared = self._prepare([str(text) for text in texts])
+        Y = self.model.predict(prepared)
+        return matrix_to_labels(Y)
+
+    def predict(self, text: str) -> dict[str, str]:
+        if not _has_words(text):
+            return {}
+        return self.predict_batch([text])[0]
 
 
 def render_html(text: str, pred: dict[str, str]) -> str:

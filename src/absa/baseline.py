@@ -1,5 +1,8 @@
 """TF-IDF baselines for aspect detection and aspect sentiment classification."""
 
+import json
+import pickle
+from pathlib import Path
 from typing import Literal
 
 import numpy as np
@@ -97,3 +100,32 @@ class TfidfAbsa:
             if present.any() and sentiment is not None:
                 predictions[present, column] = sentiment.predict(X[present])
         return predictions
+
+    def save(self, path: Path) -> None:
+        """Save the fitted vectorizer/classifiers for the offline demo."""
+        path = Path(path)
+        path.mkdir(parents=True, exist_ok=True)
+        config = {
+            "model_type": "tfidf",
+            "mode": self.mode,
+            "classifier": self.classifier,
+            "C": self.C,
+            "seed": self.seed,
+            "preprocess": getattr(self, "preprocess_cfg", {}),
+        }
+        (path / "absa_config.json").write_text(
+            json.dumps(config, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        with (path / "model.pkl").open("wb") as fh:
+            pickle.dump(self, fh, protocol=pickle.HIGHEST_PROTOCOL)
+
+    @classmethod
+    def load(cls, path: Path) -> "TfidfAbsa":
+        """Load a checkpoint produced by :meth:`save`."""
+        with (Path(path) / "model.pkl").open("rb") as fh:
+            model = pickle.load(fh)
+        if not isinstance(model, cls):
+            raise TypeError("Checkpoint không phải là TfidfAbsa")
+        return model
