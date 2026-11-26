@@ -7,11 +7,11 @@ from pathlib import Path
 import pandas as pd
 import torch
 
+from absa.baseline import TfidfAbsa
 from absa.data import ASPECTS, matrix_to_labels
 from absa.eda import aspect_polarity_table
 from absa.preprocess import PRE_DEFAULTS, normalize, segment
 from absa.transformer import AbsaHead, decode
-from absa.baseline import TfidfAbsa
 
 ASPECT_VI = {
     "SCREEN": "Màn hình",

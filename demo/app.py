@@ -65,7 +65,8 @@ footer{display:none !important}
 .model-tabs,.feature-tabs{background:#fff;border-radius:10px;padding:0 12px;
   border:1px solid #d7e2da;box-shadow:0 3px 10px rgba(28,55,38,.045)}
 .model-tabs{padding-bottom:20px !important}
-.feature-tabs{margin-top:14px !important;margin-bottom:4px !important;padding-bottom:16px !important}
+.feature-tabs{margin-top:14px !important;margin-bottom:4px !important;
+  padding-bottom:16px !important}
 .model-tabs > .tab-nav,.feature-tabs > .tab-nav{gap:8px !important;padding:7px 6px 0 !important}
 .model-tabs > .tab-nav button,.feature-tabs > .tab-nav button{
   border:1px solid transparent !important;border-radius:8px 8px 0 0 !important;
@@ -77,7 +78,8 @@ footer{display:none !important}
   background:#edf7ef !important;color:#176b38 !important;border-color:#cce4d2 !important;
   border-bottom:3px solid #16803f !important}
 .panel-card{background:#fbfefb !important;border:1px solid #d7e2da !important;
-  border-radius:10px !important;box-shadow:0 3px 10px rgba(28,55,38,.045) !important;padding:18px !important}
+  border-radius:10px !important;box-shadow:0 3px 10px rgba(28,55,38,.045) !important;
+  padding:18px !important}
 .result-card{background:#f5faf6 !important;border:1px solid #d7e2da !important;
   border-radius:10px !important;padding:18px !important;margin-top:18px !important}
 .panel-card{height:max-content !important;align-self:flex-start !important}
@@ -237,12 +239,32 @@ def export_report_files(
     with PdfPages(pdf_path) as pdf:
         page, ax = plt.subplots(figsize=(11.69, 8.27))
         ax.axis("off")
-        ax.text(0.03, 0.91, "Báo cáo phân tích bình luận", fontsize=24, weight="bold", color="#173b28")
-        ax.text(0.03, 0.855, "UIT-ViSFD · Phân tích cảm xúc theo khía cạnh", fontsize=12, color="#64756a")
+        ax.text(
+            0.03, 0.91, "Báo cáo phân tích bình luận", fontsize=24, weight="bold", color="#173b28"
+        )
+        ax.text(
+            0.03,
+            0.855,
+            "UIT-ViSFD · Phân tích cảm xúc theo khía cạnh",
+            fontsize=12,
+            color="#64756a",
+        )
         ax.text(0.03, 0.78, f"Mô hình: {model_label}", fontsize=13, weight="bold")
         ax.text(0.03, 0.735, f"Tệp dữ liệu: {source_name}", fontsize=11)
-        ax.text(0.03, 0.695, f"Số bình luận: {total_comments:,} · Tổng lượt khía cạnh: {total_mentions:,}".replace(",", "."), fontsize=11)
-        ax.text(0.03, 0.61, "Bảng dưới đây thể hiện số lượt và tỷ lệ cảm xúc trên từng khía cạnh.", fontsize=11, color="#64756a")
+        totals_line = f"Số bình luận: {total_comments:,} · Tổng lượt khía cạnh: {total_mentions:,}"
+        ax.text(
+            0.03,
+            0.695,
+            totals_line.replace(",", "."),
+            fontsize=11,
+        )
+        ax.text(
+            0.03,
+            0.61,
+            "Bảng dưới đây thể hiện số lượt và tỷ lệ cảm xúc trên từng khía cạnh.",
+            fontsize=11,
+            color="#64756a",
+        )
         pdf.savefig(page, bbox_inches="tight")
         plt.close(page)
 
@@ -252,7 +274,9 @@ def export_report_files(
 
         table_page, table_ax = plt.subplots(figsize=(14, max(5, 0.45 * len(shown) + 2)))
         table_ax.axis("off")
-        table_ax.set_title("Chi tiết theo khía cạnh", loc="left", fontsize=16, weight="bold", pad=16)
+        table_ax.set_title(
+            "Chi tiết theo khía cạnh", loc="left", fontsize=16, weight="bold", pad=16
+        )
         values = shown.astype(str).values.tolist()
         table_artist = table_ax.table(
             cellText=values,
@@ -292,7 +316,8 @@ def build_app(
             table = summarize_predictions(preds)
             table.attrs["n_comments"] = len(preds)
             note = (
-                f'<div class="note">File có hơn {max_rows:,} dòng; chỉ phân tích {max_rows:,} dòng đầu.'
+                f'<div class="note">File có hơn {max_rows:,} dòng; chỉ phân tích '
+                f'{max_rows:,} dòng đầu.'
                 "</div>"
                 if truncated
                 else ""
@@ -304,13 +329,13 @@ def build_app(
             total_negative = int(table["Negative"].sum())
             worst = table["Negative"].idxmax() if table["Negative"].max() > 0 else None
             kpi = (
-                f'<div class="kpis"><div class="kpi"><div class="l">Bình luận đã phân tích</div>'
+                '<div class="kpis"><div class="kpi"><div class="l">Bình luận đã phân tích</div>'
                 + f'<div class="x">{len(preds):,}</div></div>'.replace(",", ".")
-                + f'<div class="kpi"><div class="l">Có nhắc ít nhất 1 khía cạnh</div>'
+                + '<div class="kpi"><div class="l">Có nhắc ít nhất 1 khía cạnh</div>'
                 + f'<div class="x">{mentioned:.0f}%</div></div>'
-                + f'<div class="kpi"><div class="l">Tổng lượt khía cạnh</div>'
+                + '<div class="kpi"><div class="l">Tổng lượt khía cạnh</div>'
                 + f'<div class="x">{total_mentions:,}</div></div>'.replace(",", ".")
-                + f'<div class="kpi"><div class="l">Bị chê nhiều nhất</div>'
+                + '<div class="kpi"><div class="l">Bị chê nhiều nhất</div>'
                 + f'<div class="x" style="color:#cf222e">{ASPECT_VI[worst] if worst else "—"}</div>'
                 "</div></div>"
             )
@@ -323,7 +348,7 @@ def build_app(
                 )
             shown = detailed_table(table)
             sentiment_note = (
-                f'<div class="table-note"><b>Phân bố toàn bộ lượt nhắc:</b> '
+                '<div class="table-note"><b>Phân bố toàn bộ lượt nhắc:</b> '
                 + f'Tích cực {total_positive:,} · Trung tính {total_neutral:,} · '
                 + f'Tiêu cực {total_negative:,}.'.replace(",", ".")
                 + " Tỷ lệ trong bảng được tính riêng trên từng khía cạnh.</div>"
@@ -362,7 +387,9 @@ def build_app(
                 with gr.Row(equal_height=False):
                     with gr.Column(scale=4, elem_classes=["panel-card"]):
                         f = gr.File(label="File CSV (cần cột comment)", file_types=[".csv"])
-                        gr.Markdown(f"Tối đa {max_rows:,} dòng đầu được phân tích.".replace(",", "."))
+                        gr.Markdown(
+                            f"Tối đa {max_rows:,} dòng đầu được phân tích.".replace(",", ".")
+                        )
                     with gr.Column(scale=8, elem_classes=["result-card"]):
                         summary = gr.HTML(CSV_PLACEHOLDER)
                         chart = gr.Plot(label="Cảm xúc theo khía cạnh")
