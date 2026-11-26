@@ -131,9 +131,13 @@ class TfidfPredictor:
 
     def predict_batch(self, texts: list[str], batch_size: int = 32) -> list[dict[str, str]]:
         del batch_size  # sklearn predicts the whole sparse matrix efficiently here
-        prepared = self._prepare([str(text) for text in texts])
-        Y = self.model.predict(prepared)
-        return matrix_to_labels(Y)
+        keep = [i for i, t in enumerate(texts) if _has_words(str(t))]
+        result: list[dict[str, str]] = [{} for _ in texts]
+        if keep:
+            Y = self.model.predict(self._prepare([str(texts[i]) for i in keep]))
+            for i, labels in zip(keep, matrix_to_labels(Y), strict=True):
+                result[i] = labels
+        return result
 
     def predict(self, text: str) -> dict[str, str]:
         if not _has_words(text):

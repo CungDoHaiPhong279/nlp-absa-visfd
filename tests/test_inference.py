@@ -1,5 +1,6 @@
+from absa.baseline import TfidfAbsa
 from absa.data import ASPECTS, labels_to_matrix, matrix_to_labels
-from absa.inference import Predictor, render_html, summarize_predictions
+from absa.inference import Predictor, TfidfPredictor, render_html, summarize_predictions
 from absa.transformer import TransformerAbsa
 
 
@@ -51,3 +52,15 @@ def test_from_dir_roundtrip(tmp_path) -> None:
     assert set(pred) <= set(ASPECTS)
     assert pred == matrix_to_labels(model.predict(["pin trâu"]))[0]
     assert p.predict_batch(["pin trâu", "", "máy đẹp"])[1] == {}
+
+
+def test_tfidf_from_dir_roundtrip(tmp_path) -> None:
+    texts = ["pin trâu"] * 5 + ["pin yếu"] * 5
+    Y = labels_to_matrix([{"BATTERY": "Positive"}] * 5 + [{"BATTERY": "Negative"}] * 5)
+    model = TfidfAbsa(min_df=1).fit(texts, Y)
+    model.preprocess_cfg = {"lowercase": True}
+    model.save(tmp_path / "ckpt")
+    p = Predictor.from_dir(tmp_path / "ckpt")
+    assert isinstance(p, TfidfPredictor)
+    assert p.predict("PIN TRÂU") == {"BATTERY": "Positive"}
+    assert p.predict_batch(["pin yếu", "😍😍", ""]) == [{"BATTERY": "Negative"}, {}, {}]

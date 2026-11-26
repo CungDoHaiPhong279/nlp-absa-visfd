@@ -104,3 +104,13 @@ def test_word_tokens_keep_emoji_and_single_chars() -> None:
         ["pin tốt 😍", "ý kiến tệ"], _labels([{"BATTERY": 1}, {"GENERAL": 3}])
     )
     assert {"😍", "ý"} <= set(model.vectorizer.vocabulary_)
+
+
+def test_save_load_roundtrip(tmp_path: Path) -> None:
+    texts = ["pin tốt"] * 5 + ["pin tệ"] * 5
+    model = TfidfAbsa(min_df=1).fit(texts, _labels([{"BATTERY": 1}] * 5 + [{"BATTERY": 3}] * 5))
+    model.save(tmp_path / "ckpt")
+    loaded = TfidfAbsa.load(tmp_path / "ckpt")
+    assert np.array_equal(
+        loaded.predict(["pin tốt", "pin tệ"]), model.predict(["pin tốt", "pin tệ"])
+    )

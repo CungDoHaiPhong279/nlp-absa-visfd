@@ -124,16 +124,25 @@ footer{display:none !important}
   .tab-container button{white-space:normal !important;flex:1 1 0;min-width:0}}
 """
 
-HERO = (
-    '<div class="hero"><div class="hero-brand"><div class="eyebrow">ABSA · UIT-ViSFD</div>'
-    '<h1>Đọc vị bình luận điện thoại</h1>'
-    "<p>Dán một bình luận, mô hình sẽ nhận diện khách đang khen hay chê "
-    "<b>từng khía cạnh</b> của sản phẩm.</p></div>"
-    '<div class="hero-stats"><div class="hero-stat"><div class="num">10</div>'
-    '<div class="label">khía cạnh</div></div><div class="hero-stat"><div class="num">3</div>'
-    '<div class="label">mức cảm xúc</div></div><div class="hero-stat"><div class="num">2</div>'
-    '<div class="label">mô hình</div></div></div></div>'
-)
+
+# the CSS hard-codes a light palette, so dark mode would leave light text on light cards
+FORCE_LIGHT = "() => document.body.classList.remove('dark')"
+
+
+def hero(n_models: int) -> str:
+    return (
+        '<div class="hero"><div class="hero-brand"><div class="eyebrow">ABSA · UIT-ViSFD</div>'
+        "<h1>Đọc vị bình luận điện thoại</h1>"
+        "<p>Dán một bình luận, mô hình sẽ nhận diện khách đang khen hay chê "
+        "<b>từng khía cạnh</b> của sản phẩm.</p></div>"
+        '<div class="hero-stats"><div class="hero-stat"><div class="num">10</div>'
+        '<div class="label">khía cạnh</div></div><div class="hero-stat"><div class="num">3</div>'
+        '<div class="label">mức cảm xúc</div></div>'
+        f'<div class="hero-stat"><div class="num">{n_models}</div>'
+        '<div class="label">mô hình</div></div></div></div>'
+    )
+
+
 PLACEHOLDER = (
     '<div class="res-empty"><div class="big">Kết quả sẽ hiện ở đây</div>'
     "Dán một bình luận hoặc chọn một ví dụ có sẵn.</div>"
@@ -180,6 +189,7 @@ def plot_summary(table: pd.DataFrame, figsize=None):
     for text in legend.get_texts():
         text.set_color(gray)
     fig.tight_layout()
+    plt.close(fig)  # gr.Plot still renders a closed figure; open ones pile up per upload
     return fig
 
 
@@ -222,7 +232,6 @@ def detailed_table(table: pd.DataFrame) -> pd.DataFrame:
 def export_report_files(
     table: pd.DataFrame,
     shown: pd.DataFrame,
-    chart,
     model_label: str,
     source_name: str,
 ) -> tuple[str, str]:
@@ -261,7 +270,7 @@ def export_report_files(
         ax.text(
             0.03,
             0.61,
-            "Bảng dưới đây thể hiện số lượt và tỷ lệ cảm xúc trên từng khía cạnh.",
+            "Các trang sau: biểu đồ và bảng số lượt, tỷ lệ cảm xúc theo từng khía cạnh.",
             fontsize=11,
             color="#64756a",
         )
@@ -270,7 +279,6 @@ def export_report_files(
 
         chart_pdf = plot_summary(table, figsize=(11.69, 8.27))
         pdf.savefig(chart_pdf)
-        plt.close(chart_pdf)
 
         table_page, table_ax = plt.subplots(figsize=(14, max(5, 0.45 * len(shown) + 2)))
         table_ax.axis("off")
@@ -317,7 +325,7 @@ def build_app(
             table.attrs["n_comments"] = len(preds)
             note = (
                 f'<div class="note">File có hơn {max_rows:,} dòng; chỉ phân tích '
-                f'{max_rows:,} dòng đầu.'
+                f"{max_rows:,} dòng đầu."
                 "</div>"
                 if truncated
                 else ""
@@ -349,66 +357,70 @@ def build_app(
             shown = detailed_table(table)
             sentiment_note = (
                 '<div class="table-note"><b>Phân bố toàn bộ lượt nhắc:</b> '
-                + f'Tích cực {total_positive:,} · Trung tính {total_neutral:,} · '
-                + f'Tiêu cực {total_negative:,}.'.replace(",", ".")
+                + f"Tích cực {total_positive:,} · Trung tính {total_neutral:,} · "
+                + f"Tiêu cực {total_negative:,}.".replace(",", ".")
                 + " Tỷ lệ trong bảng được tính riêng trên từng khía cạnh.</div>"
             )
             chart = plot_summary(table)
-            csv_path, pdf_path = export_report_files(
-                table, shown, chart, label, Path(file).name
-            )
+            csv_path, pdf_path = export_report_files(table, shown, label, Path(file).name)
             return note + kpi + alert + sentiment_note, chart, shown, csv_path, pdf_path
 
         with gr.Tab(label):
             with gr.Tabs(elem_classes=["feature-tabs"]):
-              with gr.Tab("Phân tích một bình luận"):
-                out = gr.HTML(PLACEHOLDER, render=False)
-                with gr.Row(equal_height=False):
-                    with gr.Column(scale=5, elem_classes=["panel-card", "comment-input-card"]):
-                        inp = gr.Textbox(
-                            label="Bình luận",
-                            lines=5,
-                            placeholder="Ví dụ: Máy đẹp nhưng pin yếu, giá hơi chát",
-                        )
-                        btn = gr.Button("Phân tích", variant="primary", size="lg")
-                        gr.Examples(
-                            EXAMPLES,
-                            inputs=inp,
-                            outputs=out,
-                            fn=analyze,
-                            run_on_click=True,
-                            label="Thử nhanh (bình luận thật trong tập Dev)",
-                        )
-                    with gr.Column(scale=7, elem_classes=["result-card", "comment-result-card"]):
-                        out.render()
-                btn.click(analyze, inp, out)
-                inp.submit(analyze, inp, out)
-              with gr.Tab("Tổng hợp từ file CSV"):
-                with gr.Row(equal_height=False):
-                    with gr.Column(scale=4, elem_classes=["panel-card"]):
-                        f = gr.File(label="File CSV (cần cột comment)", file_types=[".csv"])
-                        gr.Markdown(
-                            f"Tối đa {max_rows:,} dòng đầu được phân tích.".replace(",", ".")
-                        )
-                    with gr.Column(scale=8, elem_classes=["result-card"]):
-                        summary = gr.HTML(CSV_PLACEHOLDER)
-                        chart = gr.Plot(label="Cảm xúc theo khía cạnh")
-                        table = gr.Dataframe(
-                            label="Chi tiết theo khía cạnh",
-                            interactive=False,
-                            wrap=True,
-                        )
-                        with gr.Row():
-                            csv_download = gr.File(label="Tải bảng CSV", interactive=False)
-                            pdf_download = gr.File(label="Tải báo cáo PDF", interactive=False)
-                f.change(summarize, f, [summary, chart, table, csv_download, pdf_download])
+                with gr.Tab("Phân tích một bình luận"):
+                    out = gr.HTML(PLACEHOLDER, render=False)
+                    with gr.Row(equal_height=False):
+                        with gr.Column(scale=5, elem_classes=["panel-card", "comment-input-card"]):
+                            inp = gr.Textbox(
+                                label="Bình luận",
+                                lines=5,
+                                placeholder="Ví dụ: Máy đẹp nhưng pin yếu, giá hơi chát",
+                            )
+                            btn = gr.Button("Phân tích", variant="primary", size="lg")
+                            gr.Examples(
+                                EXAMPLES,
+                                inputs=inp,
+                                outputs=out,
+                                fn=analyze,
+                                run_on_click=True,
+                                label="Thử nhanh (bình luận thật trong tập Dev)",
+                            )
+                        with gr.Column(
+                            scale=7, elem_classes=["result-card", "comment-result-card"]
+                        ):
+                            out.render()
+                    btn.click(analyze, inp, out)
+                    inp.submit(analyze, inp, out)
+                with gr.Tab("Tổng hợp từ file CSV"):
+                    with gr.Row(equal_height=False):
+                        with gr.Column(scale=4, elem_classes=["panel-card"]):
+                            f = gr.File(label="File CSV (cần cột comment)", file_types=[".csv"])
+                            gr.Markdown(
+                                f"Tối đa {max_rows:,} dòng đầu được phân tích.".replace(",", ".")
+                            )
+                        with gr.Column(scale=8, elem_classes=["result-card"]):
+                            summary = gr.HTML(CSV_PLACEHOLDER)
+                            chart = gr.Plot(label="Cảm xúc theo khía cạnh")
+                            table = gr.Dataframe(
+                                label="Chi tiết theo khía cạnh",
+                                interactive=False,
+                                wrap=True,
+                            )
+                            with gr.Row():
+                                csv_download = gr.File(label="Tải bảng CSV", interactive=False)
+                                pdf_download = gr.File(label="Tải báo cáo PDF", interactive=False)
+                    f.change(summarize, f, [summary, chart, table, csv_download, pdf_download])
 
     with gr.Blocks(title="Đọc vị bình luận điện thoại") as demo:
-        gr.HTML(HERO)
+        gr.HTML(hero(2 if tfidf_predictor is not None else 1))
         with gr.Tabs(elem_classes=["model-tabs"]):
+            add_model_tab("PhoBERT", predictor)
             if tfidf_predictor is not None:
                 add_model_tab("TF-IDF", tfidf_predictor)
-            add_model_tab("PhoBERT", predictor)
+        gr.HTML(
+            '<div class="foot">Bài tập lớn NLP · Dữ liệu UIT-ViSFD (Phan et al., 2021) · '
+            "Chỉ dùng cho nghiên cứu</div>"
+        )
     return demo
 
 
@@ -427,7 +439,9 @@ def main() -> None:
     phobert = Predictor.from_dir(phobert_path)
     tfidf = Predictor.from_dir(args.tfidf_model) if args.tfidf_model else None
     demo = build_app(phobert, args.max_rows, tfidf_predictor=tfidf)
-    demo.launch(share=args.share, server_port=args.port, theme=make_theme(), css=CSS)
+    demo.launch(
+        share=args.share, server_port=args.port, theme=make_theme(), css=CSS, js=FORCE_LIGHT
+    )
 
 
 if __name__ == "__main__":
